@@ -20,8 +20,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true,
   },
   "include": ["vite.config.ts"]
 }
