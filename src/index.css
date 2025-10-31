@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+
+/* (опційно) свій базовий css */
+html, body, #root { height: 100%; }
+
+.animate-gradient {
+  animation: gradient-xy 8s ease infinite;
+}
+
+@keyframes gradient-xy {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
