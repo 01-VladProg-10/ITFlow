@@ -106,11 +106,11 @@ WSGI_APPLICATION = 'ITFlow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ITFlow',
-        'USER': 'postgres',
-        'PASSWORD': 'polishchuk',
+        'NAME': 'itflow',
+        'USER': 'itflow',
+        'PASSWORD': 'itflow',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '5433',
     }
 }
 
