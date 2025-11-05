@@ -1,6 +1,6 @@
 // App.tsx
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   CheckCircle2, Menu, X, Sparkles, ShieldCheck, Rocket, Clock,
   ArrowRight, Mail, Phone, LogIn
@@ -10,8 +10,6 @@ import dashboardIcon from "./icons/daszboard.png";
 import zanowieniaIcon from "./icons/zanowienia.png";
 import kontaktIcon from "./icons/kontakt.png";
 import ustawieniaIcon from "./icons/ustawienia.png";
-
-import Login from "./login";
 
 type NavItem = { name: string; href: string; icon: string; disabled?: boolean };
 
@@ -88,8 +86,8 @@ function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
             >
               <LogIn className="h-4 w-4" /> Zaloguj
             </Link>
-            <Link
-              to="/register"
+            <a
+              href="#"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-black/20 px-3 py-2 text-sm font-semibold"
             >
               Załóż konto

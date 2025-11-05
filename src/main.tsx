@@ -4,13 +4,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
 import App from "./App";
-import Login from "./login"; // якщо файл називається інакше — підправ шлях
+import Login from "./login";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Login /> },
-  // опціонально:
-  // { path: "/register", element: <div>Register page</div> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
