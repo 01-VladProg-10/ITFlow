@@ -8,7 +8,14 @@ from .serializers import OrderSerializer
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['status', 'manager']
+    filterset_fields = [
+        'status',       # filtr po statusie (np. submitted, done)
+        'manager',      # filtr po przypisanym managerze
+        'developer',    # filtr po przypisanym developerze
+        'client',       # filtr po kliencie
+        'created_at',   # filtr po dacie utworzenia (dokładna)
+        'updated_at',   # filtr po dacie aktualizacji (dokładna)
+    ]
     ordering_fields = ['created_at', 'updated_at']
 
     def get_user_group(self, user):
