@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Order
 from accounts.serializers import UserSerializer
 
+
 class OrderSerializer(serializers.ModelSerializer):
     client = UserSerializer(read_only=True)
     manager = UserSerializer(read_only=True)
@@ -20,8 +21,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at', 'client', 'manager', 'developer']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'client']
 
     def create(self, validated_data):
-        user = self.context['request'].user
-        return Order.objects.create(client=user, **validated_data)
+        return Order.objects.create(**validated_data)

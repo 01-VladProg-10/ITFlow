@@ -11,4 +11,5 @@ urlpatterns = [
 
     # accounts app
     path('api/', include('accounts.urls')),
+    path('api/', include('orders.urls')),
 ]
