@@ -91,7 +91,7 @@ function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-black/20 px-3 py-2 text-sm font-semibold"
             >
               Załóż konto
-            </a>
+            </Link>
           </div>
         </div>
         <div className="mt-4 text-xs text-white/70">© {new Date().getFullYear()} ITFlow</div>
@@ -170,7 +170,7 @@ function DashboardMock() {
   );
 }
 
-export default function App() {
+function AppContent() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -249,5 +249,17 @@ export default function App() {
         </section>
       </main>
     </div>
+  );
+}
+
+// Головний App з роутером
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<AppContent />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
