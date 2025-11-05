@@ -1,18 +1,17 @@
-version: '3.9'
+version: '3.9'  # Compose file format version (версия формата Docker Compose — определяет синтаксис и возможности)
 
 services:
-  database:
-    image: postgres:17
-    container_name: itflow-postgres
-    environment:
-      - POSTGRES_DB=itflow
-      - POSTGRES_USER=itflow
-      - POSTGRES_PASSWORD=itflow
+  database:  # PostgreSQL database service (сервис базы данных PostgreSQL)
+    image: postgres:17  # Use official PostgreSQL 17 image from Docker Hub (используется официальный образ PostgreSQL 17 с Docker Hub)
+    container_name: itflow-postgres  # Explicit container name for easy reference (явное имя контейнера для удобства в командах)
+    environment:  # Environment variables passed to container (переменные окружения, передаваемые контейнеру)
+      - POSTGRES_DB=itflow        # Database name created at startup (имя базы данных, создаваемой при запуске)
+      - POSTGRES_USER=itflow      # Default user for PostgreSQL (пользователь, создаваемый при инициализации)
+      - POSTGRES_PASSWORD=itflow  # Password for that user (пароль для этого пользователя)
     ports:
-      - "5433:5432"
+      - "5433:5432"  # Map host port 5433 to container port 5432 (сопоставление порта 5433 на хосте с 5432 внутри контейнера)
     volumes:
-      - itflow_pgdata:/var/lib/postgresql/data
+      - itflow_pgdata:/var/lib/postgresql/data  # Persistent storage for DB data (постоянное хранилище данных PostgreSQL)
 
 volumes:
-  itflow_pgdata:
-  
+  itflow_pgdata:  # Named volume declaration for persistence (объявление именованного тома для сохранения данных)
