@@ -7,7 +7,7 @@ django-filter==24.3
 djangorestframework-simplejwt==5.3.1
 
 # === PostgreSQL Driver ===
-psycopg2-binary==2.9.10
+psycopg[binary]==3.3.0   # nowszy, kompatybilny z Windows i Python 3.14
 
 # === Environment Variables ===
 python-dotenv==1.0.1
