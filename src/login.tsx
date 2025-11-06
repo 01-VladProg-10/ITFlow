@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { LogIn, UserPlus, Mail, Lock } from "lucide-react";
+ import { useSearchParams } from "react-router-dom";
 
 export default function AuthDualPanel() {
-  const [mode, setMode] = useState<"login" | "register">("login");
+ 
+
+const [search] = useSearchParams();
+const initialMode = search.get("mode") === "register" ? "register" : "login";
+const [mode, setMode] = useState<"login" | "register">(initialMode);
+
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
