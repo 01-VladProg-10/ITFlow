@@ -2,7 +2,7 @@ import dashboardIcon from "./icons/daszboard.png";
 import zanowieniaIcon from "./icons/zanowienia.png";
 import kontaktIcon from "./icons/kontakt.png";
 import ustawieniaIcon from "./icons/ustawienia.png";
-import wylogujIcon from "./icons/wyloguj.png";
+
 import {
   Flame,
   FileText,
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-/* === Sidebar from your App.tsx (w-72) === */
+/* === Sidebar === */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
@@ -67,17 +67,16 @@ function Sidebar() {
           ))}
         </nav>
 
-       <div className="mt-auto p-4">
-        <Link
-          to="/"
-          className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 transition px-4 py-2 text-sm font-semibold"
-        >
-          <LogIn className="h-4 w-4" /> Wyloguj się
-        </Link>
+        <div className="mt-auto p-4">
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 transition px-4 py-2 text-sm font-semibold"
+          >
+            <LogIn className="h-4 w-4" /> Wyloguj się
+          </Link>
 
-        <div className="mt-4 text-xs text-white/70">© {new Date().getFullYear()} ITFlow</div>
-      </div>
-
+          <div className="mt-4 text-xs text-white/70">© {new Date().getFullYear()} ITFlow</div>
+        </div>
       </div>
     </aside>
   );
@@ -96,81 +95,76 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-[#F3F2F8]">
-      {/* sidebar */}
       <Sidebar />
 
-      {/* main content shifted by sidebar width */}
       <main className="md:ml-72">
-        {/* top bar with your gradient stops */}
         <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
 
         <div className="px-[88px] pt-6 pb-10">
-          {/* welcome */}
-          <div className="mb-8">
-            <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
-              👋 Witaj, Jan Kowalski!
-            </h1>
-            <p className="text-slate-500 text-[14px] mt-1">
-              1 zamówienie ma aktualizację
-            </p>
-          </div>
-
-          {/* cards row */}
-          <div className="flex gap-[88px]">
-            {/* LEFT CARD — lower than 300px + ~24px spacing */}
-            <div className="w-[645px] h-[260px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex flex-col justify-between">
-              <div className="space-y-6">
-                <div>
-                  <div className="text-[13px] text-slate-500">Twoje zamówienie</div>
-                  <div className="text-[18px] font-semibold text-slate-900 mt-1">
-                    Tworzenie strony WWWI
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-[14px]">
-                    Status: <span className="text-[#6D28D9] font-semibold">Gotowe</span>
-                  </div>
-                  {/* менший відступ між статусом і лінією */}
-                  <div className="mt-2 h-3 rounded-full bg-slate-100">
-                    <div className="h-3 w-[85%] rounded-full bg-gradient-to-r from-[#6D28D9] to-[#1F4FE4]" />
-                  </div>
-                </div>
-              </div>
+          <div className="mt-12">
+            {/* welcome */}
+            <div className="mb-8">
+              <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
+                👋 Witaj, Jan Kowalski!
+              </h1>
+              <p className="text-slate-500 text-[14px] mt-1">
+                1 zamówienie ma aktualizację
+              </p>
             </div>
 
-            {/* RIGHT CARD */}
-            <div className="w-[350px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-              <div className="text-slate-900 font-semibold mb-4 text-[14px]">
-                Historia działań
-              </div>
-              <ul className="space-y-3 text-[14px]">
-                {history.map(({ Icon, bg, label, date }, i) => (
-                  <li key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-slate-800">
-                      <span
-                        className="h-8 w-8 rounded-full flex items-center justify-center shadow"
-                        style={{ backgroundColor: bg }}
-                      >
-                        <Icon size={16} color="#FFFFFF" />
-                      </span>
-                      {label}
+            <div className="flex items-start gap-[88px]">
+
+              {/* LEFT CARD — компактна, з ~24px повітря під лінією */}
+              <div className="w-[645px] self-start bg-white rounded-2xl shadow-lg border border-slate-100 p-6 pb-6">
+                <div className="space-y-6">
+                  <div>
+                    <div className="text-[13px] text-slate-500">Twoje zamówienie</div>
+                    <div className="text-[18px] font-semibold text-slate-900 mt-1">
+                      Tworzenie strony WWWI
                     </div>
-                    <span className="text-slate-400 text-xs">{date}</span>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+
+                  <div>
+                    <div className="text-[14px]">
+                      Status: <span className="text-[#6D28D9] font-semibold">Gotowe</span>
+                    </div>
+                    <div className="mt-2 h-3 rounded-full bg-slate-100 mb-6">
+                      <div className="h-3 w-[85%] rounded-full bg-gradient-to-r from-[#6D28D9] to-[#1F4FE4]" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* RIGHT CARD */}
+              <div className="w-[350px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+                <div className="text-slate-900 font-semibold mb-4 text-[14px]">
+                  Historia działań
+                </div>
+                <ul className="space-y-3 text-[14px]">
+                  {history.map(({ Icon, bg, label, date }, i) => (
+                    <li key={i} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 text-slate-800">
+                        <span
+                          className="h-8 w-8 rounded-full flex items-center justify-center shadow"
+                          style={{ backgroundColor: bg }}
+                        >
+                          <Icon size={16} color="#FFFFFF" />
+                        </span>
+                        {label}
+                      </div>
+                      <span className="text-slate-400 text-xs">{date}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* button */}
-          <div className="mt-10 flex justify-center">
-            <button className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition">
-              Nowe zamówienie
-            </button>
-          </div>
-
-         
+        <div className="-mt-12 flex justify-center">
+          <button className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition">
+            Nowe zamówienie
+          </button>
         </div>
       </main>
     </div>
