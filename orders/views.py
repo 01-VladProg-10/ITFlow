@@ -1,64 +1,16 @@
-from rest_framework import viewsets, filters, status
+# E:\ItFlow\orders\views.py
+from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Order
 from .serializers import OrderSerializer
 
-
+# === CRUD для заказов ===
 class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all().order_by('-created_at')
     serializer_class = OrderSerializer
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = [
-        'status',       # filtr po statusie (np. submitted, done)
-        'manager',      # filtr po przypisanym managerze
-        'developer',    # filtr po przypisanym developerze
-        'client',       # filtr po kliencie
-        'created_at',   # filtr po dacie utworzenia (dokładna)
-        'updated_at',   # filtr po dacie aktualizacji (dokładna)
-    ]
-    ordering_fields = ['created_at', 'updated_at']
+    permission_classes = [IsAuthenticated]
 
-    def get_user_group(self, user):
-        """Zwraca nazwę grupy użytkownika (np. 'manager', 'developer', 'client')."""
-        if user.groups.exists():
-            return user.groups.first().name.lower()  # zakładamy jedną grupę per user
-        return None
+    def perform_create(self, serializer):
+        serializer.save(client=self.request.user)
 
-    def get_queryset(self):
-        user = self.request.user
-        group = self.get_user_group(user)
-
-        if group == 'manager':
-            # Manager widzi wszystkie zgłoszenia
-            return Order.objects.all()
-        elif group == 'developer':
-            # Developer widzi tylko przypisane do siebie
-            return Order.objects.filter(developer=user)
-        elif group == 'admin':
-            # Admin widzi wszystko
-            return Order.objects.all()
-        elif group == 'client':
-            # Klient widzi tylko swoje zgłoszenia
-            return Order.objects.filter(client=user)
-        else:
-            # Brak grupy — nic nie widzi
-            return Order.objects.none()
-
-    def create(self, request, *args, **kwargs):
-        user = request.user
-        group = self.get_user_group(user)
-
-        # 🚫 Tylko użytkownicy z grupy 'client' mogą tworzyć zlecenia
-        if group != 'client':
-            return Response(
-                {"error": "Tylko użytkownicy z grupy 'client' mogą tworzyć zgłoszenia."},
-                status=status.HTTP_403_FORBIDDEN
-            )
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(client=request.user)
-        return Response(
-            {"message": "Order created successfully", "order": serializer.data},
-            status=status.HTTP_201_CREATED
-        )

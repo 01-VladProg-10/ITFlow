@@ -21,3 +21,7 @@ tzdata==2025.1
 drf-yasg==1.21.8           # Swagger / OpenAPI UI
 gunicorn==23.0.0
 whitenoise==6.7.0
+
+
+# === Email ===
+sendgrid

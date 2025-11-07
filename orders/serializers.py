@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Order
 from accounts.serializers import UserSerializer
 
+
 class OrderSerializer(serializers.ModelSerializer):
     client = UserSerializer(read_only=True)
     manager = UserSerializer(read_only=True)
