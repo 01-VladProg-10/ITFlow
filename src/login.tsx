@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { LogIn, UserPlus, Mail, Lock } from "lucide-react";
- import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { loginUser, fetchMe } from "./api/users"; 
 
 export default function AuthDualPanel() {
  
@@ -20,10 +22,23 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
   const [regPassword, setRegPassword] = useState("");
   const [regPasswordVerify, setRegPasswordVerify] = useState("");
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  
+
+  const navigate = useNavigate();
+
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login:", { email: loginUsername, password: loginPassword });
+    try {
+      await loginUser(loginUsername, loginPassword);
+      const me = await fetchMe();
+      console.log("Zalogowany użytkownik:", me);
+
+      navigate("/dashboard", { replace: true });
+    } catch (err: any) {
+      alert("Nie udało się zalogować: " + (err.message || "Błąd"));
+    }
   };
+
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
