@@ -10,21 +10,34 @@ const initialMode = search.get("mode") === "register" ? "register" : "login";
 const [mode, setMode] = useState<"login" | "register">(initialMode);
 
 
-  const [loginEmail, setLoginEmail] = useState("");
+  const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  const [regName, setRegName] = useState("");
+  const [regUsername, setRegUsername] = useState("");
+  const [regFirstName, setRegFirstName] = useState("");
+  const [regLastName, setRegLastName] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
+  const [regPasswordVerify, setRegPasswordVerify] = useState("");
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login:", { email: loginEmail, password: loginPassword });
+    console.log("Login:", { email: loginUsername, password: loginPassword });
   };
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Register:", { name: regName, email: regEmail, password: regPassword });
+    if (regPassword !== regPasswordVerify) {
+      alert("Hasła nie są takie same!");
+      return;
+    }
+    console.log("Register:", {
+      username: regUsername,
+      email: regEmail,
+      first_name: regFirstName,
+      last_name: regLastName,
+      password: regPassword,
+    });
   };
 
   return (
@@ -49,14 +62,14 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
 
                   <form onSubmit={handleLoginSubmit} className="space-y-5">
                     <div>
-                      <label className="block text-sm font-medium text-white/90 mb-2">Email</label>
+                      <label className="block text-sm font-medium text-white/90 mb-2">Username</label>
                       <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
                         <Mail className="h-5 w-5 text-white/70" />
                         <input
-                          type="email"
-                          value={loginEmail}
-                          onChange={(e) => setLoginEmail(e.target.value)}
-                          placeholder="Twój email"
+                          type="username"
+                          value={loginUsername}
+                          onChange={(e) => setLoginUsername(e.target.value)}
+                          placeholder="Twój username"
                           required
                           className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
                         />
@@ -112,63 +125,91 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
                   </h2>
 
                   <form onSubmit={handleRegisterSubmit} className="space-y-5">
-                    <div>
-                      <label className="block text-sm font-medium text-white/90 mb-2">Imię</label>
-                      <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
-                        <input
-                          type="text"
-                          value={regName}
-                          onChange={(e) => setRegName(e.target.value)}
-                          placeholder="Twoje imię"
-                          required
-                          className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
-                        />
-                      </div>
-                    </div>
+  <div>
+    <label className="block text-sm font-medium text-white/90 mb-2">Username</label>
+    <input
+      type="text"
+      value={regUsername}
+      onChange={(e) => setRegUsername(e.target.value)}
+      placeholder="Twój username"
+      required
+      className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg px-4 py-3 border border-white/30 rounded-2xl"
+    />
+  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-white/90 mb-2">Email</label>
-                      <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
-                        <Mail className="h-5 w-5 text-white/70" />
-                        <input
-                          type="email"
-                          value={regEmail}
-                          onChange={(e) => setRegEmail(e.target.value)}
-                          placeholder="Twój email"
-                          required
-                          className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
-                        />
-                      </div>
-                    </div>
+  <div>
+    <label className="block text-sm font-medium text-white/90 mb-2">Imię</label>
+    <input
+      type="text"
+      value={regFirstName}
+      onChange={(e) => setRegFirstName(e.target.value)}
+      placeholder="Twoje imię"
+      required
+      className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg px-4 py-3 border border-white/30 rounded-2xl"
+    />
+  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-white/90 mb-2">Hasło</label>
-                      <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
-                        <Lock className="h-5 w-5 text-white/70" />
-                        <input
-                          type="password"
-                          value={regPassword}
-                          onChange={(e) => setRegPassword(e.target.value)}
-                          placeholder="Twoje hasło"
-                          required
-                          className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
-                        />
-                      </div>
-                    </div>
+  <div>
+    <label className="block text-sm font-medium text-white/90 mb-2">Nazwisko</label>
+    <input
+      type="text"
+      value={regLastName}
+      onChange={(e) => setRegLastName(e.target.value)}
+      placeholder="Twoje nazwisko"
+      required
+      className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg px-4 py-3 border border-white/30 rounded-2xl"
+    />
+  </div>
 
-                    {/* BUTTON — gradient shift A */}
-                    <button
-                      type="submit"
-                      className="w-full flex items-center justify-center gap-3 
-                      bg-gradient-to-r from-violet-500 to-blue-500 
-                      bg-[length:200%_200%] hover:bg-right 
-                      text-white font-semibold py-3 px-6 rounded-2xl 
-                      shadow-lg hover:shadow-xl 
-                      transition-all duration-300 text-lg cursor-pointer"
-                    >
-                      <UserPlus className="h-5 w-5" /> Zarejestruj
-                    </button>
-                  </form>
+  <div>
+    <label className="block text-sm font-medium text-white/90 mb-2">Email</label>
+    <input
+      type="email"
+      value={regEmail}
+      onChange={(e) => setRegEmail(e.target.value)}
+      placeholder="Twój email"
+      required
+      className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg px-4 py-3 border border-white/30 rounded-2xl"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-white/90 mb-2">Hasło</label>
+    <input
+      type="password"
+      value={regPassword}
+      onChange={(e) => setRegPassword(e.target.value)}
+      placeholder="Twoje hasło"
+      required
+      className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg px-4 py-3 border border-white/30 rounded-2xl"
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-white/90 mb-2">Potwierdź hasło</label>
+    <input
+      type="password"
+      value={regPasswordVerify}
+      onChange={(e) => setRegPasswordVerify(e.target.value)}
+      placeholder="Powtórz hasło"
+      required
+      className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg px-4 py-3 border border-white/30 rounded-2xl"
+    />
+  </div>
+
+  <button
+    type="submit"
+    className="w-full flex items-center justify-center gap-3 
+      bg-gradient-to-r from-violet-500 to-blue-500 
+      bg-[length:200%_200%] hover:bg-right 
+      text-white font-semibold py-3 px-6 rounded-2xl 
+      shadow-lg hover:shadow-xl 
+      transition-all duration-300 text-lg cursor-pointer"
+  >
+    <UserPlus className="h-5 w-5" /> Zarejestruj
+  </button>
+</form>
+
 
                   <div className="mt-6 text-center text-white/80 text-base">
                     Masz już konto?{" "}
