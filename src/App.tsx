@@ -1,6 +1,6 @@
 // App.tsx
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import {
   CheckCircle2, Menu, X, Sparkles, ShieldCheck, Rocket, Clock,
   ArrowRight, Mail, Phone, LogIn
@@ -47,7 +47,8 @@ function Logo({ className = "h-7 w-auto" }) {
 
 function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
   const content = (
-    <div className="flex h-full w-72 flex-col bg-gradient-to-b from-violet-600 to-blue-600 text-white">
+    <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+
       <div className="flex items-center justify-between px-4 h-16">
         <Logo />
         {onClose && (
@@ -87,7 +88,7 @@ function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
               <LogIn className="h-4 w-4" /> Zaloguj
             </Link>
             <a
-              href="#"
+              href="/login?mode=register"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-black/20 px-3 py-2 text-sm font-semibold"
             >
               Załóż konto
@@ -113,64 +114,8 @@ function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
   );
 }
 
-function DashboardMock() {
-  return (
-    <div className="relative rounded-2xl bg-white/80 backdrop-blur shadow-xl ring-1 ring-black/5 p-5 md:p-6 w-full">
-      <div className="grid md:grid-cols-3 gap-4">
-        <div className="space-y-3">
-          {["Dashboard", "Moje zamówienia", "Kontakt", "Ustawienia"].map((t, i) => (
-            <div
-              key={t}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm ${
-                i === 0 ? "bg-indigo-50 text-indigo-700" : "bg-slate-50 text-slate-600"
-              }`}
-            >
-              <div className="h-8 w-8 rounded-xl bg-white shadow flex items-center justify-center">
-                <Sparkles className="h-4 w-4" />
-              </div>
-              <span>{t}</span>
-            </div>
-          ))}
-          <div className="pt-2 text-xs text-slate-400">Wyloguj się</div>
-        </div>
 
-        <div className="md:col-span-2 space-y-4">
-          <div className="rounded-2xl border border-slate-100 p-4 bg-white">
-            <div className="text-slate-800 font-semibold mb-1">Witaj, Jan Kowalski!</div>
-            <div className="text-slate-500 text-sm">1 zamówienie ma aktualizację</div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="rounded-2xl p-4 bg-white border border-slate-100">
-              <div className="text-slate-600 text-sm mb-1">Twoje zamówienie</div>
-              <div className="font-semibold">Tworzenie strony WWW</div>
-              <div className="mt-2 text-sm">
-                Status: <span className="text-indigo-600 font-medium">Gotowe</span>
-              </div>
-              <div className="mt-3 h-2 rounded-full bg-slate-100">
-                <div className="h-2 w-10/12 rounded-full bg-gradient-to-r from-violet-500 to-blue-500" />
-              </div>
-            </div>
-
-            <div className="rounded-2xl p-4 bg-white border border-slate-100">
-              <div className="font-semibold mb-3">Historia działań</div>
-              <ul className="text-sm space-y-2">
-                {["Gotowe", "Dodany plik pośredni", "Do poprawy", "Do sprawdzania klientowi"].map((s, i) => (
-                  <li key={i} className="flex items-center gap-2 text-slate-600">
-                    <CheckCircle2 className="h-4 w-4" />
-                    <span>{s}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function App() {
+function AppContent() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -203,7 +148,7 @@ export default function App() {
           </p>
           <div className="mt-6 flex justify-center gap-3">
             <a
-              href="#"
+              href="/login?mode=register"
               className="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-r from-violet-600 to-blue-600 text-white font-semibold"
             >
               Wypróbuj teraz <ArrowRight className="h-4 w-4" />
@@ -243,11 +188,17 @@ export default function App() {
             </a>
           </div>
         </section>
-
-        <section className="py-6">
-          <DashboardMock />
-        </section>
       </main>
     </div>
   );
 }
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<AppContent />} />
+      <Route path="/login" element={<LogIn />} />
+    </Routes>
+  );
+}
+
