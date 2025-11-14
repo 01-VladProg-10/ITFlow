@@ -22,6 +22,12 @@ drf-yasg==1.21.8           # Swagger / OpenAPI UI
 gunicorn==23.0.0
 whitenoise==6.7.0
 
-
 # === Email ===
-sendgrid
+sendgrid==6.11.0
+
+# === File Storage / Cloudflare R2 ===
+django-storages[boto3]==1.13.2
+boto3==1.28.28
+
+# === CORS Support for React Frontend ===
+django-cors-headers==4.0.0
