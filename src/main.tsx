@@ -5,8 +5,8 @@ import "./index.css";
 
 import App from "./App";
 import Login from "./login";
-import UserDashboard from "./UserDashboard";
 import KontaktUser from "./pages/KontaktUser";
+import DashboardSwitch from "./DashboardSwitch";
 import UserSettings from "./pages/UserSettings";
 import ProgSettings from "./pages/ProgSettings";
 import ManagerSettings from "./pages/ManagerSettings";
@@ -15,7 +15,7 @@ import ManagerSettings from "./pages/ManagerSettings";
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Login /> },
-  { path: "/dashboard", element: <UserDashboard /> },
+  { path: "/dashboard", element: <DashboardSwitch/> },
   { path: "/kontakt", element: <KontaktUser /> },
   { path: "/ustawienia", element: <UserSettings /> },
   { path: "/prog-ustawienia", element: <ProgSettings /> },
