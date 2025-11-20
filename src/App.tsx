@@ -1,8 +1,8 @@
 // App.tsx
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 import {
-  CheckCircle2, Menu, X, Sparkles, ShieldCheck, Rocket, Clock,
+   Menu, X, Sparkles, ShieldCheck, Rocket, Clock,
   ArrowRight, Mail, Phone, LogIn
 } from "lucide-react";
 
@@ -194,11 +194,6 @@ function AppContent() {
 }
 
 export default function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<AppContent />} />
-      <Route path="/login" element={<LogIn />} />
-    </Routes>
-  );
+ return <AppContent />;
 }
 

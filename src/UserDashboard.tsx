@@ -37,7 +37,7 @@ function Logo({ className = "h-7 w-auto" }) {
 const nav = [
   { name: "Dashboard", href: "#", icon: dashboardIcon },
   { name: "Moje zamówienia", href: "#", icon: zanowieniaIcon },
-  { name: "Kontakt", href: "#", icon: kontaktIcon },
+  { name: "Kontakt", to: "/kontakt", icon: kontaktIcon },
   { name: "Ustawienia", href: "#", icon: ustawieniaIcon },
 ];
 
@@ -53,18 +53,19 @@ function Sidebar() {
         </div>
 
         <nav className="mt-4 px-3 space-y-1">
-          {nav.map(({ name, href, icon }) => (
-            <a
-              key={name}
-              href={href}
-              className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition hover:bg-white/10"
-            >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
-                <img src={icon} alt={name} className="h-4 w-4" />
-              </span>
-              <span>{name}</span>
-            </a>
-          ))}
+        {nav.map(({ name, to, icon }) => (
+          <Link
+            key={name}
+            to={to!}
+            className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition hover:bg-white/10"
+          >
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
+              <img src={icon} alt={name} className="h-4 w-4" />
+            </span>
+            <span>{name}</span>
+          </Link>
+))}
+
         </nav>
 
         <div className="mt-auto p-4">
