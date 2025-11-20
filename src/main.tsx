@@ -7,6 +7,9 @@ import App from "./App";
 import Login from "./login";
 import KontaktUser from "./pages/KontaktUser";
 import DashboardSwitch from "./DashboardSwitch";
+import UserSettings from "./pages/UserSettings";
+import ProgSettings from "./pages/ProgSettings";
+import ManagerSettings from "./pages/ManagerSettings";
 
 
 const router = createBrowserRouter([
@@ -14,6 +17,10 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/dashboard", element: <DashboardSwitch/> },
   { path: "/kontakt", element: <KontaktUser /> },
+  { path: "/ustawienia", element: <UserSettings /> },
+  { path: "/prog-ustawienia", element: <ProgSettings /> },
+  { path: "/manager-ustawienia", element: <ManagerSettings /> },
+
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
