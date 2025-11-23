@@ -1,9 +1,12 @@
+# orders/views.py
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
+
+from .models import Order
+from .serializers import OrderSerializer
 
 User = get_user_model()
 
@@ -24,15 +27,18 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             return Order.objects.filter(client=user).order_by('-created_at')
 
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def create_order(self, request):
+        """Dedykowany endpoint POST /orders/create/"""
+        serializer = OrderSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def assign(self, request, pk=None):
-        """
-        Manager przydziela zadanie developerowi.
-        Payload JSON:
-        {
-            "developer_id": 5
-        }
-        """
+        """Przydzielanie zamówienia developerowi (tylko manager)"""
         user = request.user
         if 'manager' not in user.groups.values_list('name', flat=True):
             return Response({'detail': 'Only managers can assign tasks.'}, status=status.HTTP_403_FORBIDDEN)
@@ -50,5 +56,4 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         order.developer = developer
         order.save()
-
         return Response({'detail': f'Task assigned to {developer.username}.'})
