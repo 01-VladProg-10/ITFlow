@@ -42,8 +42,10 @@ INSTALLED_APPS = [
     # Local apps
     'accounts.apps.AccountsConfig',
     'orders',
-    'nortifications',
+    'nortifications.apps.NortificationsConfig',
     'files',
+
+    
 ]
 
 # ---------------------------------------------------------------------
@@ -60,7 +62,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
+    
     ],
+    'EXCEPTION_HANDLER': 'ITFlow.exceptions.custom_exception_handler',
 }
 
 SIMPLE_JWT = {
@@ -230,19 +234,48 @@ LOGGING = {
     },
 
     'loggers': {
-        'django': {
+        #  Главный логгер проекта 
+        'itflow': {
             'handlers': ['console', 'file'],
-            'level': 'INFO',
+            'level': 'DEBUG',
+            'propagate': False,
         },
+
+        # Локальные приложения
         'accounts': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         },
+        'orders': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'nortifications': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+
+        # Опциональная история изменений
+        'history': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+
+        # Django ошибки
         'django.request': {
             'handlers': ['errors'],
             'level': 'ERROR',
             'propagate': False,
+        },
+
+        #  Django системное
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
         },
     },
 }

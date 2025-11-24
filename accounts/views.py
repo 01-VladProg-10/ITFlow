@@ -5,7 +5,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import Group
 from .models import User
 from .serializers import UserSerializer, GroupSerializer
+import logging
 
+logger = logging.getLogger(__name__)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -16,10 +18,10 @@ class UserViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [IsAuthenticated()]
 
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
-    def me(self, request):
-        serializer = self.get_serializer(request.user)
-        return Response(serializer.data)
+
+    # ---------------------------------------------------------
+    #      МЕТОД: /users/register — логирование + валидация
+    # ---------------------------------------------------------
 
     @action(detail=False, methods=['post'])
     def register(self, request):
@@ -27,10 +29,31 @@ class UserViewSet(viewsets.ModelViewSet):
         Rejestracja nowego użytkownika.
         Grupa 'client' zostanie przypisana automatycznie przez sygnał post_save.
         """
+        logger.info(
+            "User registration attempt",
+            extra={
+                "username": request.data.get("username"),
+                "email": request.data.get("email"),
+                "ip": request.META.get("REMOTE_ADDR")
+            }
+        )
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        
+        # Валидация с логированием ошибки
+        if not serializer.is_valid():
+            logger.warning(
+                "User registration failed (validation error)",
+                extra={"errors": serializer.errors}
+            )
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Сохранение пользователя
 
         user = serializer.save()
+        logger.info(
+            "User registered successfully",
+            extra={"user_id": user.id}
+        )
 
         return Response(
             {
@@ -40,8 +63,20 @@ class UserViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED
         )
 
-    @action(detail=False, methods=['get'])
+
+ # ---------------------------------------------------------
+    #       МЕТОД: /users/me — логирование + возврат данных
+    # ---------------------------------------------------------
+
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def me(self, request):
+
+        logger.debug(
+            "Fetching current user profile",
+            extra={"user_id": request.user.id}
+        )
+
         """Zwraca dane aktualnie zalogowanego użytkownika."""
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)

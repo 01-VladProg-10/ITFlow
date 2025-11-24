@@ -24,6 +24,7 @@ whitenoise==6.7.0
 
 # === Email ===
 sendgrid==6.11.0
+django-sendgrid-v5==1.2.2
 
 # === File Storage / Cloudflare R2 ===
 django-storages[boto3]==1.13.2
