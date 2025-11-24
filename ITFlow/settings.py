@@ -21,16 +21,6 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'unsafe-default-secret')
 DEBUG = True
 ALLOWED_HOSTS = []
 
-
-import logging
-from pathlib import Path
-import os
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
-
 # ---------------------------------------------------------------------
 # Installed applications
 # ---------------------------------------------------------------------

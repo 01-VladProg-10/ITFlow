@@ -13,7 +13,7 @@ urlpatterns = [
 
     # 🔹 Подключение приложений
     path('api/accounts/', include('accounts.urls')),
-    path('api/orders/', include('orders.urls')),
+    path('api/', include('orders.urls')),
     path('api/notifications/', include('nortifications.urls')),
     path('api/files/', include('files.urls')),
 

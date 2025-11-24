@@ -3,5 +3,9 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.14 (ITFlow)" />
   </component>
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 (ITFlow)" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.14 (ITFlow)" project-jdk-type="Python SDK" />
+>>>>>>> 2166394907cc6fa51918a94b8d28d1a5a3a3b9ed
 </project>
