@@ -33,7 +33,6 @@ async function refreshAccess(): Promise<boolean> {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      // якщо бек читає refresh з cookie — тіла не потрібно
     });
     if (!res.ok) return false;
     const data = await res.json().catch(() => ({}));
