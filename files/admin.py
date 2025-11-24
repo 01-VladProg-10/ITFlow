@@ -37,12 +37,3 @@ class FileAdmin(admin.ModelAdmin):
             return format_html('<a href="{}" target="_blank">Otwórz plik</a>', obj.uploaded_file_url)
         return "-"
     file_link.short_description = "Plik (URL)"
-
-from django.contrib import admin
-from .models import File
-
-@admin.register(File)
-class FileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'file_type', 'uploaded_by', 'visible_to_clients', 'created_at')
-    list_filter = ('file_type', 'visible_to_clients')
-    search_fields = ('name', 'description')
