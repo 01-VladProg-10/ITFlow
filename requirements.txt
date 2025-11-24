@@ -1,0 +1,33 @@
+# === Django & Core ===
+Django==5.2.7
+djangorestframework==3.15.2
+django-filter==24.3
+
+# === JWT Authentication ===
+djangorestframework-simplejwt==5.3.1
+
+# === PostgreSQL Driver ===
+psycopg2-binary==2.9.10
+
+# === Environment Variables ===
+python-dotenv==1.0.1
+
+# === Development / Debugging ===
+pytz==2025.1
+sqlparse==0.5.2
+tzdata==2025.1
+
+# === Optional but useful (recommended) ===
+drf-yasg==1.21.8           # Swagger / OpenAPI UI
+gunicorn==23.0.0
+whitenoise==6.7.0
+
+# === Email ===
+sendgrid==6.11.0
+
+# === File Storage / Cloudflare R2 ===
+django-storages[boto3]==1.13.2
+boto3==1.28.28
+
+# === CORS Support for React Frontend ===
+django-cors-headers==4.0.0

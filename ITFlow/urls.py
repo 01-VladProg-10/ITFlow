@@ -1,14 +1,20 @@
+# ITFlow/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
+    # 🔹 Панель администратора
     path('admin/', admin.site.urls),
 
-    # SimpleJWT endpoints
+    # 🔹 JWT авторизация
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    # accounts app
-    path('api/', include('accounts.urls')),
+    # 🔹 Подключение приложений
+    path('api/accounts/', include('accounts.urls')),
+    path('api/', include('orders.urls')),
+    path('api/notifications/', include('nortifications.urls')),
+    path('api/files/', include('files.urls')),
+
 ]
