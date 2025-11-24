@@ -1,7 +1,5 @@
 import { API_BASE, apiFetch, auth } from "./auth";
 
-// SimpleJWT за замовчуванням чекає username+password.
-// Якщо у формі ти вводиш email — просто на відправці підставимо його у поле username.
 export async function loginUser(usernameOrEmail: string, password: string) {
   const res = await fetch(`${API_BASE}/token/`, {
     method: "POST",
