@@ -308,12 +308,6 @@ function RightSidePanel({ role }: { role: Role }) {
 
 /* ============================================================
    MAIN PAGE – підтримка ?new=1 + всі замовлення
-============================================================ */
-export function OrdersPage({ role }: { role: Role }) {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const openNew = params.get("new") === "1";
-
   const isProgrammer = role === "programmer";
 
   const [orders, setOrders] = useState<Order[]>([]);
