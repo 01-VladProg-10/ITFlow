@@ -19,7 +19,6 @@ import { fetchOrders, createOrder, type Order } from "../api/orders";
 
 type Role = "client" | "manager" | "programmer";
 
-/* -------------------- LOGO -------------------- */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
