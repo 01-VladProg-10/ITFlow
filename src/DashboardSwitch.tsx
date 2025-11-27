@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { fetchMe } from "./api/users";
-import type { MeResponse } from "./api/users";
+import {
+  fetchDashboard,
+  type DashboardResponse,
+} from "./api/users";
 
 import UserDashboard, {
   ManagerDashboard,
@@ -12,27 +14,65 @@ const ROLE_MANAGER = "manager";
 const ROLE_PROGRAMMER = "programmer";
 
 export default function DashboardSwitch() {
-  const [me, setMe] = useState<MeResponse | null>(null);
+  const [data, setData] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchMe()
-      .then(setMe)
+    fetchDashboard()
+      .then(setData)
       .catch((err) => {
-        console.error("fetchMe error", err);
-        setMe(null);
+        console.error("fetchDashboard error", err);
+        setData(null);
       })
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="p-6">Ładowanie...</div>;
-  if (!me) return <div className="p-6">Brak dostępu. Zaloguj się ponownie.</div>;
+  if (!data)
+    return (
+      <div className="p-6">
+        Brak dostępu. Zaloguj się ponownie.
+      </div>
+    );
 
-  const groupNames = (me.groups || []).map((g) => (g.name || "").toLowerCase());
+  // groups z pola "groups" (["manager"]) i z user.groups ([{name:"manager"}])
+  const groupNamesTop = (data.groups || [])
+    .map((g) => (g || "").toLowerCase());
 
-  if (groupNames.includes(ROLE_PROGRAMMER)) return <ProgrammerDashboard />;
-  if (groupNames.includes(ROLE_MANAGER)) return <ManagerDashboard />;
-  if (groupNames.includes(ROLE_CLIENT)) return <UserDashboard />;
+  const groupNamesUser = (data.user?.groups || [])
+    .map((g) => (g.name || "").toLowerCase());
+
+  const groupNames = Array.from(
+    new Set([...groupNamesTop, ...groupNamesUser])
+  );
+
+  // przekazujemy latest_order i user dalej do dashboardów
+  if (groupNames.includes(ROLE_PROGRAMMER)) {
+    return (
+      <ProgrammerDashboard
+        latestOrder={data.latest_order}
+        user={data.user}
+      />
+    );
+  }
+
+  if (groupNames.includes(ROLE_MANAGER)) {
+    return (
+      <ManagerDashboard
+        latestOrder={data.latest_order}
+        user={data.user}
+      />
+    );
+  }
+
+  if (groupNames.includes(ROLE_CLIENT)) {
+    return (
+      <UserDashboard
+        latestOrder={data.latest_order}
+        user={data.user}
+      />
+    );
+  }
 
   return (
     <div className="p-6">
