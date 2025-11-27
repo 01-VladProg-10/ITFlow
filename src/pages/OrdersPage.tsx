@@ -1,6 +1,5 @@
-// src/pages/OrdersPage.tsx
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import dashboardIcon from "../icons/daszboard.png";
 import zanowieniaIcon from "../icons/zanowienia.png";
@@ -20,17 +19,7 @@ import { fetchOrders, createOrder, type Order } from "../api/orders";
 
 type Role = "client" | "manager" | "programmer";
 
-type NavItem = {
-  name: string;
-  to: string;
-  icon: string;
-};
-
-type OrdersPageProps = {
-  role: Role;
-};
-
-/* === Logo === */
+/* -------------------- LOGO -------------------- */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
@@ -54,8 +43,9 @@ function Logo({ className = "h-7 w-auto" }) {
   );
 }
 
-/* === Sidebar nav === */
-const navByRole: Record<Role, NavItem[]> = {
+/* -------------------- SIDEBAR NAV -------------------- */
+
+const navByRole = {
   client: [
     { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
     { name: "Moje zamówienia", to: "/orders", icon: zanowieniaIcon },
@@ -70,12 +60,12 @@ const navByRole: Record<Role, NavItem[]> = {
   manager: [
     { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
     { name: "Zamówienia", to: "/manager-orders", icon: zanowieniaIcon },
-    { name: "Zgłoszenia", to: "/#", icon: kontaktIcon }, 
+    { name: "Zgłoszenia", to: "/#", icon: kontaktIcon },
     { name: "Ustawienia", to: "/manager-ustawienia", icon: ustawieniaIcon },
   ],
 };
 
-/* === Sidebar === */
+/* -------------------- SIDEBAR -------------------- */
 function Sidebar({ role }: { role: Role }) {
   const nav = navByRole[role];
 
@@ -84,10 +74,7 @@ function Sidebar({ role }: { role: Role }) {
       <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
         <div className="flex items-center justify-between px-4 h-16">
           <Logo />
-          <button
-            className="md:hidden rounded-xl p-2 hover:bg-white/10"
-            aria-label="Zamknij menu"
-          >
+          <button className="md:hidden rounded-xl p-2 hover:bg-white/10">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -110,40 +97,17 @@ function Sidebar({ role }: { role: Role }) {
         <div className="mt-auto p-4">
           <Link
             to="/"
-            className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 transition px-4 py-2 text-sm font-semibold"
+            className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-semibold"
           >
             <LogIn className="h-4 w-4" /> Wyloguj się
           </Link>
-
-          <div className="mt-4 text-xs text-white/70">
-            © {new Date().getFullYear()} ITFlow
-          </div>
         </div>
       </div>
     </aside>
   );
 }
 
-/* === Gradient button === */
-function GradientButton({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
-    >
-      {children}
-    </button>
-  );
-}
-
-/* === Main order card === */
+/* -------------------- MAIN ORDER CARD -------------------- */
 function OrderMainCard({ role, order }: { role: Role; order: Order | null }) {
   const isProgrammer = role === "programmer";
 
@@ -158,7 +122,7 @@ function OrderMainCard({ role, order }: { role: Role; order: Order | null }) {
   return (
     <div className="flex-1 bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
       <div className="space-y-4">
-        <div className="space-y-1">
+        <div>
           <div className="text-[13px] text-slate-500">
             {isProgrammer ? "Twoje zadanie" : "Twoje zamówienie"}
           </div>
@@ -180,25 +144,19 @@ function OrderMainCard({ role, order }: { role: Role; order: Order | null }) {
               <div className="h-3 w-[85%] rounded-full bg-gradient-to-r from-[#6D28D9] to-[#1F4FE4]" />
             </div>
           </div>
-          <div>
-            Termin:{" "}
-            <span className="text-[#2563EB] font-semibold">27 kwi 2025</span>
-          </div>
           <div className="flex items-center gap-2 mt-1 text-[13px] text-slate-600">
             <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-100">
               <Clock className="h-3 w-3 text-orange-500" />
             </span>
             <span>
               Ostatnia aktualizacja:{" "}
-              <span className="text-[#2563EB] font-semibold">
-                27 kwi 2025
-              </span>
+              <span className="text-[#2563EB] font-semibold">27 kwi 2025</span>
             </span>
           </div>
         </div>
 
         <div className="pt-4">
-          <button className="px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6] transition">
+          <button className="px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
             Zobacz szczegóły
           </button>
         </div>
@@ -207,7 +165,7 @@ function OrderMainCard({ role, order }: { role: Role; order: Order | null }) {
   );
 }
 
-/* === Client panel (files) === */
+/* -------------------- CLIENT FILES PANEL -------------------- */
 function ClientFilesPanel() {
   const files = [
     { name: "Raport.pdf", color: "#F59E0B" },
@@ -216,9 +174,7 @@ function ClientFilesPanel() {
 
   return (
     <div className="w-[260px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-      <h2 className="font-semibold mb-4 text-[20px] text-slate-900">
-        Pliki
-      </h2>
+      <h2 className="font-semibold mb-4 text-[20px]">Pliki</h2>
 
       <div className="space-y-4">
         {files.map((file, idx) => (
@@ -226,7 +182,6 @@ function ClientFilesPanel() {
             key={idx}
             className="bg-[#F5F3FF] rounded-2xl p-4 flex flex-col gap-3 shadow-sm"
           >
-            {/* Górna linia */}
             <div className="flex items-center gap-3">
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-orange-100">
                 <FileText className="h-5 w-5" style={{ color: file.color }} />
@@ -237,8 +192,7 @@ function ClientFilesPanel() {
               </span>
             </div>
 
-            {/* Przycisk Pobierz */}
-            <button className="self-start px-4 py-1.5 text-[13px] font-semibold rounded-xl bg-[linear-gradient(90deg,#8F2AFA,#5F7EFA,#2D19E9)] text-white shadow hover:opacity-90 transition">
+            <button className="self-start px-4 py-1.5 text-[13px] font-semibold rounded-xl bg-[linear-gradient(90deg,#8F2AFA,#5F7EFA,#2D19E9)] text-white">
               Pobierz
             </button>
           </div>
@@ -248,39 +202,35 @@ function ClientFilesPanel() {
   );
 }
 
-/* === Programmer history panel === */
+/* -------------------- PROGRAMMER HISTORY -------------------- */
 function ProgrammerHistoryPanel() {
   const history = [
     {
       label: "Gotowe",
       color: "#EF4444",
       iconBg: "bg-red-100",
-      icon: Flame,   // 🔥
+      icon: Flame,
     },
     {
       label: "Dodany plik pośredni",
       color: "#F59E0B",
       iconBg: "bg-orange-100",
-      icon: FileText, // документ
+      icon: FileText,
     },
   ];
 
   return (
     <div className="w-[260px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-      <h2 className="font-semibold mb-4 text-[20px] text-slate-900">
-        Historia
-      </h2>
+      <h2 className="font-semibold mb-4 text-[20px]">Historia</h2>
 
       <div className="space-y-4">
         {history.map((item, idx) => {
           const Icon = item.icon;
-
           return (
             <div
               key={idx}
               className="bg-[#F5F3FF] rounded-2xl p-4 flex flex-col gap-3 shadow-sm"
             >
-              {/* Górna linia */}
               <div className="flex items-center gap-3">
                 <span
                   className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${item.iconBg}`}
@@ -293,8 +243,7 @@ function ProgrammerHistoryPanel() {
                 </span>
               </div>
 
-              {/* Przycisk */}
-              <button className="self-start px-4 py-1.5 text-[13px] font-semibold rounded-xl bg-[linear-gradient(90deg,#8F2AFA,#5F7EFA,#2D19E9)] text-white shadow hover:opacity-90 transition">
+              <button className="self-start px-4 py-1.5 text-[13px] font-semibold rounded-xl bg-[linear-gradient(90deg,#8F2AFA,#5F7EFA,#2D19E9)] text-white">
                 Zobacz
               </button>
             </div>
@@ -305,76 +254,43 @@ function ProgrammerHistoryPanel() {
   );
 }
 
-
-/* === Manager panel – nowy, jak z makiet === */
+/* -------------------- MANAGER FILES PANEL -------------------- */
 function ManagerFilesPanel() {
   const files = [
-    {
-      name: "Raport.pdf",
-      size: "2.3 MB",
-      iconBg: "bg-orange-100",
-      iconColor: "text-orange-500",
-    },
-    {
-      name: "Poprawki.pdf",
-      size: "3.1 MB",
-      iconBg: "bg-green-100",
-      iconColor: "text-green-500",
-    },
-    {
-      name: "Gotowe.zip",
-      size: "100 MB",
-      iconBg: "bg-red-100",
-      iconColor: "text-red-500",
-    },
+    { name: "Raport.pdf", size: "2.3 MB", iconBg: "bg-orange-100", iconColor: "text-orange-500" },
+    { name: "Poprawki.pdf", size: "3.1 MB", iconBg: "bg-green-100", iconColor: "text-green-500" },
+    { name: "Gotowe.zip", size: "100 MB", iconBg: "bg-red-100", iconColor: "text-red-500" },
   ];
 
   return (
     <div className="w-[300px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-      <h2 className="font-semibold mb-4 text-[16px] text-slate-900">
-        Pliki od programisty
-      </h2>
+      <h2 className="font-semibold mb-4 text-[16px]">Pliki od programisty</h2>
 
-      {/* Lista plików */}
       <div className="space-y-3 mb-6">
         {files.map((file, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-2"
-          >
+          <div key={index} className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-2">
             <div className="flex items-center gap-3">
-              <span
-                className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${file.iconBg}`}
-              >
+              <span className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${file.iconBg}`}>
                 <FileText className={`h-5 w-5 ${file.iconColor}`} />
               </span>
 
               <div className="flex flex-col">
-                <span className="font-medium text-slate-800 text-[14px]">
-                  {file.name}
-                </span>
-                <span className="text-[12px] text-slate-500">
-                  {file.size}
-                </span>
+                <span className="font-medium text-slate-800 text-[14px]">{file.name}</span>
+                <span className="text-[12px] text-slate-500">{file.size}</span>
               </div>
             </div>
 
-            {/* Checkbox */}
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-slate-300"
-            />
+            <input type="checkbox" className="h-4 w-4 rounded border-slate-300" />
           </div>
         ))}
       </div>
 
-      {/* Przyciski */}
       <div className="flex items-center gap-3 mb-6">
         <button className="px-4 py-2 rounded-xl text-[13px] font-semibold bg-slate-200 text-slate-800">
           Pokaż klientowi
         </button>
 
-        <button className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2] transition flex items-center gap-2">
+        <button className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2] flex items-center gap-2">
           <Download className="h-4 w-4" />
           Pobierz
         </button>
@@ -383,61 +299,57 @@ function ManagerFilesPanel() {
   );
 }
 
+/* -------------------- RIGHT PANEL ROUTER -------------------- */
 function RightSidePanel({ role }: { role: Role }) {
   if (role === "client") return <ClientFilesPanel />;
   if (role === "programmer") return <ProgrammerHistoryPanel />;
   return <ManagerFilesPanel />;
 }
 
-/* === Główna strona z logiką Task1 + Task5 === */
-export function OrdersPage({ role }: OrdersPageProps) {
+/* ============================================================
+   MAIN PAGE – підтримка ?new=1 + всі замовлення
   const isProgrammer = role === "programmer";
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  // Task1 – stan formularza
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(role === "client" && openNew);
   const [form, setForm] = useState({ title: "", description: "" });
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [createSuccess, setCreateSuccess] = useState<string | null>(null);
 
-  // Task5 – pobieranie listy z backendu
+  /* ---- Pobieranie listy zamówień ---- */
   useEffect(() => {
     setLoading(true);
-    setLoadError(null);
     fetchOrders()
       .then(setOrders)
       .catch((err) => {
         console.error("fetchOrders error", err);
-        setLoadError(
-          err instanceof Error
-            ? err.message
-            : "Nie udało się pobrać listy zamówień."
-        );
+        setLoadError("Nie udało się pobrać listy zamówień.");
       })
       .finally(() => setLoading(false));
   }, []);
 
+  /* ---- Tworzenie zamówienia ---- */
   async function handleCreateOrder(e: React.FormEvent) {
     e.preventDefault();
     setCreating(true);
     setCreateError(null);
     setCreateSuccess(null);
+
     try {
       const newOrder = await createOrder({
         title: form.title,
         description: form.description,
       });
+
       setOrders((prev) => [newOrder, ...prev]);
       setCreateSuccess("Zamówienie zostało utworzone.");
       setForm({ title: "", description: "" });
       setShowForm(false);
     } catch (err: any) {
-      console.error("createOrder error", err);
-      // front tylko wypisuje to, co backend zwrócił
       setCreateError(
         err instanceof Error ? err.message : "Nie udało się utworzyć zamówienia."
       );
@@ -446,9 +358,6 @@ export function OrdersPage({ role }: OrdersPageProps) {
     }
   }
 
-  const firstOrder = orders[0] ?? null;
-
-  // widoki ładowania / błędu – proste, ale z sidebar
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F3F2F8]">
@@ -462,9 +371,7 @@ export function OrdersPage({ role }: OrdersPageProps) {
     return (
       <div className="min-h-screen bg-[#F3F2F8]">
         <Sidebar role={role} />
-        <main className="md:ml-72 p-10 text-red-600 whitespace-pre-wrap">
-          {loadError}
-        </main>
+        <main className="md:ml-72 p-10 text-red-600">{loadError}</main>
       </div>
     );
   }
@@ -474,27 +381,42 @@ export function OrdersPage({ role }: OrdersPageProps) {
       <Sidebar role={role} />
 
       <main className="md:ml-72">
-        {/* Gradient bar */}
         <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
 
         <div className="px-[88px] pt-10 pb-12">
-          {/* header */}
-          <div>
-            <h1 className="text-[32px] font-extrabold text-slate-900">
-              {isProgrammer ? "Lista zadań" : "Lista zamówień"}
-            </h1>
-            <p className="text-slate-500 text-[14px] mt-1">
-              {orders.length}{" "}
-              {isProgrammer ? "zadań" : "zamówień"} w systemie
-            </p>
-          </div>
+          <h1 className="text-[32px] font-extrabold text-slate-900">
+            {isProgrammer ? "Lista zadań" : "Lista zamówień"}
+          </h1>
+          <p className="text-slate-500 text-[14px] mt-1">
+            {orders.length} {isProgrammer ? "zadań" : "zamówień"} w systemie
+          </p>
 
+          {/* ------- MAIN CARD + RIGHT PANEL ------- */}
           <div className="mt-10 flex gap-10 items-start">
-            <OrderMainCard role={role} order={firstOrder} />
+            <OrderMainCard role={role} order={orders[0] ?? null} />
             <RightSidePanel role={role} />
           </div>
 
-          {/* dół strony – przyciski + formularz klienta */}
+          {/* ------- LISTA WSZYSTKICH ZAMÓWIEŃ ------- */}
+          <div className="mt-12">
+            <h2 className="text-[20px] font-bold text-slate-900 mb-4">
+              Wszystkie {isProgrammer ? "zadania" : "zamówienia"}
+            </h2>
+
+            <ul className="space-y-3">
+              {orders.map((o) => (
+                <li
+                  key={o.id}
+                  className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-[14px] flex justify-between"
+                >
+                  <span>{o.title}</span>
+                  <span className="text-slate-500">{o.status}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ------- FORMULARZ / PRZYCISKI -------- */}
           <div className="mt-12 space-y-4 max-w-xl">
             {role === "client" && (
               <>
@@ -504,9 +426,7 @@ export function OrdersPage({ role }: OrdersPageProps) {
                   </div>
                 )}
                 {createSuccess && (
-                  <div className="text-sm text-green-600">
-                    {createSuccess}
-                  </div>
+                  <div className="text-sm text-green-600">{createSuccess}</div>
                 )}
 
                 {showForm ? (
@@ -515,7 +435,7 @@ export function OrdersPage({ role }: OrdersPageProps) {
                     className="bg-white rounded-2xl shadow-md border border-slate-200 p-4 space-y-3"
                   >
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         Tytuł zamówienia
                       </label>
                       <input
@@ -528,8 +448,9 @@ export function OrdersPage({ role }: OrdersPageProps) {
                         required
                       />
                     </div>
+
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                      <label className="block text-sm font-medium mb-1">
                         Opis
                       </label>
                       <textarea
@@ -542,7 +463,6 @@ export function OrdersPage({ role }: OrdersPageProps) {
                             description: e.target.value,
                           }))
                         }
-                        required
                       />
                     </div>
 
@@ -550,10 +470,11 @@ export function OrdersPage({ role }: OrdersPageProps) {
                       <button
                         type="submit"
                         disabled={creating}
-                        className="px-6 py-2 rounded-xl text-sm font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2] disabled:opacity-60"
+                        className="px-6 py-2 rounded-xl text-sm font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]"
                       >
                         {creating ? "Tworzenie..." : "Złóż zamówienie"}
                       </button>
+
                       <button
                         type="button"
                         onClick={() => setShowForm(false)}
@@ -564,19 +485,26 @@ export function OrdersPage({ role }: OrdersPageProps) {
                     </div>
                   </form>
                 ) : (
-                  <GradientButton onClick={() => setShowForm(true)}>
+                  <button
+                    className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]"
+                    onClick={() => setShowForm(true)}
+                  >
                     Nowe zamówienie
-                  </GradientButton>
+                  </button>
                 )}
               </>
             )}
 
             {role === "programmer" && (
-              <GradientButton>Zmień status</GradientButton>
+              <button className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]">
+                Zmień status
+              </button>
             )}
 
             {role === "manager" && (
-              <GradientButton>Zamówienia</GradientButton>
+              <button className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]">
+                Zamówienia
+              </button>
             )}
           </div>
         </div>
@@ -585,8 +513,7 @@ export function OrdersPage({ role }: OrdersPageProps) {
   );
 }
 
-/* === Public wrappers for router === */
-
+/* -------------------- EXPORTS FOR ROUTER -------------------- */
 export function ClientOrdersPage() {
   return <OrdersPage role="client" />;
 }
