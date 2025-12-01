@@ -8,12 +8,18 @@ export type Order = {
   status: string;
   developer: number | null;
   manager: number | null;
+  created_at?: string;
+  updated_at?: string;
 };
 
 // API_BASE = "http://127.0.0.1:8080/api"
-// Тоді endpoint /api/orders/ на бекенді відповідає `${API_BASE}/orders/`
+// → ORDERS_URL = "http://127.0.0.1:8080/api/orders/"
 const ORDERS_URL = `${API_BASE}/orders/`;
 
+/**
+ * Pobiera listę wszystkich zamówień.
+ * GET /api/orders/
+ */
 export async function fetchOrders(): Promise<Order[]> {
   const res = await apiFetch(ORDERS_URL, {
     method: "GET",
@@ -32,16 +38,25 @@ export async function fetchOrders(): Promise<Order[]> {
   return json as Order[];
 }
 
-export async function createOrder(payload: {
+type CreateOrderPayload = {
   title: string;
   description: string;
-}): Promise<Order> {
+  status?: string;
+  developer?: number | null;
+  manager?: number | null;
+};
+
+/**
+ * Tworzy nowe zamówienie.
+ * POST /api/orders/
+ */
+export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
   const body = {
     title: payload.title,
     description: payload.description,
-    status: "submitted",
-    developer: null,
-    manager: null,
+    status: payload.status ?? "submitted",
+    developer: payload.developer ?? null,
+    manager: payload.manager ?? null,
   };
 
   const res = await apiFetch(ORDERS_URL, {

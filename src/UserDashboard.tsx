@@ -93,7 +93,7 @@ const navByRole: Record<RoleKey, NavItem[]> = {
 
 /**
  * Тепер roleCopy зберігає тільки те, що не залежить від бекенду.
- * greeting і subText будемо рахувати динамічно всередині Dashboard.
+ * greeting і subText рахуємо динамічно всередині Dashboard.
  */
 const roleCopy: Record<
   RoleKey,
@@ -115,6 +115,73 @@ const roleCopy: Record<
     buttonText: "Zmień status",
   },
 };
+
+/* === HELPERS ДЛЯ ПРОГРЕС-БАРУ + ДАТИ === */
+
+/** Мапимо статус → % прогресу */
+function getProgressFromStatus(statusRaw: string | null | undefined): number {
+  const status = (statusRaw || "").toLowerCase().trim();
+
+  switch (status) {
+    case "submitted":
+    case "nowe":
+    case "new":
+      return 20;
+    case "in_progress":
+    case "in progress":
+    case "w trakcie":
+      return 50;
+    case "in_review":
+    case "review":
+    case "do akceptacji":
+      return 75;
+    case "done":
+    case "completed":
+    case "zakończone":
+      return 100;
+    default:
+      return 10; // невідомий статус — трошки заповнена лінія
+  }
+}
+
+/** Чим ближче до 100%, тим більше зеленого */
+function getProgressGradient(progress: number): string {
+  if (progress < 40) {
+    // фіолетовий → синій
+    return "from-[#6D28D9] to-[#1F4FE4]";
+  }
+  if (progress < 80) {
+    // фіолетовий → синьо-зелений
+    return "from-[#6D28D9] to-[#22C55E]";
+  }
+  // майже готово → зелений градієнт
+  return "from-[#16A34A] to-[#22C55E]";
+}
+
+/** Форматуємо дату останньої актуалізації (updated_at / created_at) */
+function formatLatestOrderDate(latestOrder?: LatestOrder | null): string | null {
+  if (!latestOrder) return null;
+
+  const anyOrder = latestOrder as any;
+  const raw =
+    anyOrder.updated_at ??
+    anyOrder.updatedAt ??
+    anyOrder.modified_at ??
+    anyOrder.created_at ??
+    anyOrder.createdAt ??
+    null;
+
+  if (!raw) return null;
+
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return null;
+
+  return d.toLocaleDateString("pl-PL", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
 
 /* === SIDEBAR (desktop + mobile overlay) === */
 
@@ -196,7 +263,7 @@ function Sidebar({
   );
 }
 
-/* === ІСТОРІЯ (правий блок) — однакова для всіх === */
+/* === ІСТОРІЯ (правий блок) === */
 
 const history = [
   { Icon: Flame, bg: "#F43F5E", label: "Gotowe", date: "27 kwi 2025" },
@@ -241,13 +308,20 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
         : "Brak zamówień z aktualizacjami.";
   } else {
     const base =
-      role === "programmer" ? "Ostatnie zadanie ma status" : "Ostatnie zamówienie ma status";
+      role === "programmer"
+        ? "Ostatnie zadanie ma status"
+        : "Ostatnie zamówienie ma status";
     subText = `${base}: ${latestOrder.status ?? "nieznany"}.`;
   }
 
-  // Дані в картці з бекенду, з fallback
+  // Дані в картці з беку, з fallback
   const orderTitle = latestOrder?.title ?? "Brak zamówień";
   const orderStatus = latestOrder?.status ?? "—";
+
+  // 🔥 Динаміка для лінії та дати
+  const progress = getProgressFromStatus(latestOrder?.status);
+  const progressGradient = getProgressGradient(progress);
+  const updatedLabel = formatLatestOrderDate(latestOrder);
 
   return (
     <div className="min-h-screen bg-[#F3F2F8]">
@@ -311,8 +385,25 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
                         {orderStatus}
                       </span>
                     </div>
-                    <div className="mt-2 h-3 rounded-full bg-slate-100 mb-6">
-                      <div className="h-3 w-[85%] rounded-full bg-gradient-to-r from-[#6D28D9] to-[#1F4FE4]" />
+
+                    {/* 🔁 ДИНАМІЧНИЙ ПРОГРЕС-БАР */}
+                    <div className="mt-2 h-3 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        className={`h-3 rounded-full bg-gradient-to-r ${progressGradient}`}
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[12px] text-slate-500">
+                      <span>{progress}% ukończone</span>
+                      {updatedLabel && (
+                        <span>
+                          Ostatnia aktualizacja:{" "}
+                          <span className="text-[#2563EB] font-semibold">
+                            {updatedLabel}
+                          </span>
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -325,10 +416,7 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
                 </div>
                 <ul className="space-y-3 text-[14px]">
                   {history.map(({ Icon, bg, label, date }, i) => (
-                    <li
-                      key={i}
-                      className="flex items-center justify-between"
-                    >
+                    <li key={i} className="flex items-center justify-between">
                       <div className="flex items-center gap-3 text-slate-800">
                         <span
                           className="h-8 w-8 rounded-full flex items-center justify-center shadow"

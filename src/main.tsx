@@ -16,6 +16,7 @@ import {
   ManagerOrdersPage,
 } from "./pages/OrdersPage";
 import ManagerReports from "./pages/ManagerReports";
+import OrderFilesPage from "./pages/OrderFilesPage";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -34,6 +35,21 @@ const router = createBrowserRouter([
   { path: "/orders", element: <ClientOrdersPage /> },          
   { path: "/tasks", element: <ProgrammerOrdersPage /> },      
   { path: "/manager-orders", element: <ManagerOrdersPage /> }, 
+
+ /* CLIENT */
+  { path: "/orders", element: <ClientOrdersPage /> },
+  { path: "/orders/:orderId/files", element: <OrderFilesPage role="client" /> },
+
+  /* PROGRAMMER */
+  { path: "/tasks", element: <ProgrammerOrdersPage /> },
+  { path: "/tasks/:orderId/files", element: <OrderFilesPage role="programmer" /> },
+
+  /* MANAGER */
+  { path: "/manager-orders", element: <ManagerOrdersPage /> },
+  {
+    path: "/manager-orders/:orderId/files",
+    element: <OrderFilesPage role="manager" />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
