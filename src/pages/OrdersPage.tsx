@@ -1,3 +1,4 @@
+// src/pages/OrdersPage.tsx
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -6,19 +7,19 @@ import zanowieniaIcon from "../icons/zanowienia.png";
 import kontaktIcon from "../icons/kontakt.png";
 import ustawieniaIcon from "../icons/ustawienia.png";
 
-import {
-  FileText,
-  Download,
-  Clock,
-  Flame,
-  X,
-  LogIn,
-} from "lucide-react";
+import { FileText, Clock, Flame, X, LogIn } from "lucide-react";
 
 import { fetchOrders, createOrder, type Order } from "../api/orders";
 
 type Role = "client" | "manager" | "programmer";
 
+/** Розширюємо Order локально, щоб мати дати з беку (якщо будуть) */
+type OrderWithMeta = Order & {
+  updated_at?: string | null;
+  created_at?: string | null;
+};
+
+/* === LOGO (як у тебе в інших файлах) === */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
@@ -37,7 +38,9 @@ function Logo({ className = "h-7 w-auto" }) {
         />
         <circle cx="46" cy="22" r="6" fill="url(#g)" />
       </svg>
-      <span className="font-bold text-xl tracking-tight text-white">ITFlow</span>
+      <span className="font-bold text-xl tracking-tight text-white">
+        ITFlow
+      </span>
     </div>
   );
 }
@@ -62,10 +65,10 @@ const navByRole = {
     { name: "Zgłoszenia", to: "/reports", icon: kontaktIcon },
     { name: "Ustawienia", to: "/manager-ustawienia", icon: ustawieniaIcon },
   ],
-};
+} as const;
 
 /* -------------------- SIDEBAR -------------------- */
-function Sidebar({ role }: { role: Role }) {
+export function Sidebar({ role }: { role: Role }) {
   const nav = navByRole[role];
 
   return (
@@ -106,8 +109,76 @@ function Sidebar({ role }: { role: Role }) {
   );
 }
 
+/* -------------------- PROGRESS HELPERS -------------------- */
+
+/** Мапимо статус → % прогресу */
+function getProgressFromStatus(statusRaw: string | null | undefined): number {
+  const status = (statusRaw || "").toLowerCase().trim();
+
+  switch (status) {
+    case "submitted":
+    case "nowe":
+    case "new":
+      return 20;
+    case "in_progress":
+    case "in progress":
+    case "w trakcie":
+      return 50;
+    case "in_review":
+    case "review":
+    case "do akceptacji":
+      return 75;
+    case "done":
+    case "completed":
+    case "zakończone":
+      return 100;
+    default:
+      return 10; // невідомий статус — трохи заповнена лінія
+  }
+}
+
+/** Чим ближче до 100%, тим більше зеленого в градієнті */
+function getProgressGradient(progress: number): string {
+  if (progress < 40) {
+    // фіолетовий → синій
+    return "from-[#6D28D9] to-[#1F4FE4]";
+  }
+  if (progress < 80) {
+    // фіолетовий → синьо-зелений
+    return "from-[#6D28D9] to-[#22C55E]";
+  }
+  // майже готово → зелений
+  return "from-[#16A34A] to-[#22C55E]";
+}
+
+/** Форматуємо updated_at з беку до гарного польського формату */
+function formatUpdatedAt(order: OrderWithMeta): string | null {
+  const raw =
+    (order as any).updated_at ??
+    (order as any).updatedAt ??
+    (order as any).modified_at ??
+    null;
+
+  if (!raw) return null;
+
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return null;
+
+  return d.toLocaleDateString("pl-PL", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 /* -------------------- MAIN ORDER CARD -------------------- */
-function OrderMainCard({ role, order }: { role: Role; order: Order | null }) {
+function OrderMainCard({
+  role,
+  order,
+}: {
+  role: Role;
+  order: OrderWithMeta | null;
+}) {
   const isProgrammer = role === "programmer";
 
   if (!order) {
@@ -117,6 +188,10 @@ function OrderMainCard({ role, order }: { role: Role; order: Order | null }) {
       </div>
     );
   }
+
+  const progress = getProgressFromStatus(order.status);
+  const gradient = getProgressGradient(progress);
+  const updatedLabel = formatUpdatedAt(order);
 
   return (
     <div className="flex-1 bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
@@ -137,172 +212,64 @@ function OrderMainCard({ role, order }: { role: Role; order: Order | null }) {
               {order.status || "—"}
             </span>
           </div>
+
+          {/* --- ДИНАМІЧНИЙ ПРОГРЕС --- */}
           <div className="flex items-center gap-3">
             <span>Postęp:</span>
-            <div className="flex-1 h-3 rounded-full bg-slate-100">
-              <div className="h-3 w-[85%] rounded-full bg-gradient-to-r from-[#6D28D9] to-[#1F4FE4]" />
+            <div className="flex-1 h-3 rounded-full bg-slate-100 overflow-hidden">
+              <div
+                className={`h-3 rounded-full bg-gradient-to-r ${gradient}`}
+                style={{ width: `${progress}%` }}
+              />
             </div>
+            <span className="text-[12px] text-slate-500 w-10 text-right">
+              {progress}%
+            </span>
           </div>
+
+          {/* --- ДИНАМІЧНА ДАТА --- */}
           <div className="flex items-center gap-2 mt-1 text-[13px] text-slate-600">
             <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-100">
               <Clock className="h-3 w-3 text-orange-500" />
             </span>
             <span>
               Ostatnia aktualizacja:{" "}
-              <span className="text-[#2563EB] font-semibold">27 kwi 2025</span>
+              <span className="text-[#2563EB] font-semibold">
+                {updatedLabel ?? "brak danych"}
+              </span>
             </span>
           </div>
         </div>
 
         <div className="pt-4">
-          <button className="px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
-            Zobacz szczegóły
-          </button>
-        </div>
+  {role === "manager" && (
+    <Link
+      to={`/manager-orders/${order.id}/files`}
+      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
+      Zobacz szczegóły
+    </Link>
+  )}
+
+  {role === "client" && (
+    <Link
+      to={`/orders/${order.id}/files`}
+      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
+      Zobacz szczegóły
+    </Link>
+  )}
+
+  {role === "programmer" && (
+    <Link
+      to={`/tasks/${order.id}/files`}
+      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
+      Zobacz szczegóły
+    </Link>
+  )}
+</div>
+
       </div>
     </div>
   );
-}
-
-/* -------------------- CLIENT FILES PANEL -------------------- */
-function ClientFilesPanel() {
-  const files = [
-    { name: "Raport.pdf", color: "#F59E0B" },
-    { name: "Poprawki.pdf", color: "#F59E0B" },
-  ];
-
-  return (
-    <div className="w-[260px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-      <h2 className="font-semibold mb-4 text-[20px]">Pliki</h2>
-
-      <div className="space-y-4">
-        {files.map((file, idx) => (
-          <div
-            key={idx}
-            className="bg-[#F5F3FF] rounded-2xl p-4 flex flex-col gap-3 shadow-sm"
-          >
-            <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-orange-100">
-                <FileText className="h-5 w-5" style={{ color: file.color }} />
-              </span>
-
-              <span className="text-slate-800 font-medium text-[15px]">
-                {file.name}
-              </span>
-            </div>
-
-            <button className="self-start px-4 py-1.5 text-[13px] font-semibold rounded-xl bg-[linear-gradient(90deg,#8F2AFA,#5F7EFA,#2D19E9)] text-white">
-              Pobierz
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* -------------------- PROGRAMMER HISTORY -------------------- */
-function ProgrammerHistoryPanel() {
-  const history = [
-    {
-      label: "Gotowe",
-      color: "#EF4444",
-      iconBg: "bg-red-100",
-      icon: Flame,
-    },
-    {
-      label: "Dodany plik pośredni",
-      color: "#F59E0B",
-      iconBg: "bg-orange-100",
-      icon: FileText,
-    },
-  ];
-
-  return (
-    <div className="w-[260px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-      <h2 className="font-semibold mb-4 text-[20px]">Historia</h2>
-
-      <div className="space-y-4">
-        {history.map((item, idx) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={idx}
-              className="bg-[#F5F3FF] rounded-2xl p-4 flex flex-col gap-3 shadow-sm"
-            >
-              <div className="flex items-center gap-3">
-                <span
-                  className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${item.iconBg}`}
-                >
-                  <Icon className="h-5 w-5" style={{ color: item.color }} />
-                </span>
-
-                <span className="text-slate-800 font-medium text-[15px]">
-                  {item.label}
-                </span>
-              </div>
-
-              <button className="self-start px-4 py-1.5 text-[13px] font-semibold rounded-xl bg-[linear-gradient(90deg,#8F2AFA,#5F7EFA,#2D19E9)] text-white">
-                Zobacz
-              </button>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-/* -------------------- MANAGER FILES PANEL -------------------- */
-function ManagerFilesPanel() {
-  const files = [
-    { name: "Raport.pdf", size: "2.3 MB", iconBg: "bg-orange-100", iconColor: "text-orange-500" },
-    { name: "Poprawki.pdf", size: "3.1 MB", iconBg: "bg-green-100", iconColor: "text-green-500" },
-    { name: "Gotowe.zip", size: "100 MB", iconBg: "bg-red-100", iconColor: "text-red-500" },
-  ];
-
-  return (
-    <div className="w-[300px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-      <h2 className="font-semibold mb-4 text-[16px]">Pliki od programisty</h2>
-
-      <div className="space-y-3 mb-6">
-        {files.map((file, index) => (
-          <div key={index} className="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-2">
-            <div className="flex items-center gap-3">
-              <span className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${file.iconBg}`}>
-                <FileText className={`h-5 w-5 ${file.iconColor}`} />
-              </span>
-
-              <div className="flex flex-col">
-                <span className="font-medium text-slate-800 text-[14px]">{file.name}</span>
-                <span className="text-[12px] text-slate-500">{file.size}</span>
-              </div>
-            </div>
-
-            <input type="checkbox" className="h-4 w-4 rounded border-slate-300" />
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-3 mb-6">
-        <button className="px-4 py-2 rounded-xl text-[13px] font-semibold bg-slate-200 text-slate-800">
-          Pokaż klientowi
-        </button>
-
-        <button className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2] flex items-center gap-2">
-          <Download className="h-4 w-4" />
-          Pobierz
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* -------------------- RIGHT PANEL ROUTER -------------------- */
-function RightSidePanel({ role }: { role: Role }) {
-  if (role === "client") return <ClientFilesPanel />;
-  if (role === "programmer") return <ProgrammerHistoryPanel />;
-  return <ManagerFilesPanel />;
 }
 
 /* ============================================================
@@ -315,7 +282,7 @@ export function OrdersPage({ role }: { role: Role }) {
 
   const isProgrammer = role === "programmer";
 
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderWithMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -329,13 +296,30 @@ export function OrdersPage({ role }: { role: Role }) {
   useEffect(() => {
     setLoading(true);
     fetchOrders()
-      .then(setOrders)
+      .then((data) => {
+        setOrders(data as OrderWithMeta[]);
+      })
       .catch((err) => {
         console.error("fetchOrders error", err);
         setLoadError("Nie udało się pobrać listy zamówień.");
       })
       .finally(() => setLoading(false));
   }, []);
+
+  /* ---- Ręczne odświeżanie listy (przycisk dla managera) ---- */
+  async function handleRefreshOrders() {
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const data = await fetchOrders();
+      setOrders(data as OrderWithMeta[]);
+    } catch (err) {
+      console.error("refreshOrders error", err);
+      setLoadError("Nie udało się pobrać listy zamówień.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   /* ---- Tworzenie zamówienia ---- */
   async function handleCreateOrder(e: React.FormEvent) {
@@ -350,13 +334,15 @@ export function OrdersPage({ role }: { role: Role }) {
         description: form.description,
       });
 
-      setOrders((prev) => [newOrder, ...prev]);
+      setOrders((prev) => [newOrder as OrderWithMeta, ...prev]);
       setCreateSuccess("Zamówienie zostało utworzone.");
       setForm({ title: "", description: "" });
       setShowForm(false);
     } catch (err: any) {
       setCreateError(
-        err instanceof Error ? err.message : "Nie udało się utworzyć zamówienia."
+        err instanceof Error
+          ? err.message
+          : "Nie udało się utworzyć zamówienia."
       );
     } finally {
       setCreating(false);
@@ -367,7 +353,9 @@ export function OrdersPage({ role }: { role: Role }) {
     return (
       <div className="min-h-screen bg-[#F3F2F8]">
         <Sidebar role={role} />
-        <main className="md:ml-72 p-10 text-slate-700">Ładowanie zamówień...</main>
+        <main className="md:ml-72 p-10 text-slate-700">
+          Ładowanie zamówień.
+        </main>
       </div>
     );
   }
@@ -399,7 +387,6 @@ export function OrdersPage({ role }: { role: Role }) {
           {/* ------- MAIN CARD + RIGHT PANEL ------- */}
           <div className="mt-10 flex gap-10 items-start">
             <OrderMainCard role={role} order={orders[0] ?? null} />
-            <RightSidePanel role={role} />
           </div>
 
           {/* ------- LISTA WSZYSTKICH ZAMÓWIEŃ ------- */}
@@ -412,10 +399,41 @@ export function OrdersPage({ role }: { role: Role }) {
               {orders.map((o) => (
                 <li
                   key={o.id}
-                  className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-[14px] flex justify-between"
+                  className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-[14px] flex items-center justify-between gap-4"
                 >
-                  <span>{o.title}</span>
-                  <span className="text-slate-500">{o.status}</span>
+                  <div>
+                    <div className="font-medium text-slate-900">{o.title}</div>
+                    <div className="text-slate-500 text-[13px]">
+                      {o.status}
+                    </div>
+                  </div>
+
+                                <div>
+                  {role === "manager" && (
+                    <Link
+                      to={`/manager-orders/${o.id}/files`}
+                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
+                      Zobacz szczegóły
+                    </Link>
+                  )}
+
+                  {role === "client" && (
+                    <Link
+                      to={`/orders/${o.id}/files`}
+                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
+                      Zobacz szczegóły
+                    </Link>
+                  )}
+
+                  {role === "programmer" && (
+                    <Link
+                      to={`/tasks/${o.id}/files`}
+                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
+                      Zobacz szczegóły
+                    </Link>
+                  )}
+                </div>
+
                 </li>
               ))}
             </ul>
@@ -431,7 +449,9 @@ export function OrdersPage({ role }: { role: Role }) {
                   </div>
                 )}
                 {createSuccess && (
-                  <div className="text-sm text-green-600">{createSuccess}</div>
+                  <div className="text-sm text-green-600">
+                    {createSuccess}
+                  </div>
                 )}
 
                 {showForm ? (
@@ -477,7 +497,7 @@ export function OrdersPage({ role }: { role: Role }) {
                         disabled={creating}
                         className="px-6 py-2 rounded-xl text-sm font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]"
                       >
-                        {creating ? "Tworzenie..." : "Złóż zamówienie"}
+                        {creating ? "Tworzenie." : "Złóż zamówienie"}
                       </button>
 
                       <button
@@ -507,7 +527,10 @@ export function OrdersPage({ role }: { role: Role }) {
             )}
 
             {role === "manager" && (
-              <button className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]">
+              <button
+                onClick={handleRefreshOrders}
+                className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]"
+              >
                 Zamówienia
               </button>
             )}
