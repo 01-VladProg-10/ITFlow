@@ -19,7 +19,6 @@ import { fetchOrders, createOrder, type Order } from "../api/orders";
 
 type Role = "client" | "manager" | "programmer";
 
-/* -------------------- LOGO -------------------- */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
@@ -60,7 +59,7 @@ const navByRole = {
   manager: [
     { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
     { name: "Zamówienia", to: "/manager-orders", icon: zanowieniaIcon },
-    { name: "Zgłoszenia", to: "/#", icon: kontaktIcon },
+    { name: "Zgłoszenia", to: "/reports", icon: kontaktIcon },
     { name: "Ustawienia", to: "/manager-ustawienia", icon: ustawieniaIcon },
   ],
 };

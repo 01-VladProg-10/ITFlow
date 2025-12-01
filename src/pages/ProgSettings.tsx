@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { X, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import dashboardIcon from "../icons/daszboard.png";
 import zanowieniaIcon from "../icons/zanowienia.png";
-import kontaktIcon from "../icons/kontakt.png";
 import ustawieniaIcon from "../icons/ustawienia.png";
 
 /* === Sidebar === */
@@ -27,9 +26,9 @@ function Logo({ className = "h-7 w-auto" }) {
 }
 
 const nav = [
-  { name: "Dashboard", href: "#", icon: dashboardIcon },
-  { name: "Moje zadania", href: "#", icon: zanowieniaIcon },
-  { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
+  { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
+  { name: "Moje zadania", to: "/tasks", icon: zanowieniaIcon },
+  { name: "Ustawienia", to: "/prog-ustawienia", icon: ustawieniaIcon },
 ];
 
 function Sidebar() {
