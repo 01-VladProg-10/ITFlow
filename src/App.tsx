@@ -1,8 +1,14 @@
 // App.tsx
 import { useState } from "react";
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
 import {
   CheckCircle2, Menu, X, Sparkles, ShieldCheck, Rocket, Clock,
+=======
+import {Link } from "react-router-dom";
+import {
+   Menu, X, Sparkles, ShieldCheck, Rocket, Clock,
+>>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
   ArrowRight, Mail, Phone, LogIn
 } from "lucide-react";
 
@@ -47,7 +53,12 @@ function Logo({ className = "h-7 w-auto" }) {
 
 function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
   const content = (
+<<<<<<< HEAD
     <div className="flex h-full w-72 flex-col bg-gradient-to-b from-violet-600 to-blue-600 text-white">
+=======
+    <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+
+>>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
       <div className="flex items-center justify-between px-4 h-16">
         <Logo />
         {onClose && (
@@ -87,7 +98,11 @@ function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
               <LogIn className="h-4 w-4" /> Zaloguj
             </Link>
             <a
+<<<<<<< HEAD
               href="#"
+=======
+              href="/login?mode=register"
+>>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-black/20 px-3 py-2 text-sm font-semibold"
             >
               Załóż konto
@@ -113,6 +128,7 @@ function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
   );
 }
 
+<<<<<<< HEAD
 function DashboardMock() {
   return (
     <div className="relative rounded-2xl bg-white/80 backdrop-blur shadow-xl ring-1 ring-black/5 p-5 md:p-6 w-full">
@@ -171,6 +187,10 @@ function DashboardMock() {
 }
 
 export default function App() {
+=======
+
+function AppContent() {
+>>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
   const [open, setOpen] = useState(false);
 
   return (
@@ -203,7 +223,11 @@ export default function App() {
           </p>
           <div className="mt-6 flex justify-center gap-3">
             <a
+<<<<<<< HEAD
               href="#"
+=======
+              href="/login?mode=register"
+>>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
               className="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-r from-violet-600 to-blue-600 text-white font-semibold"
             >
               Wypróbuj teraz <ArrowRight className="h-4 w-4" />
@@ -243,11 +267,22 @@ export default function App() {
             </a>
           </div>
         </section>
+<<<<<<< HEAD
 
         <section className="py-6">
           <DashboardMock />
         </section>
+=======
+>>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
       </main>
     </div>
   );
 }
+<<<<<<< HEAD
+=======
+
+export default function App() {
+ return <AppContent />;
+}
+
+>>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
