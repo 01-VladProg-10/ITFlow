@@ -19,7 +19,6 @@ import { fetchOrders, createOrder, type Order } from "../api/orders";
 
 type Role = "client" | "manager" | "programmer";
 
-/* -------------------- LOGO -------------------- */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
@@ -308,6 +307,12 @@ function RightSidePanel({ role }: { role: Role }) {
 
 /* ============================================================
    MAIN PAGE – підтримка ?new=1 + всі замовлення
+============================================================ */
+export function OrdersPage({ role }: { role: Role }) {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const openNew = params.get("new") === "1";
+
   const isProgrammer = role === "programmer";
 
   const [orders, setOrders] = useState<Order[]>([]);
