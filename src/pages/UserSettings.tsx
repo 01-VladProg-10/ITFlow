@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
+import { getUserProfile, updateUserProfile } from "../api/kontakt";
 
 import dashboardIcon from "../icons/daszboard.png";
 import zanowieniaIcon from "../icons/zanowienia.png";
@@ -26,14 +27,14 @@ function Logo({ className = "h-7 w-auto" }) {
   );
 }
 
-const nav = [
-  { name: "Dashboard", href: "#", icon: dashboardIcon },
-  { name: "Moje zamówienia", href: "#", icon: zanowieniaIcon },
-  { name: "Kontakt", to: "/kontakt", icon: kontaktIcon },
-  { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
-];
-
 function Sidebar() {
+  const nav = [
+    { name: "Dashboard", href: "#", icon: dashboardIcon },
+    { name: "Moje zamówienia", href: "#", icon: zanowieniaIcon },
+    { name: "Kontakt", to: "/kontakt", icon: kontaktIcon },
+    { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
+  ];
+
   return (
     <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
       <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
@@ -78,36 +79,99 @@ function Sidebar() {
 export default function UserSettings() {
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState({
+    username: "",
     firstName: "",
     lastName: "",
     email: "",
     company: "",
+    password: "",
+    passwordVerify: "",
   });
 
+  useEffect(() => {
+    getUserProfile()
+      .then((data) => {
+        setProfile({
+          username: data.username || "",
+          firstName: data.first_name || "",
+          lastName: data.last_name || "",
+          email: data.email || "",
+          company: data.company || "",
+          password: "",
+          passwordVerify: "",
+        });
+      })
+      .catch(console.error);
+  }, []);
+
   const handleChange = (field: string, value: string) => {
-    setProfile(prev => ({ ...prev, [field]: value }));
+    setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
   const displayValue = (value: string) => (value.trim() === "" ? "-" : value);
 
+  const handleSave = async () => {
+    if (profile.password || profile.passwordVerify) {
+      if (profile.password !== profile.passwordVerify) {
+        alert("❌ Hasła muszą być identyczne!");
+        return;
+      }
+    }
+
+    try {
+      const payload: any = {
+        username: profile.username,
+        first_name: profile.firstName,
+        last_name: profile.lastName,
+        email: profile.email,
+        company: profile.company,
+      };
+      if (profile.password) {
+        payload.password = profile.password;
+        payload.password_verify = profile.passwordVerify;
+      }
+
+      const updated = await updateUserProfile(payload);
+      setProfile({
+        username: updated.username,
+        firstName: updated.first_name,
+        lastName: updated.last_name,
+        email: updated.email,
+        company: updated.company || "",
+        password: "",
+        passwordVerify: "",
+      });
+      alert("✅ Profil został zaktualizowany!");
+      setEditing(false);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Błąd przy aktualizacji profilu");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F3F2F8]">
       <Sidebar />
-
       <main className="md:ml-72">
         <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
 
         <div className="px-[88px] pt-6 pb-10">
           <div className="mt-12 max-w-[645px]">
-            <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
-              🛠 Ustawienia konta
-            </h1>
-            <p className="text-slate-500 text-[14px] mt-1">
-              Zarządzaj swoim profilem
-            </p>
+            <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">🛠 Ustawienia konta</h1>
+            <p className="text-slate-500 text-[14px] mt-1">Zarządzaj swoim profilem</p>
 
             <div className="mt-6 bg-white rounded-2xl shadow-lg border border-slate-100 p-6 space-y-6">
-              
+              <div className="flex flex-col space-y-2">
+                <label className="font-medium">Nazwa użytkownika</label>
+                <input
+                  type="text"
+                  className="border rounded p-2"
+                  value={editing ? profile.username : displayValue(profile.username)}
+                  disabled={!editing}
+                  onChange={(e) => handleChange("username", e.target.value)}
+                />
+              </div>
+
               <div className="flex gap-4">
                 <div className="flex-1 flex flex-col space-y-2">
                   <label className="font-medium">Imię</label>
@@ -154,15 +218,38 @@ export default function UserSettings() {
                 />
               </div>
 
+              <div className="flex flex-col space-y-2">
+                <label className="font-medium">Nowe hasło</label>
+                <input
+                  type="password"
+                  className="border rounded p-2"
+                  value={profile.password}
+                  disabled={!editing}
+                  onChange={(e) => handleChange("password", e.target.value)}
+                  placeholder="Wpisz nowe hasło"
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <label className="font-medium">Powtórz nowe hasło</label>
+                <input
+                  type="password"
+                  className="border rounded p-2"
+                  value={profile.passwordVerify}
+                  disabled={!editing}
+                  onChange={(e) => handleChange("passwordVerify", e.target.value)}
+                  placeholder="Powtórz nowe hasło"
+                />
+              </div>
+
               <div className="flex justify-end mt-6">
                 <button
-                  onClick={() => setEditing(!editing)}
+                  onClick={() => (editing ? handleSave() : setEditing(true))}
                   className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
                 >
                   {editing ? "Zapisz" : "Edytuj profil"}
                 </button>
               </div>
-
             </div>
           </div>
         </div>
