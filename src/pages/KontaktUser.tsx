@@ -26,10 +26,10 @@ function Logo({ className = "h-7 w-auto" }) {
 }
 
 const nav = [
-  { name: "Dashboard", href: "#", icon: dashboardIcon },
-  { name: "Moje zamówienia", href: "#", icon: zanowieniaIcon },
+  { name: "Dashboard", href: "/dashboard", icon: dashboardIcon },
+  { name: "Moje zamówienia", href: "/orders", icon: zanowieniaIcon },
   { name: "Kontakt", to: "/kontakt", icon: kontaktIcon },
-  { name: "Ustawienia", href: "#", icon: ustawieniaIcon },
+  { name: "Ustawienia", href: "/ustawienia", icon: ustawieniaIcon },
 ];
 
 function Sidebar() {

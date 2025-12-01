@@ -15,7 +15,7 @@ import {
   ProgrammerOrdersPage,
   ManagerOrdersPage,
 } from "./pages/OrdersPage";
-
+import ManagerReports from "./pages/ManagerReports";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -23,6 +23,7 @@ const router = createBrowserRouter([
   { path: "/dashboard", element: <DashboardSwitch /> },
 
   { path: "/kontakt", element: <KontaktUser /> },
+  { path: "/reports", element: <ManagerReports /> },
 
 
   { path: "/ustawienia", element: <UserSettings /> },

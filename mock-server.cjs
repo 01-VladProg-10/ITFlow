@@ -83,6 +83,43 @@ app.post("/api/orders/", (req, res) => {
   res.status(201).json(newOrder);
 });
 
+// === DASHBOARD MOCK ===
+// GET /api/accounts/users/dashboard/
+app.get("/api/accounts/users/dashboard/", (req, res) => {
+  // Беремо "останнє замовлення" як перше з масиву (як у реальному backend’і)
+  const latestOrder = orders[0] || null;
+
+  const response = {
+    user: {
+      id: 1,
+      username: "mock_user",
+      first_name: "Mock",
+      last_name: "User",
+      email: "mock@example.com",
+      groups: [
+        {
+          id: 1,
+          // змінюй тут "client" / "manager" / "programmer",
+          // щоб перевіряти різні dashboardy
+          name: "manager",
+        },
+      ],
+    },
+    // тут дублюємо назву ролі — так, як у prawdziwym JSON
+    groups: ["manager"],
+    latest_order: latestOrder
+      ? {
+          ...latestOrder,
+          client_detail: "mock_client",
+          manager_detail: null,
+          developer_detail: null,
+        }
+      : null,
+  };
+
+  res.json(response);
+});
+
 // fallback – info że serwer działa
 app.get("/", (req, res) => {
   res.send("Mock ITFlow API running on /api/orders/");

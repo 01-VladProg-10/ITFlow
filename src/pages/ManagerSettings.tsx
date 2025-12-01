@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { X, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -27,10 +27,10 @@ function Logo({ className = "h-7 w-auto" }) {
 }
 
 const nav = [
-  { name: "Dashboard", href: "#", icon: dashboardIcon },
-  { name: "Zamówienia", href: "#", icon: zanowieniaIcon },
-  { name: "Zgłoszenia", to: "/kontakt", icon: kontaktIcon },
-  { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
+  { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
+  { name: "Zamówienia", to: "/manager-orders", icon: zanowieniaIcon },
+  { name: "Zgłoszenia", to: "/reports", icon: kontaktIcon },
+  { name: "Ustawienia", to: "/manager-ustawienia", icon: ustawieniaIcon },
 ];
 
 function Sidebar() {
