@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { X, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -27,8 +27,8 @@ function Logo({ className = "h-7 w-auto" }) {
 }
 
 const nav = [
-  { name: "Dashboard", href: "#", icon: dashboardIcon },
-  { name: "Moje zamówienia", href: "#", icon: zanowieniaIcon },
+  { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
+  { name: "Moje zamówienia", to: "/orders", icon: zanowieniaIcon },
   { name: "Kontakt", to: "/kontakt", icon: kontaktIcon },
   { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
 ];

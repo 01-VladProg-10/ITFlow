@@ -59,7 +59,7 @@ const navByRole = {
   manager: [
     { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
     { name: "Zamówienia", to: "/manager-orders", icon: zanowieniaIcon },
-    { name: "Zgłoszenia", to: "/#", icon: kontaktIcon },
+    { name: "Zgłoszenia", to: "/reports", icon: kontaktIcon },
     { name: "Ustawienia", to: "/manager-ustawienia", icon: ustawieniaIcon },
   ],
 };
@@ -306,7 +306,7 @@ function RightSidePanel({ role }: { role: Role }) {
 }
 
 /* ============================================================
-   MAIN PAGE – підтримка ?new=1 + всі замовлення
+   MAIN PAGE
 ============================================================ */
 export function OrdersPage({ role }: { role: Role }) {
   const location = useLocation();
