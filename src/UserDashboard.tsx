@@ -263,7 +263,7 @@ function Sidebar({
   );
 }
 
-/* === ІСТОРІЯ (правий блок) === */
+/* === ІСТОРІЯ (правий блок) — однакова для всіх === */
 
 const history = [
   { Icon: Flame, bg: "#F43F5E", label: "Gotowe", date: "27 kwi 2025" },
