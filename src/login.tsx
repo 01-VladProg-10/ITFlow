@@ -1,26 +1,5 @@
 import React, { useState } from "react";
 import { LogIn, UserPlus, Mail, Lock } from "lucide-react";
-<<<<<<< HEAD
-
-export default function AuthDualPanel() {
-  const [mode, setMode] = useState<"login" | "register">("login");
-
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-
-  const [regName, setRegName] = useState("");
-  const [regEmail, setRegEmail] = useState("");
-  const [regPassword, setRegPassword] = useState("");
-
-  const handleLoginSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Login:", { email: loginEmail, password: loginPassword });
-  };
-
-  const handleRegisterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Register:", { name: regName, email: regEmail, password: regPassword });
-=======
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { loginUser, fetchMe } from "./api/users"; 
@@ -74,7 +53,6 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
       last_name: regLastName,
       password: regPassword,
     });
->>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
   };
 
   return (
@@ -99,16 +77,6 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
 
                   <form onSubmit={handleLoginSubmit} className="space-y-5">
                     <div>
-<<<<<<< HEAD
-                      <label className="block text-sm font-medium text-white/90 mb-2">Email</label>
-                      <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
-                        <Mail className="h-5 w-5 text-white/70" />
-                        <input
-                          type="email"
-                          value={loginEmail}
-                          onChange={(e) => setLoginEmail(e.target.value)}
-                          placeholder="Twój email"
-=======
                       <label className="block text-sm font-medium text-white/90 mb-2">Username</label>
                       <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
                         <Mail className="h-5 w-5 text-white/70" />
@@ -117,7 +85,6 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
                           value={loginUsername}
                           onChange={(e) => setLoginUsername(e.target.value)}
                           placeholder="Twój username"
->>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
                           required
                           className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
                         />
@@ -173,65 +140,6 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
                   </h2>
 
                   <form onSubmit={handleRegisterSubmit} className="space-y-5">
-<<<<<<< HEAD
-                    <div>
-                      <label className="block text-sm font-medium text-white/90 mb-2">Imię</label>
-                      <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
-                        <input
-                          type="text"
-                          value={regName}
-                          onChange={(e) => setRegName(e.target.value)}
-                          placeholder="Twoje imię"
-                          required
-                          className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-white/90 mb-2">Email</label>
-                      <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
-                        <Mail className="h-5 w-5 text-white/70" />
-                        <input
-                          type="email"
-                          value={regEmail}
-                          onChange={(e) => setRegEmail(e.target.value)}
-                          placeholder="Twój email"
-                          required
-                          className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-white/90 mb-2">Hasło</label>
-                      <div className="flex items-center gap-3 border border-white/30 rounded-2xl px-4 py-3 bg-white/6 focus-within:ring-2 focus-within:ring-indigo-400">
-                        <Lock className="h-5 w-5 text-white/70" />
-                        <input
-                          type="password"
-                          value={regPassword}
-                          onChange={(e) => setRegPassword(e.target.value)}
-                          placeholder="Twoje hasło"
-                          required
-                          className="w-full bg-transparent outline-none text-white placeholder-white/70 text-lg"
-                        />
-                      </div>
-                    </div>
-
-                    {/* BUTTON — gradient shift A */}
-                    <button
-                      type="submit"
-                      className="w-full flex items-center justify-center gap-3 
-                      bg-gradient-to-r from-violet-500 to-blue-500 
-                      bg-[length:200%_200%] hover:bg-right 
-                      text-white font-semibold py-3 px-6 rounded-2xl 
-                      shadow-lg hover:shadow-xl 
-                      transition-all duration-300 text-lg cursor-pointer"
-                    >
-                      <UserPlus className="h-5 w-5" /> Zarejestruj
-                    </button>
-                  </form>
-=======
   <div>
     <label className="block text-sm font-medium text-white/90 mb-2">Username</label>
     <input
@@ -317,7 +225,6 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
   </button>
 </form>
 
->>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
 
                   <div className="mt-6 text-center text-white/80 text-base">
                     Masz już konto?{" "}

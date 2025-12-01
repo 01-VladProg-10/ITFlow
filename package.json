@@ -7,19 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-<<<<<<< HEAD
-    "preview": "vite preview"
-  },
-  "dependencies": {
-=======
-     "mock": "node mock-server.cjs",
+    "mock": "node mock-server.cjs",
     "preview": "vite preview"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.1.0",
->>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
     "lucide-react": "^0.548.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -39,11 +33,7 @@
     "globals": "^16.4.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.16",
-<<<<<<< HEAD
-    "typescript": "~5.9.3",
-=======
     "typescript": "^5.9.3",
->>>>>>> 167d2b46339eef27cb1c19d34fbdb3708b3443a1
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.7"
   }
