@@ -1,70 +1,93 @@
-// src/api/orderFiles.ts
 import { API_BASE, apiFetch } from "./auth";
 
 export type OrderFile = {
   id: number;
   order: number;
   name: string;
-  size: number;        // в байтах
-  url: string;         // посилання на файл (якщо потрібно)
+  size?: number;
+  description?: string;
+  file_type?: string;
+  visible_to_clients?: boolean;
+  uploaded_file_url: string;
 };
 
-// БЕЗ кінцевого слеша, щоб не було // в URL
-// API_BASE = "http://127.0.0.1:8080/api"
-// ORDERS_URL = "http://127.0.0.1:8080/api/orders"
-const ORDERS_URL = `${API_BASE}/orders`;
-
 /**
- * GET /api/orders/:id/files/
+ * Pobiera listę plików dla danego zamówienia.
  */
-export async function fetchOrderFiles(orderId: number): Promise<OrderFile[]> {
-  const res = await apiFetch(`${ORDERS_URL}/${orderId}/files/`, {
+export async function fetchFilesByOrder(orderId: number): Promise<OrderFile[]> {
+  const res = await apiFetch(`${API_BASE}/files/order/${orderId}/`, {
     method: "GET",
   });
-
   const json = await res.json().catch(() => null);
 
   if (!res.ok) {
-    const msg =
-      json && typeof json === "object"
-        ? JSON.stringify(json)
-        : "Nie udało się pobrać plików zamówienia.";
-    throw new Error(msg);
+    throw new Error(json ? JSON.stringify(json) : "Nie udało się pobrać plików.");
   }
 
   return json as OrderFile[];
 }
 
 /**
- * POST /api/orders/:id/files/send-to-client/
- * body: { file_ids: number[] }
+ * Upload pliku (FormData) – używa fetch z logiką odświeżania tokenu
  */
-export async function sendFilesToClient(
-  orderId: number,
-  fileIds: number[]
-): Promise<void> {
-  const res = await apiFetch(`${ORDERS_URL}/${orderId}/files/send-to-client/`, {
+export async function uploadFile(data: {
+  file: File;
+  order: number;
+  name: string;
+  file_type: string;
+  description?: string;
+  visible_to_clients?: boolean;
+}): Promise<OrderFile> {
+  const formData = new FormData();
+  formData.append("uploaded_file", data.file);
+  formData.append("name", data.name);
+  formData.append("file_type", data.file_type);
+  if (data.description) formData.append("description", data.description);
+  formData.append("order", String(data.order));
+  formData.append("visible_to_clients", String(data.visible_to_clients ?? false));
+
+  const url = `${API_BASE}/files/upload/`;
+
+  const token = localStorage.getItem("access_token");
+  if (!token) throw new Error("Brak tokenu autoryzacji.");
+
+  const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ file_ids: fileIds }),
+    headers: { "Authorization": `Bearer ${token}` },
+    body: formData,
+    credentials: "include",
   });
 
   const json = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(json ? JSON.stringify(json) : "Nie udało się wgrać pliku.");
 
-  if (!res.ok) {
-    const msg =
-      json && typeof json === "object"
-        ? JSON.stringify(json)
-        : "Nie udało się wysłać plików do klienta.";
-    throw new Error(msg);
-  }
+  return json as OrderFile;
 }
 
 /**
- * GET /api/orders/:id/files/download/?file_ids=1&file_ids=2
+ * Zmiana widoczności pliku dla klientów
  */
-export function buildDownloadUrl(orderId: number, fileIds: number[]): string {
-  const params = new URLSearchParams();
-  fileIds.forEach((id) => params.append("file_ids", String(id)));
-  return `${ORDERS_URL}/${orderId}/files/download/?${params.toString()}`;
+export async function updateFileVisibility(fileId: number, visible: boolean) {
+  const res = await apiFetch(`${API_BASE}/files/${fileId}/visibility/`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ visible_to_clients: visible }),
+  });
+
+  const json = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(json ? JSON.stringify(json) : "Nie udało się zmienić widoczności pliku.");
+  return json;
+}
+
+/**
+ * NOWA FUNKCJA:
+ * Otwiera wybrane pliki w nowych kartach przeglądarki po kolei,
+ * korzystając z pola `uploaded_file_url` każdego pliku.
+ */
+export function openFilesInNewTabs(files: OrderFile[]) {
+  for (const file of files) {
+    if (file.uploaded_file_url) {
+      window.open(file.uploaded_file_url, "_blank");
+    }
+  }
 }

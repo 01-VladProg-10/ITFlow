@@ -5,8 +5,12 @@ import "./index.css";
 
 import App from "./App";
 import Login from "./login";
-import KontaktUser from "./pages/KontaktUser";
 import DashboardSwitch from "./DashboardSwitch";
+
+// PAGES
+import ManagerReports from "./pages/ManagerReports";
+import ManagerReportDetail from "./pages/ManagerReportDetail";
+import KontaktUser from "./pages/KontaktUser";
 import UserSettings from "./pages/UserSettings";
 import ProgSettings from "./pages/ProgSettings";
 import ManagerSettings from "./pages/ManagerSettings";
@@ -15,43 +19,37 @@ import {
   ProgrammerOrdersPage,
   ManagerOrdersPage,
 } from "./pages/OrdersPage";
-import ManagerReports from "./pages/ManagerReports";
 import OrderFilesPage from "./pages/OrderFilesPage";
 
+// KONFIGURACJA ROUTERA
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Login /> },
   { path: "/dashboard", element: <DashboardSwitch /> },
 
   { path: "/kontakt", element: <KontaktUser /> },
+
+  // MANAGER REPORTS
   { path: "/reports", element: <ManagerReports /> },
+  { path: "/reports/:id", element: <ManagerReportDetail /> },
 
-
+  // USTAWIENIA
   { path: "/ustawienia", element: <UserSettings /> },
-  { path: "/prog-ustawienia", element: <ProgSettings /> },
-  { path: "/manager-ustawienia", element: <ManagerSettings /> },
+  { path: "/prog-ustawienia", element: <UserSettings /> },
+  { path: "/manager-ustawienia", element: <UserSettings /> },
 
-
-  { path: "/orders", element: <ClientOrdersPage /> },          
-  { path: "/tasks", element: <ProgrammerOrdersPage /> },      
-  { path: "/manager-orders", element: <ManagerOrdersPage /> }, 
-
- /* CLIENT */
+  // ORDERS
   { path: "/orders", element: <ClientOrdersPage /> },
   { path: "/orders/:orderId/files", element: <OrderFilesPage role="client" /> },
 
-  /* PROGRAMMER */
   { path: "/tasks", element: <ProgrammerOrdersPage /> },
   { path: "/tasks/:orderId/files", element: <OrderFilesPage role="programmer" /> },
 
-  /* MANAGER */
   { path: "/manager-orders", element: <ManagerOrdersPage /> },
-  {
-    path: "/manager-orders/:orderId/files",
-    element: <OrderFilesPage role="manager" />,
-  },
+  { path: "/manager-orders/:orderId/files", element: <OrderFilesPage role="manager" /> },
 ]);
 
+// RENDER
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
