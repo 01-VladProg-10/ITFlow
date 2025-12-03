@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LogIn, UserPlus, Mail, Lock } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { loginUser, fetchMe } from "./api/users"; 
+import { loginUser, fetchMe, registerUser } from "./api/users"; 
 
 export default function AuthDualPanel() {
  
@@ -40,19 +40,30 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
   };
 
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (regPassword !== regPasswordVerify) {
       alert("Hasła nie są takie same!");
       return;
     }
-    console.log("Register:", {
-      username: regUsername,
-      email: regEmail,
-      first_name: regFirstName,
-      last_name: regLastName,
-      password: regPassword,
-    });
+
+    try {
+      await registerUser({
+        username: regUsername,
+        email: regEmail,
+        first_name: regFirstName,
+        last_name: regLastName,
+        password: regPassword,
+      });
+
+      alert("Konto zostało utworzone. Możesz się teraz zalogować.");
+      setMode("login");
+      // Opcjonalnie wstawiamy login z rejestracji do pola logowania
+      setLoginUsername(regUsername);
+      setLoginPassword("");
+    } catch (err: any) {
+      alert("Nie udało się zarejestrować: " + (err.message || "Błąd"));
+    }
   };
 
   return (

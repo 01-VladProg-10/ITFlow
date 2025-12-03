@@ -16,6 +16,30 @@ export async function loginUser(usernameOrEmail: string, password: string) {
   return json;
 }
 
+export type RegisterPayload = {
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+};
+
+export async function registerUser(payload: RegisterPayload) {
+  const res = await fetch(`${API_BASE}/accounts/users/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(`Błąd rejestracji: ${res.status} ${JSON.stringify(err)}`);
+  }
+
+  return res.json();
+}
+
 /** Старий тип, можеш ще десь використовувати */
 export type MeResponse = {
   id: number;
