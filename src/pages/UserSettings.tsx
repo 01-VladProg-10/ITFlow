@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { X, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -26,10 +27,10 @@ function Logo({ className = "h-7 w-auto" }) {
 }
 
 const nav = [
-  { name: "Dashboard", href: "/dashboard", icon: dashboardIcon },
-  { name: "Moje zamówienia", href: "/orders", icon: zanowieniaIcon },
+  { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
+  { name: "Moje zamówienia", to: "/orders", icon: zanowieniaIcon },
   { name: "Kontakt", to: "/kontakt", icon: kontaktIcon },
-  { name: "Ustawienia", href: "/ustawienia", icon: ustawieniaIcon },
+  { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
 ];
 
 function Sidebar() {
@@ -74,7 +75,21 @@ function Sidebar() {
 }
 /* === end Sidebar === */
 
-export default function KontaktUser() {
+export default function UserSettings() {
+  const [editing, setEditing] = useState(false);
+  const [profile, setProfile] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    company: "",
+  });
+
+  const handleChange = (field: string, value: string) => {
+    setProfile(prev => ({ ...prev, [field]: value }));
+  };
+
+  const displayValue = (value: string) => (value.trim() === "" ? "-" : value);
+
   return (
     <div className="min-h-screen bg-[#F3F2F8]">
       <Sidebar />
@@ -85,71 +100,70 @@ export default function KontaktUser() {
         <div className="px-[88px] pt-6 pb-10">
           <div className="mt-12 max-w-[645px]">
             <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
-              📬 Formularz kontaktowy
+              🛠 Ustawienia konta
             </h1>
             <p className="text-slate-500 text-[14px] mt-1">
-              Masz pytanie? Napisz do nas!
+              Zarządzaj swoim profilem
             </p>
 
-            {/* FORMULARZ */}
-            <div className="mt-6 bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                
-                <div className="flex gap-4">
-                  <div className="flex-1 flex flex-col space-y-2">
-                    <label htmlFor="firstName" className="font-medium">Imię</label>
-                    <input
-                      id="firstName"
-                      type="text"
-                      required
-                      className="border rounded p-2"
-                      placeholder="Wpisz swoje imię"
-                    />
-                  </div>
-
-                  <div className="flex-1 flex flex-col space-y-2">
-                    <label htmlFor="lastName" className="font-medium">Nazwisko</label>
-                    <input
-                      id="lastName"
-                      type="text"
-                      required
-                      className="border rounded p-2"
-                      placeholder="Wpisz swoje nazwisko"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                  <label htmlFor="email" className="font-medium">Email</label>
+            <div className="mt-6 bg-white rounded-2xl shadow-lg border border-slate-100 p-6 space-y-6">
+              
+              <div className="flex gap-4">
+                <div className="flex-1 flex flex-col space-y-2">
+                  <label className="font-medium">Imię</label>
                   <input
-                    id="email"
-                    type="email"
-                    required
+                    type="text"
                     className="border rounded p-2"
-                    placeholder="Wpisz swój email"
+                    value={editing ? profile.firstName : displayValue(profile.firstName)}
+                    disabled={!editing}
+                    onChange={(e) => handleChange("firstName", e.target.value)}
                   />
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                  <label htmlFor="message" className="font-medium">Wiadomość</label>
-                  <textarea
-                    id="message"
-                    required
+                <div className="flex-1 flex flex-col space-y-2">
+                  <label className="font-medium">Nazwisko</label>
+                  <input
+                    type="text"
                     className="border rounded p-2"
-                    placeholder="Twoja wiadomość"
+                    value={editing ? profile.lastName : displayValue(profile.lastName)}
+                    disabled={!editing}
+                    onChange={(e) => handleChange("lastName", e.target.value)}
                   />
                 </div>
+              </div>
 
-                {/* Кнопка Wyślij wiadomość всередині форми */}
+              <div className="flex flex-col space-y-2">
+                <label className="font-medium">Email</label>
+                <input
+                  type="email"
+                  className="border rounded p-2"
+                  value={editing ? profile.email : displayValue(profile.email)}
+                  disabled={!editing}
+                  onChange={(e) => handleChange("email", e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <label className="font-medium">Firma</label>
+                <input
+                  type="text"
+                  className="border rounded p-2"
+                  value={editing ? profile.company : displayValue(profile.company)}
+                  disabled={!editing}
+                  onChange={(e) => handleChange("company", e.target.value)}
+                />
+              </div>
+
+              <div className="flex justify-end mt-6">
                 <button
-                  type="submit"
-                  className="w-full px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
+                  onClick={() => setEditing(!editing)}
+                  className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
                 >
-                  Wyślij wiadomość
+                  {editing ? "Zapisz" : "Edytuj profil"}
                 </button>
-              </form>
-            </div>
+              </div>
 
+            </div>
           </div>
         </div>
       </main>
