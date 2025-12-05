@@ -283,8 +283,18 @@ export function OrdersPage({ role }: { role: Role }) {
   const isProgrammer = role === "programmer";
 
   const [orders, setOrders] = useState<OrderWithMeta[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+
+  const filteredOrders = orders.filter(o => {
+    const q = searchQuery.toLowerCase();
+    return (
+      o.title.toLowerCase().includes(q) ||
+      (o.description || "").toLowerCase().includes(q) ||
+      (o.status || "").toLowerCase().includes(q)
+    );
+  });
 
   const [showForm, setShowForm] = useState(role === "client" && openNew);
   const [form, setForm] = useState({ title: "", description: "" });
@@ -381,12 +391,25 @@ export function OrdersPage({ role }: { role: Role }) {
             {isProgrammer ? "Lista zadań" : "Lista zamówień"}
           </h1>
           <p className="text-slate-500 text-[14px] mt-1">
-            {orders.length} {isProgrammer ? "zadań" : "zamówień"} w systemie
+            {filteredOrders.length} {isProgrammer ? "zadań" : "zamówień"}
+            {searchQuery ? " pasujących do wyszukiwania" : " w systemie"}
           </p>
 
-          {/* ------- MAIN CARD + RIGHT PANEL ------- */}
+          {/* ---- SEARCH BOX ---- */}
+          <div className="mt-6 max-w-xl">
+            <input
+              type="text"
+              placeholder="Szukaj po tytule, opisie lub statusie..."
+              className="w-full px-4 py-3 rounded-xl border border-slate-300 shadow-sm text-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+
+          {/* ------- MAIN CARD ------- */}
           <div className="mt-10 flex gap-10 items-start">
-            <OrderMainCard role={role} order={orders[0] ?? null} />
+            <OrderMainCard role={role} order={filteredOrders[0] ?? null} />
           </div>
 
           {/* ------- LISTA WSZYSTKICH ZAMÓWIEŃ ------- */}
@@ -396,7 +419,7 @@ export function OrdersPage({ role }: { role: Role }) {
             </h2>
 
             <ul className="space-y-3">
-              {orders.map((o) => (
+            {filteredOrders.map((o) => (
                 <li
                   key={o.id}
                   className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-[14px] flex items-center justify-between gap-4"
