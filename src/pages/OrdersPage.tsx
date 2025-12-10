@@ -1,4 +1,3 @@
-// src/pages/OrdersPage.tsx
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -7,7 +6,7 @@ import zanowieniaIcon from "../icons/zanowienia.png";
 import kontaktIcon from "../icons/kontakt.png";
 import ustawieniaIcon from "../icons/ustawienia.png";
 
-import { FileText, Clock, Flame, X, LogIn } from "lucide-react";
+import { FileText, Clock, Flame, X, LogIn, Menu } from "lucide-react";
 
 import { fetchOrders, createOrder, type Order } from "../api/orders";
 
@@ -67,45 +66,102 @@ const navByRole = {
   ],
 } as const;
 
+/* -------------------- MOBILE HEADER -------------------- */
+function MobileHeader({ onOpenSidebar }: { onOpenSidebar: () => void }) {
+  return (
+    <header className="md:hidden sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
+      <div className="h-14 flex items-center justify-between px-4">
+        <button
+          onClick={onOpenSidebar}
+          className="rounded-xl p-2 hover:bg-slate-100"
+          aria-label="Otwórz menu"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+        <div className="font-bold">ITFlow</div>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-600"
+        >
+          <LogIn className="h-4 w-4" />
+          Wyloguj
+        </Link>
+      </div>
+    </header>
+  );
+}
+
 /* -------------------- SIDEBAR -------------------- */
-export function Sidebar({ role }: { role: Role }) {
+export function Sidebar({
+  role,
+  open,
+  onClose,
+}: {
+  role: Role;
+  open: boolean;
+  onClose: () => void;
+}) {
   const nav = navByRole[role];
 
-  return (
-    <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
-        <div className="flex items-center justify-between px-4 h-16">
-          <Logo />
-          <button className="md:hidden rounded-xl p-2 hover:bg-white/10">
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-
-        <nav className="mt-4 px-3 space-y-1">
-          {nav.map(({ name, to, icon }) => (
-            <Link
-              key={name}
-              to={to}
-              className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition hover:bg-white/10"
-            >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
-                <img src={icon} alt={name} className="h-4 w-4" />
-              </span>
-              <span>{name}</span>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-auto p-4">
-          <Link
-            to="/"
-            className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-semibold"
-          >
-            <LogIn className="h-4 w-4" /> Wyloguj się
-          </Link>
-        </div>
+  const content = (
+    <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+      <div className="flex items-center justify-between px-4 h-16">
+        <Logo />
+        <button
+          className="md:hidden rounded-xl p-2 hover:bg-white/10"
+          aria-label="Zamknij menu"
+          onClick={onClose}
+        >
+          <X className="h-6 w-6" />
+        </button>
       </div>
-    </aside>
+
+      <nav className="mt-4 px-3 space-y-1">
+        {nav.map(({ name, to, icon }) => (
+          <Link
+            key={name}
+            to={to}
+            className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition hover:bg-white/10"
+            onClick={onClose}
+          >
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
+              <img src={icon} alt={name} className="h-4 w-4" />
+            </span>
+            <span>{name}</span>
+          </Link>
+        ))}
+      </nav>
+
+      <div className="mt-auto p-4">
+        <Link
+          to="/"
+          className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-semibold"
+        >
+          <LogIn className="h-4 w-4" /> Wyloguj się
+        </Link>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
+        {content}
+      </aside>
+
+      {/* Mobile overlay */}
+      {open && (
+        <div
+          className="md:hidden fixed inset-0 z-50 bg-black/40"
+          onClick={onClose}
+        >
+          <div className="h-full" onClick={(e) => e.stopPropagation()}>
+            {content}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -242,31 +298,33 @@ function OrderMainCard({
         </div>
 
         <div className="pt-4">
-  {role === "manager" && (
-    <Link
-      to={`/manager-orders/${order.id}/files`}
-      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
-      Zobacz szczegóły
-    </Link>
-  )}
+          {role === "manager" && (
+            <Link
+              to={`/manager-orders/${order.id}/files`}
+              className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]"
+            >
+              Zobacz szczegóły
+            </Link>
+          )}
 
-  {role === "client" && (
-    <Link
-      to={`/orders/${order.id}/files`}
-      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
-      Zobacz szczegóły
-    </Link>
-  )}
+          {role === "client" && (
+            <Link
+              to={`/orders/${order.id}/files`}
+              className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]"
+            >
+              Zobacz szczegóły
+            </Link>
+          )}
 
-  {role === "programmer" && (
-    <Link
-      to={`/tasks/${order.id}/files`}
-      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
-      Zobacz szczegóły
-    </Link>
-  )}
-</div>
-
+          {role === "programmer" && (
+            <Link
+              to={`/tasks/${order.id}/files`}
+              className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]"
+            >
+              Zobacz szczegóły
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -286,8 +344,9 @@ export function OrdersPage({ role }: { role: Role }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const filteredOrders = orders.filter(o => {
+  const filteredOrders = orders.filter((o) => {
     const q = searchQuery.toLowerCase();
     return (
       o.title.toLowerCase().includes(q) ||
@@ -362,9 +421,14 @@ export function OrdersPage({ role }: { role: Role }) {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F3F2F8]">
-        <Sidebar role={role} />
+        <MobileHeader onOpenSidebar={() => setSidebarOpen(true)} />
+        <Sidebar
+          role={role}
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
         <main className="md:ml-72 p-10 text-slate-700">
-          Ładowanie zamówień.
+          Ładowanie zamówień...
         </main>
       </div>
     );
@@ -373,7 +437,12 @@ export function OrdersPage({ role }: { role: Role }) {
   if (loadError) {
     return (
       <div className="min-h-screen bg-[#F3F2F8]">
-        <Sidebar role={role} />
+        <MobileHeader onOpenSidebar={() => setSidebarOpen(true)} />
+        <Sidebar
+          role={role}
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
         <main className="md:ml-72 p-10 text-red-600">{loadError}</main>
       </div>
     );
@@ -381,13 +450,19 @@ export function OrdersPage({ role }: { role: Role }) {
 
   return (
     <div className="min-h-screen bg-[#F3F2F8]">
-      <Sidebar role={role} />
+      <MobileHeader onOpenSidebar={() => setSidebarOpen(true)} />
+
+      <Sidebar
+        role={role}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <main className="md:ml-72">
         <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
 
-        <div className="px-[88px] pt-10 pb-12">
-          <h1 className="text-[32px] font-extrabold text-slate-900">
+        <div className="px-6 md:px-[88px] pt-10 pb-12">
+          <h1 className="text-[26px] md:text-[32px] font-extrabold text-slate-900">
             {isProgrammer ? "Lista zadań" : "Lista zamówień"}
           </h1>
           <p className="text-slate-500 text-[14px] mt-1">
@@ -406,61 +481,51 @@ export function OrdersPage({ role }: { role: Role }) {
             />
           </div>
 
-
           {/* ------- MAIN CARD ------- */}
           <div className="mt-10 flex gap-10 items-start">
             <OrderMainCard role={role} order={filteredOrders[0] ?? null} />
           </div>
 
-          {/* ------- LISTA WSZYSTKICH ZAMÓWIEŃ ------- */}
-          <div className="mt-12">
-            <h2 className="text-[20px] font-bold text-slate-900 mb-4">
-              Wszystkie {isProgrammer ? "zadania" : "zamówienia"}
-            </h2>
+      {/* ------- LISTA WSZYSTKICH ZAMÓWIEŃ ------- */}
+<div className="mt-12">
+  <h2 className="text-[20px] font-bold text-slate-900 mb-4">
+    Wszystkie {isProgrammer ? "zadania" : "zamówienia"}
+  </h2>
 
-            <ul className="space-y-3">
-            {filteredOrders.map((o) => (
-                <li
-                  key={o.id}
-                  className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-[14px] flex items-center justify-between gap-4"
-                >
-                  <div>
-                    <div className="font-medium text-slate-900">{o.title}</div>
-                    <div className="text-slate-500 text-[13px]">
-                      {o.status}
-                    </div>
-                  </div>
+  <ul className="space-y-3">
+    {filteredOrders.map((o) => {
+      const detailsHref =
+        role === "manager"
+          ? `/manager-orders/${o.id}/files`
+          : role === "client"
+          ? `/orders/${o.id}/files`
+          : `/tasks/${o.id}/files`;
 
-                                <div>
-                  {role === "manager" && (
-                    <Link
-                      to={`/manager-orders/${o.id}/files`}
-                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
-                      Zobacz szczegóły
-                    </Link>
-                  )}
+      return (
+        <li
+          key={o.id}
+          className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-[14px]"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="font-medium text-slate-900">{o.title}</div>
+              <div className="text-slate-500 text-[13px]">{o.status}</div>
+            </div>
 
-                  {role === "client" && (
-                    <Link
-                      to={`/orders/${o.id}/files`}
-                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
-                      Zobacz szczegóły
-                    </Link>
-                  )}
-
-                  {role === "programmer" && (
-                    <Link
-                      to={`/tasks/${o.id}/files`}
-                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
-                      Zobacz szczegóły
-                    </Link>
-                  )}
-                </div>
-
-                </li>
-              ))}
-            </ul>
+            <div className="sm:flex-shrink-0">
+              <Link
+                to={detailsHref}
+                className="inline-flex justify-center w-full sm:w-auto px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]"
+              >
+                Zobacz szczegóły
+              </Link>
+            </div>
           </div>
+        </li>
+      );
+    })}
+  </ul>
+</div>
 
           {/* ------- FORMULARZ / PRZYCISKI -------- */}
           <div className="mt-12 space-y-4 max-w-xl">
@@ -520,7 +585,7 @@ export function OrdersPage({ role }: { role: Role }) {
                         disabled={creating}
                         className="px-6 py-2 rounded-xl text-sm font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]"
                       >
-                        {creating ? "Tworzenie." : "Złóż zamówienie"}
+                        {creating ? "Tworzenie..." : "Złóż zamówienie"}
                       </button>
 
                       <button

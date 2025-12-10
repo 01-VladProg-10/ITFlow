@@ -1,4 +1,5 @@
-import { X, LogIn } from "lucide-react";
+import { useState } from "react";
+import { X, LogIn, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import dashboardIcon from "../icons/daszboard.png";
@@ -6,7 +7,7 @@ import zanowieniaIcon from "../icons/zanowienia.png";
 import kontaktIcon from "../icons/kontakt.png";
 import ustawieniaIcon from "../icons/ustawienia.png";
 
-/* === Sidebar === */
+/* === LOGO === */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
@@ -25,6 +26,7 @@ function Logo({ className = "h-7 w-auto" }) {
   );
 }
 
+/* === NAWIGACJA === */
 const nav = [
   { name: "Dashboard", to: "/dashboard", icon: dashboardIcon },
   { name: "Moje zamówienia", to: "/orders", icon: zanowieniaIcon },
@@ -32,118 +34,136 @@ const nav = [
   { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
 ];
 
-function Sidebar() {
-  return (
-    <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
-        <div className="flex items-center justify-between px-4 h-16">
-          <Logo />
-          <button className="md:hidden rounded-xl p-2 hover:bg-white/10" aria-label="Zamknij menu">
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-
-        <nav className="mt-4 px-3 space-y-1">
-          {nav.map(({ name, to, icon }) => (
-            <Link
-              key={name}
-              to={to ?? "#"}
-              className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition hover:bg-white/10"
-            >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
-                <img src={icon} alt={name} className="h-4 w-4" />
-              </span>
-              <span>{name}</span>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-auto p-4">
-          <Link
-            to="/"
-            className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 transition px-4 py-2 text-sm font-semibold"
-          >
-            <LogIn className="h-4 w-4" /> Wyloguj się
-          </Link>
-
-          <div className="mt-4 text-xs text-white/70">© {new Date().getFullYear()} ITFlow</div>
-        </div>
+/* === SIDEBAR (desktop + mobile) === */
+function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const content = (
+    <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,#7A36EF_0%,#2D19E9_100%)] text-white">
+      <div className="flex items-center justify-between px-4 h-16">
+        <Logo />
+        <button
+          className="md:hidden rounded-xl p-2 hover:bg-white/10"
+          onClick={onClose}
+        >
+          <X className="h-6 w-6" />
+        </button>
       </div>
-    </aside>
+
+      <nav className="mt-4 px-3 space-y-1">
+        {nav.map(({ name, to, icon }) => (
+          <Link
+            key={name}
+            to={to}
+            onClick={onClose}
+            className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm hover:bg-white/10"
+          >
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
+              <img src={icon} className="h-4 w-4" />
+            </span>
+            {name}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="mt-auto p-4">
+        <Link
+          to="/"
+          className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-semibold"
+        >
+          <LogIn className="h-4 w-4" /> Wyloguj się
+        </Link>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
+        {content}
+      </aside>
+
+      {open && (
+        <div
+          className="md:hidden fixed inset-0 z-50 bg-black/40"
+          onClick={onClose}
+        >
+          <div className="h-full" onClick={(e) => e.stopPropagation()}>
+            {content}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
-/* === end Sidebar === */
 
+/* === MOBILE HEADER === */
+function MobileHeader({ onOpen }: { onOpen: () => void }) {
+  return (
+    <header className="md:hidden sticky top-0 z-30 bg-white/80 backdrop-blur border-b">
+      <div className="h-14 flex items-center justify-between px-4">
+        <button onClick={onOpen} className="rounded-xl p-2 hover:bg-slate-100">
+          <Menu className="h-6 w-6" />
+        </button>
+
+        <div className="font-bold">ITFlow</div>
+
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-600"
+        >
+          <LogIn className="h-4 w-4" />
+          Wyloguj
+        </Link>
+      </div>
+    </header>
+  );
+}
+
+/* === MAIN PAGE === */
 export default function KontaktUser() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#F3F2F8]">
-      <Sidebar />
+      <MobileHeader onOpen={() => setSidebarOpen(true)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main className="md:ml-72">
-        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
+        <div className="h-[100px] w-full bg-gradient-to-r from-[#8F2AFA] via-[#5F7EFA] to-[#2D19E9]" />
 
-        <div className="px-[88px] pt-6 pb-10">
+        <div className="px-6 md:px-[88px] pt-6 pb-10">
           <div className="mt-12 max-w-[645px]">
-            <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
+            <h1 className="text-[28px] md:text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
               📬 Formularz kontaktowy
             </h1>
-            <p className="text-slate-500 text-[14px] mt-1">
-              Masz pytanie? Napisz do nas!
-            </p>
+            <p className="text-slate-500 text-[14px] mt-1">Masz pytanie? Napisz do nas!</p>
 
-            {/* FORMULARZ */}
-            <div className="mt-6 bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+            <div className="mt-6 bg-white rounded-2xl shadow-lg border p-6">
               <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1 flex flex-col space-y-2">
-                    <label htmlFor="firstName" className="font-medium">Imię</label>
-                    <input
-                      id="firstName"
-                      type="text"
-                      required
-                      className="border rounded p-2"
-                      placeholder="Wpisz swoje imię"
-                    />
+                    <label className="font-medium">Imię</label>
+                    <input type="text" required className="border rounded p-2" placeholder="Wpisz imię" />
                   </div>
 
                   <div className="flex-1 flex flex-col space-y-2">
-                    <label htmlFor="lastName" className="font-medium">Nazwisko</label>
-                    <input
-                      id="lastName"
-                      type="text"
-                      required
-                      className="border rounded p-2"
-                      placeholder="Wpisz swoje nazwisko"
-                    />
+                    <label className="font-medium">Nazwisko</label>
+                    <input type="text" required className="border rounded p-2" placeholder="Wpisz nazwisko" />
                   </div>
                 </div>
 
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="email" className="font-medium">Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    className="border rounded p-2"
-                    placeholder="Wpisz swój email"
-                  />
+                  <label className="font-medium">Email</label>
+                  <input type="email" required className="border rounded p-2" placeholder="Twój email" />
                 </div>
 
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="message" className="font-medium">Wiadomość</label>
-                  <textarea
-                    id="message"
-                    required
-                    className="border rounded p-2"
-                    placeholder="Twoja wiadomość"
-                  />
+                  <label className="font-medium">Wiadomość</label>
+                  <textarea required className="border rounded p-2" placeholder="Twoja wiadomość" />
                 </div>
 
-                {/* Кнопка Wyślij wiadomość всередині форми */}
                 <button
                   type="submit"
-                  className="w-full px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
+                  className="w-full px-8 py-3 rounded-xl text-white text-[14px] font-semibold bg-gradient-to-r from-[#8F2AFA] via-[#5F7EFA] to-[#2D19E9] hover:opacity-90"
                 >
                   Wyślij wiadomość
                 </button>

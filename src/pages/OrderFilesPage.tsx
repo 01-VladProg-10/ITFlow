@@ -1,7 +1,16 @@
 // src/pages/OrderFilesPage.tsx
+
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FileText, Download, Send, ArrowLeft, Upload } from "lucide-react";
+import {
+  FileText,
+  Download,
+  Send,
+  ArrowLeft,
+  Upload,
+  Menu,
+  LogIn,
+} from "lucide-react";
 
 import { Sidebar } from "./OrdersPage";
 import { fetchOrders, type Order } from "../api/orders";
@@ -14,6 +23,58 @@ import {
 
 type Role = "client" | "programmer" | "manager";
 
+/* --- Mobile header для цієї сторінки --- */
+function MobileHeader({ onOpenSidebar }: { onOpenSidebar: () => void }) {
+  return (
+    <header className="md:hidden sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
+      <div className="h-14 flex items-center justify-between px-4">
+        <button
+          onClick={onOpenSidebar}
+          className="rounded-xl p-2 hover:bg-slate-100"
+          aria-label="Otwórz menu"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+        <div className="font-bold">ITFlow</div>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-600"
+        >
+          <LogIn className="h-4 w-4" />
+          Wyloguj
+        </Link>
+      </div>
+    </header>
+  );
+}
+
+function HeaderGradient() {
+  return (
+    <div className="h-[100px] w-full bg-[linear-gradient(90deg,#8F2AFA_9%,#5F7EFA_35%,#2D19E9_100%)]" />
+  );
+}
+
+function LinkBack({ role }: { role: Role }) {
+  const back =
+    role === "client"
+      ? "/orders"
+      : role === "programmer"
+      ? "/tasks"
+      : "/manager-orders";
+
+  return (
+    <Link
+      to={back}
+      className="inline-flex items-center gap-2 text-[13px] text-slate-600 hover:text-slate-800 mb-4"
+    >
+      <ArrowLeft className="h-4 w-4" />
+      Powrót
+    </Link>
+  );
+}
+
+/* ============ ГОЛОВНИЙ КОМПОНЕНТ ============ */
+
 export default function OrderFilesPage({ role }: { role: Role }) {
   const { orderId } = useParams<{ orderId: string }>();
   const id = Number(orderId);
@@ -25,6 +86,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
 
   const [selected, setSelected] = useState<Record<number, boolean>>({});
   const [message, setMessage] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isClient = role === "client";
   const isProgrammer = role === "programmer";
@@ -55,19 +117,17 @@ export default function OrderFilesPage({ role }: { role: Role }) {
   const selectedIds = files.filter((f) => selected[f.id]).map((f) => f.id);
 
   const toggleOne = (fileId: number) => {
-  setSelected((prev) => ({
-    ...prev,
-    [fileId]: !prev[fileId],
-  }));
-};
-
+    setSelected((prev) => ({
+      ...prev,
+      [fileId]: !prev[fileId],
+    }));
+  };
 
   const toggleSelectAll = () => {
-  const all: Record<number, boolean> = {};
-  files.forEach((f) => (all[f.id] = true));
-  setSelected(all);
-};
-
+    const all: Record<number, boolean> = {};
+    files.forEach((f) => (all[f.id] = true));
+    setSelected(all);
+  };
 
   const handleSendToClient = async () => {
     if (!order) return;
@@ -86,20 +146,51 @@ export default function OrderFilesPage({ role }: { role: Role }) {
   };
 
   const handleUpload = () => {
-    alert("Tu będzie upload — backend musi dać endpoint /files/upload/");
+    alert("Tu będzie upload — backend musi dać endpoint /files/upload/ 🙂");
   };
 
-  if (loading) return <Loading role={role} />;
-  if (error) return <ErrorMessage role={role} message={error} />;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F3F2F8]">
+        <MobileHeader onOpenSidebar={() => setSidebarOpen(true)} />
+        <Sidebar
+          role={role}
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+        <main className="md:ml-72 p-10">Ładowanie...</main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#F3F2F8]">
+        <MobileHeader onOpenSidebar={() => setSidebarOpen(true)} />
+        <Sidebar
+          role={role}
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+        <main className="md:ml-72 p-10 text-red-600">{error}</main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F3F2F8]">
-      <Sidebar role={role} />
+      <MobileHeader onOpenSidebar={() => setSidebarOpen(true)} />
+
+      <Sidebar
+        role={role}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <main className="md:ml-72">
         <HeaderGradient />
 
-        <div className="px-[88px] pt-10 pb-12 max-w-3xl">
+        <div className="px-6 md:px-[88px] pt-10 pb-12 max-w-3xl">
           <LinkBack role={role} />
 
           <h1 className="text-[28px] font-extrabold text-slate-900 mb-2">
@@ -109,7 +200,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
             {order ? order.title : `Zamówienie #${id}`}
           </p>
 
-          {/* Файли */}
+          {/* --- KARTA Z PLIKAMI --- */}
           <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
             <h2 className="font-semibold mb-4 text-[16px]">Pliki</h2>
 
@@ -152,7 +243,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
               </div>
             )}
 
-            {/* Кнопки */}
+            {/* --- КНОПКИ --- */}
             <div className="flex flex-wrap gap-3">
               {/* Додати файл — тільки програміст */}
               {isProgrammer && (
@@ -165,8 +256,8 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                 </button>
               )}
 
-              {/* Zaznacz wszystkie — тільки менеджер */}
-             {(isManager || isClient || isProgrammer) && (
+              {/* Zaznacz wszystkie */}
+              {(isManager || isClient || isProgrammer) && files.length > 0 && (
                 <button
                   onClick={toggleSelectAll}
                   className="px-4 py-2 rounded-xl text-[13px] font-semibold bg-slate-200 text-slate-800"
@@ -188,17 +279,16 @@ export default function OrderFilesPage({ role }: { role: Role }) {
               )}
 
               {/* Download */}
-             {(isProgrammer || isManager || isClient) && (
-              <button
-                disabled={!selectedIds.length}
-                onClick={handleDownload}
-                className="px-4 py-2 rounded-xl bg-[#5F21D6] text-white flex items-center gap-2 disabled:opacity-50"
-              >
-                <Download className="h-4 w-4" />
-                Pobierz
-              </button>
-            )}
-
+              {(isProgrammer || isManager || isClient) && (
+                <button
+                  disabled={!selectedIds.length}
+                  onClick={handleDownload}
+                  className="px-4 py-2 rounded-xl bg-[#5F21D6] text-white flex items-center gap-2 disabled:opacity-50"
+                >
+                  <Download className="h-4 w-4" />
+                  Pobierz
+                </button>
+              )}
             </div>
 
             {message && (
@@ -207,51 +297,6 @@ export default function OrderFilesPage({ role }: { role: Role }) {
           </div>
         </div>
       </main>
-    </div>
-  );
-}
-
-/* ==== Допоміжні компоненти ==== */
-
-function HeaderGradient() {
-  return (
-    <div className="h-[100px] w-full bg-[linear-gradient(90deg,#8F2AFA_9%,#5F7EFA_35%,#2D19E9_100%)]" />
-  );
-}
-
-function LinkBack({ role }: { role: Role }) {
-  const back =
-    role === "client"
-      ? "/orders"
-      : role === "programmer"
-      ? "/tasks"
-      : "/manager-orders";
-
-  return (
-    <Link
-      to={back}
-      className="inline-flex items-center gap-2 text-[13px] text-slate-600 hover:text-slate-800 mb-4"
-    >
-      <ArrowLeft className="h-4 w-4" />
-      Powrót
-    </Link>
-  );
-}
-
-function Loading({ role }: { role: Role }) {
-  return (
-    <div className="min-h-screen bg-[#F3F2F8]">
-      <Sidebar role={role} />
-      <main className="md:ml-72 p-10">Ładowanie...</main>
-    </div>
-  );
-}
-
-function ErrorMessage({ role, message }: { role: Role; message: string }) {
-  return (
-    <div className="min-h-screen bg-[#F3F2F8]">
-      <Sidebar role={role} />
-      <main className="md:ml-72 p-10 text-red-600">{message}</main>
     </div>
   );
 }
