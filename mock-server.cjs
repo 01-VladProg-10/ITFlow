@@ -7,6 +7,8 @@ const cors = require("cors");
 const app = express();
 const PORT = 8080;
 
+
+
 /* ------------ CORS + body parser ------------ */
 app.use(
   cors({
@@ -28,7 +30,7 @@ const mockUser = {
   groups: [
     {
       id: 1,
-      name: "programmer", // ważne: dokładnie tak, jak używasz w froncie
+      name: "manager", // ważne: dokładnie tak, jak używasz w froncie
     },
   ],
 };
@@ -144,6 +146,45 @@ app.get("/api/accounts/users/dashboard/", (req, res) => {
 
   res.json(response);
 });
+
+/* ------------ REGISTER (mock) ------------ */
+
+// Точно той шлях, який викликає frontend: /api/accounts/users/
+app.post("/api/accounts/users/", (req, res) => {
+  const { username, first_name, last_name, email, password } = req.body || {};
+
+  const errors = {};
+
+  if (!username || username.trim() === "") {
+    errors.username = ["To pole jest wymagane."];
+  }
+  if (!first_name || first_name.trim() === "") {
+    errors.first_name = ["To pole jest wymagane."];
+  }
+  if (!last_name || last_name.trim() === "") {
+    errors.last_name = ["To pole jest wymagane."];
+  }
+  if (!email || email.trim() === "") {
+    errors.email = ["To pole jest wymagane."];
+  }
+  if (!password || password.length < 6) {
+    errors.password = ["Hasło musi mieć min. 6 znaków."];
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json(errors);
+  }
+
+  // У мокові просто вдаємо, що юзер створився
+  return res.status(201).json({
+    id: Date.now(),
+    username,
+    first_name,
+    last_name,
+    email,
+  });
+});
+
 
 /* ------------ ORDERS ------------ */
 
