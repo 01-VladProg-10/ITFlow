@@ -16,5 +16,6 @@ urlpatterns = [
     path('api/', include('orders.urls')),
     path('api/notifications/', include('nortifications.urls')),
     path('api/files/', include('files.urls')),
+    path('api/order-log/', include('orderLog.urls')),
 
 ]

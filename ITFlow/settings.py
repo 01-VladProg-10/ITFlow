@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'orders',
     'nortifications.apps.NortificationsConfig',
     'files',
-
-    
+    'orderLog',
 ]
 
 # ---------------------------------------------------------------------
