@@ -17,5 +17,6 @@ urlpatterns = [
     path('api/notifications/', include('nortifications.urls')),
     path('api/files/', include('files.urls')),
     path('api/order-log/', include('orderLog.urls')),
+    path('api/backups/', include('backups.urls')),  # Database backup management
 
 ]

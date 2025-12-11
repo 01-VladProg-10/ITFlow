@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'nortifications.apps.NortificationsConfig',
     'files',
     'orderLog',
+    'backups.apps.BackupsConfig',  # Database backup system
 ]
 
 # ---------------------------------------------------------------------
@@ -252,6 +253,13 @@ LOGGING = {
             'propagate': False,
         },
         'nortifications': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+
+        # Database backup system
+        'backups': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,

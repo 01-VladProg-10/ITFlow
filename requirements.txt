@@ -26,6 +26,10 @@ drf-yasg==1.21.8           # Swagger / OpenAPI UI
 gunicorn==23.0.0
 whitenoise==6.7.0
 
+# === Database Backup System ===
+APScheduler==3.10.4        # Scheduled task execution
+pytz==2025.1               # Timezone support for scheduler
+
 # === Email ===
 sendgrid==6.11.0
 django-sendgrid-v5==1.2.2
