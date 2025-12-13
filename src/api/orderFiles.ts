@@ -1,6 +1,11 @@
-import { API_BASE, apiFetch } from "./auth";
+// src/api/orderFiles.ts
+// Założenia:
+// - apiFetch jest używany dla operacji JSON.
+// - Dla FormData (uploadFile) musimy użyć globalnego fetch i POBRAĆ TOKEN PRZEZ auth.getAccess().
+import { API_BASE, apiFetch, auth } from "./auth"; // <-- UPEWNIJ SIĘ, ŻE IMPORTUJESZ 'auth'
 
 export type OrderFile = {
+  // ... (reszta typów bez zmian)
   id: number;
   order: number;
   name: string;
@@ -11,13 +16,12 @@ export type OrderFile = {
   uploaded_file_url: string;
 };
 
-/**
- * Pobiera listę plików dla danego zamówienia.
- */
+// ... (fetchFilesByOrder bez zmian)
 export async function fetchFilesByOrder(orderId: number): Promise<OrderFile[]> {
   const res = await apiFetch(`${API_BASE}/files/order/${orderId}/`, {
     method: "GET",
   });
+  
   const json = await res.json().catch(() => null);
 
   if (!res.ok) {
@@ -27,8 +31,9 @@ export async function fetchFilesByOrder(orderId: number): Promise<OrderFile[]> {
   return json as OrderFile[];
 }
 
+
 /**
- * Upload pliku (FormData) – używa fetch z logiką odświeżania tokenu
+ * Upload pliku (FormData) – Używa globalnego 'fetch' i POZYCJA AUTORYZACJI Z auth.
  */
 export async function uploadFile(data: {
   file: File;
@@ -48,15 +53,19 @@ export async function uploadFile(data: {
 
   const url = `${API_BASE}/files/upload/`;
 
-  const token = localStorage.getItem("access_token");
+  // --- Używamy globalnego fetch z RĘCZNĄ autoryzacją z auth.getAccess() ---
+  // POPRAWKA: Pobieramy token z obiektu 'auth', a nie z localStorage.
+  const token = auth.getAccess(); 
   if (!token) throw new Error("Brak tokenu autoryzacji.");
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Authorization": `Bearer ${token}` },
+    headers: { 
+      "Authorization": `Bearer ${token}` 
+    },
     body: formData,
-    credentials: "include",
   });
+  // -------------------------------------------------------------------------
 
   const json = await res.json().catch(() => null);
   if (!res.ok) throw new Error(json ? JSON.stringify(json) : "Nie udało się wgrać pliku.");
@@ -64,30 +73,18 @@ export async function uploadFile(data: {
   return json as OrderFile;
 }
 
-/**
- * Zmiana widoczności pliku dla klientów
- */
-export async function updateFileVisibility(fileId: number, visible: boolean) {
+// ... (updateFileVisibility bez zmian)
+export async function updateFileVisibility(fileId: number, visible: boolean): Promise<OrderFile> {
   const res = await apiFetch(`${API_BASE}/files/${fileId}/visibility/`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" }, 
     body: JSON.stringify({ visible_to_clients: visible }),
   });
 
   const json = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(json ? JSON.stringify(json) : "Nie udało się zmienić widoczności pliku.");
-  return json;
-}
-
-/**
- * NOWA FUNKCJA:
- * Otwiera wybrane pliki w nowych kartach przeglądarki po kolei,
- * korzystając z pola `uploaded_file_url` każdego pliku.
- */
-export function openFilesInNewTabs(files: OrderFile[]) {
-  for (const file of files) {
-    if (file.uploaded_file_url) {
-      window.open(file.uploaded_file_url, "_blank");
-    }
+  if (!res.ok) {
+    throw new Error(json ? JSON.stringify(json) : "Nie udało się zmienić widoczności pliku.");
   }
+  
+  return json as OrderFile;
 }

@@ -77,3 +77,36 @@ export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
 
   return json as Order;
 }
+
+/* -----------------------------------------------------
+    NOWA FUNKCJA: ZMIANA STATUSU ZAMÓWIENIA
+   ----------------------------------------------------- */
+
+/**
+ * Zmienia status wybranego zamówienia.
+ * PATCH /api/orders/<id>/status/
+ */
+export async function updateOrderStatus(
+  orderId: number,
+  status: string
+): Promise<Order> {
+  const url = `${ORDERS_URL}${orderId}/change-status/`;
+
+  const res = await apiFetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+
+  const json = await res.json().catch(() => null);
+
+  if (!res.ok) {
+    const msg =
+      json && typeof json === "object"
+        ? JSON.stringify(json)
+        : "Nie udało się zmienić statusu zamówienia.";
+    throw new Error(msg);
+  }
+
+  return json as Order;
+}

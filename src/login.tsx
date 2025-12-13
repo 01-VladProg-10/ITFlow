@@ -54,6 +54,7 @@ const [mode, setMode] = useState<"login" | "register">(initialMode);
         first_name: regFirstName,
         last_name: regLastName,
         password: regPassword,
+        password_verify: regPasswordVerify,
       });
 
       alert("Konto zostało utworzone. Możesz się teraz zalogować.");

@@ -22,10 +22,11 @@ export type RegisterPayload = {
   last_name: string;
   email: string;
   password: string;
+  password_verify: string;
 };
 
 export async function registerUser(payload: RegisterPayload) {
-  const res = await fetch(`${API_BASE}/accounts/users/`, {
+  const res = await fetch(`${API_BASE}/accounts/users/register/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
