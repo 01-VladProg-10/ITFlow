@@ -1,3 +1,5 @@
+# notifications/urls.py
+
 from django.urls import path
 from .views import (
     ContactMessageCreateView,
@@ -7,8 +9,9 @@ from .views import (
     ContactMessageFilteredListView,
     ContactMessageDeleteView,
     ContactMessageStatsView,
+    SendOrderEmailWithAttachmentView,  # 🚨 Dodany import
 )
-from .tests import send_test_email
+from .tests import send_test_email  # Zostawiam dla Twojej funkcji testowej, jeśli jej używasz
 
 app_name = "notifications"
 
@@ -34,6 +37,9 @@ urlpatterns = [
     # Statystyki zgłoszeń
     path('contact/stats/', ContactMessageStatsView.as_view(), name='contact-stats'),
 
-    # Test wysyłki maila
+    # Test wysyłki maila (jeśli go używasz)
     path('test-email/', send_test_email, name='test-email'),
+
+    # 🚨 NOWY ENDPOINT: Wysyłka maila z załącznikiem do klienta zlecenia
+    path('order/<int:order_id>/send-email/', SendOrderEmailWithAttachmentView.as_view(), name='order-send-email'),
 ]

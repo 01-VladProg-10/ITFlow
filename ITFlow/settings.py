@@ -166,7 +166,7 @@ EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "SG.TEST_KEY_PLACEHOLDER_DO_NOT_USE")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "itflowproject1@gmail.com")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
-SENDGRID_ECHO_TO_STDOUT = True
+SENDGRID_ECHO_TO_STDOUT = False
 
 # ---------------------------------------------------------------------
 # CORS configuration (dla React frontend)

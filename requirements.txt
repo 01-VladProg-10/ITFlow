@@ -26,6 +26,9 @@ drf-yasg==1.21.8           # Swagger / OpenAPI UI
 gunicorn==23.0.0
 whitenoise==6.7.0
 
+# === PDF Generation ===
+reportlab==4.1.0           # Dodano do generowania PDF w views.py
+
 # === Email ===
 sendgrid==6.11.0
 

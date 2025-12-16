@@ -7,7 +7,8 @@ from .views import (
     upload_file_api,
     files_by_order_api,
     update_visible_to_clients_api,
-    download_files_api,  # <--- NOWY IMPORT
+    download_files_api,
+    generate_final_report_pdf_api,  # <--- DODANY IMPORT
 )
 
 urlpatterns = [
@@ -18,11 +19,18 @@ urlpatterns = [
     path('<int:pk>/visibility/', update_visible_to_clients_api, name='file-visibility-api'),
 
     # -----------------------------------------------------------
-    # NOWY DEDYKOWANY URL do pobierania plików zamówienia
+    # Istniejący URL do pobierania wielu plików jako ZIP
     path(
         'order/<int:order_id>/download/',
         download_files_api,
         name='files-download-api'
+    ),
+    # -----------------------------------------------------------
+    # NOWY URL do pobierania raportu PDF
+    path(
+        'order/<int:order_id>/final_report/',
+        generate_final_report_pdf_api,
+        name='order-final-report-pdf-api'
     ),
     # -----------------------------------------------------------
 ]
