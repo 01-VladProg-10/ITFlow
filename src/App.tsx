@@ -179,7 +179,7 @@ function AppContent() {
           {features.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
-              className="rounded-2xl bg-white dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)] text-slate-900 dark:text-white p-6 shadow-lg border border-slate-100 dark:border-itf-darkBorder"
+              className="rounded-2xl bg-white dark:bg-[linear-gradient(90deg,_#6D28D9_0%,_#4C1D95_40%,_#1E1B4B_100%)] text-slate-900 dark:text-white p-6 shadow-lg border border-slate-100 dark:border-itf-darkBorder"
             >
               <div className="h-10 w-10 rounded-xl bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[#1E1B4B] flex items-center justify-center mb-3">
                 <Icon className="h-5 w-5 text-white dark:text-purple-200" />
