@@ -28,7 +28,7 @@ const mockUser = {
   groups: [
     {
       id: 1,
-      name: "programmer", // ważne: dokładnie tak, jak używasz w froncie
+      name: "client", // ważne: dokładnie tak, jak używasz w froncie
     },
   ],
 };

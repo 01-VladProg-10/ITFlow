@@ -137,17 +137,17 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 // Komponenty pomocnicze
-const HeaderGradient = () => <div className="absolute top-0 left-0 w-full h-[150px] bg-gradient-to-r from-purple-600 to-indigo-700 md:ml-72" />;
+const HeaderGradient = () => <div className="absolute top-0 left-0 w-full h-[150px] bg-gradient-to-r from-purple-600 to-indigo-700 dark:from-[#4C1D95] dark:via-[#312E81] dark:to-[#020617] md:ml-72" />;
 const Loading = ({ role }: { role: Role }) => (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A]">
         <Sidebar role={role} />
-        <main className="md:ml-72 pt-40 px-12 max-w-4xl mx-auto text-center text-slate-500">Ładowanie danych...</main>
+        <main className="md:ml-72 pt-40 px-12 max-w-4xl mx-auto text-center text-slate-500 dark:text-slate-400">Ładowanie danych...</main>
     </div>
 );
 const ErrorMessage = ({ role, message }: { role: Role, message: string }) => (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A]">
         <Sidebar role={role} />
-        <main className="md:ml-72 pt-40 px-12 max-w-4xl mx-auto text-center text-red-600">Błąd: {message}</main>
+        <main className="md:ml-72 pt-40 px-12 max-w-4xl mx-auto text-center text-red-600 dark:text-red-400">Błąd: {message}</main>
     </div>
 );
 const LinkBack = ({ role }: { role: Role }) => (
@@ -158,7 +158,7 @@ const LinkBack = ({ role }: { role: Role }) => (
 const TabButton = ({ active, onClick, children }: { active: boolean, onClick: () => void, children: ReactNode }) => (
     <button
         className={`flex items-center px-4 py-2 text-sm font-semibold transition-colors ${
-            active ? 'border-b-2 border-purple-600 text-purple-600' : 'text-slate-500 hover:text-slate-700'
+            active ? 'border-b-2 border-purple-600 dark:border-purple-400 text-purple-600 dark:text-purple-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
         }`}
         onClick={onClick}
     >
@@ -168,18 +168,18 @@ const TabButton = ({ active, onClick, children }: { active: boolean, onClick: ()
 const OrderHistoryList = ({ logs }: { logs: LogEntry[] }) => (
     <div className="space-y-4">
         {logs.length === 0 ? (
-            <p className="text-center text-slate-500 py-6">Brak historii działań dla tego zamówienia.</p>
+            <p className="text-center text-slate-500 dark:text-slate-400 py-6">Brak historii działań dla tego zamówienia.</p>
         ) : (
             logs.map((log, index) => {
                 const { Icon, bg, label, date, iconColor } = getLogStyle(log);
                 return (
-                    <div key={index} className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-slate-100">
+                    <div key={index} className="flex items-start p-4 bg-white dark:bg-itf-darkSurface rounded-xl shadow-sm border border-slate-100 dark:border-itf-darkBorder">
                         <div className={`flex h-8 w-8 items-center justify-center rounded-full shrink-0 mr-3 ${bg}`}>
                             <Icon className={`h-4 w-4 ${iconColor}`} />
                         </div>
                         <div className="flex-1">
-                            <p className="text-sm font-medium text-slate-800">{label}</p>
-                            <p className="text-xs text-slate-500 mt-1">
+                            <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{label}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                                 {log.actor_name} | {date}
                             </p>
                         </div>
@@ -552,19 +552,19 @@ export default function OrderFilesPage({ role }: { role: Role }) {
     const canDownloadAnything = filesToDisplay.filter(f => selected[f.id]).length > 0;
 
     return (
-        <div className="min-h-screen bg-[#F3F2F8]">
+        <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A] text-slate-900 dark:text-white">
             <Sidebar role={role} />
             <main className="md:ml-72">
                 <HeaderGradient />
                 <div className="px-4 md:px-12 lg:px-[88px] pt-10 pb-12 max-w-4xl mx-auto">
                     <LinkBack role={role} />
-                    <h1 className="text-3xl font-extrabold text-slate-900 mb-2">
+                    <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
                         Szczegóły zamówienia
                     </h1>
-                    <p className="text-slate-500 text-sm mb-6">Zlecenie #{order?.id}: **{order?.title}**</p>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Zlecenie #{order?.id}: **{order?.title}**</p>
 
                     {/* NOWA SEKCJA ZAKŁADEK */}
-                    <div className="flex border-b border-slate-200 mb-6">
+                    <div className="flex border-b border-slate-200 dark:border-itf-darkBorder mb-6">
                         <TabButton active={activeTab === "files"} onClick={() => setActiveTab("files")}>
                             <FileText className="h-5 w-5 mr-2" /> Pliki i Status
                         </TabButton>
@@ -574,7 +574,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                     </div>
 
 
-                    <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-6">
+                    <div className="bg-white dark:bg-itf-darkSurface rounded-2xl shadow-xl border border-slate-100 dark:border-itf-darkBorder p-6">
                         {activeTab === "files" ? (
                             // WIDOK PLIKÓW I STATUSU
                             <>
@@ -632,7 +632,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                         setShowEmailForm(false); 
                                                     }}
                                                     className={`px-4 py-2 rounded-xl text-white text-[13px] font-semibold transition-colors flex items-center shadow-md ${
-                                                        isChangingStatus ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700'
+                                                        isChangingStatus ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700' : 'bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600'
                                                     }`}
                                                 >
                                                     {isChangingStatus ? "Anuluj" : "Zmień status"}
@@ -643,14 +643,14 @@ export default function OrderFilesPage({ role }: { role: Role }) {
 
                                     {/* Sekcja Formularza Zmiany Statusu */}
                                     {isChangingStatus && (
-                                        <div className="mt-3 p-4 border border-green-200 bg-green-50 rounded-xl shadow-inner">
-                                            <p className="text-sm font-semibold mb-3 text-slate-700">Wybierz nowy status:</p>
+                                        <div className="mt-3 p-4 border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 rounded-xl shadow-inner">
+                                            <p className="text-sm font-semibold mb-3 text-slate-700 dark:text-slate-200">Wybierz nowy status:</p>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                 {availableStatuses.map((s) => (
                                                     <button
                                                         key={s.value}
                                                         onClick={() => handleChangeStatus(s.value)}
-                                                        className="text-left px-4 py-3 rounded-lg text-sm bg-white hover:bg-green-100 border border-green-100 shadow-sm transition-all font-medium text-slate-700"
+                                                        className="text-left px-4 py-3 rounded-lg text-sm bg-white dark:bg-itf-darkCard hover:bg-green-100 dark:hover:bg-green-900/40 border border-green-100 dark:border-green-800 shadow-sm transition-all font-medium text-slate-700 dark:text-slate-200"
                                                     >
                                                         {s.label}
                                                     </button>
@@ -661,12 +661,12 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                 
                                 {/* 🚨 NOWY FORMULARZ WYSYŁKI E-MAILA */}
                                 {showEmailForm && isManager && (
-                                    <div className="mt-3 p-4 border border-slate-200 bg-slate-50 rounded-xl shadow-inner">
-                                        <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center justify-between">
+                                    <div className="mt-3 p-4 border border-slate-200 dark:border-itf-darkBorder bg-slate-50 dark:bg-itf-darkCard rounded-xl shadow-inner">
+                                        <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3 flex items-center justify-between">
                                             Wyślij e-mail
                                             <button 
                                                 onClick={() => setShowEmailForm(false)} 
-                                                className="text-slate-400 hover:text-red-500 transition-colors"
+                                                className="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                                                 title="Zamknij"
                                             >
                                                 <X className="h-4 w-4" />
@@ -678,24 +678,24 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                 placeholder="Temat wiadomości (wymagany)"
                                                 value={emailSubject}
                                                 onChange={(e) => setEmailSubject(e.target.value)}
-                                                className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-purple-500 focus:border-purple-500"
+                                                className="w-full border dark:border-itf-darkBorder rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60 focus:ring-purple-500 focus:border-purple-500"
                                             />
                                             <textarea
                                                 placeholder="Treść wiadomości (wymagana)"
                                                 value={emailMessage}
                                                 onChange={(e) => setEmailMessage(e.target.value)}
                                                 rows={4}
-                                                className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-purple-500 focus:border-purple-500 resize-none"
+                                                className="w-full border dark:border-itf-darkBorder rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60 focus:ring-purple-500 focus:border-purple-500 resize-none"
                                             />
-                                            <label className="block text-xs font-medium text-slate-700">
+                                            <label className="block text-xs font-medium text-slate-700 dark:text-slate-200">
                                                 Załącznik (PDF lub ZIP, wymagany):
                                                 <input 
                                                     type="file"
                                                     accept=".pdf,.zip"
                                                     onChange={(e) => setEmailAttachment(e.target.files?.[0] || null)}
-                                                    className="block w-full text-sm mt-1 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200"
+                                                    className="block w-full text-sm mt-1 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-100 dark:file:bg-purple-900/50 file:text-purple-700 dark:file:text-purple-300 hover:file:bg-purple-200 dark:hover:file:bg-purple-900/70"
                                                 />
-                                                {emailAttachment && <p className="text-xs text-green-600 mt-1">Wybrano: **{emailAttachment.name}**</p>}
+                                                {emailAttachment && <p className="text-xs text-green-600 dark:text-green-400 mt-1">Wybrano: **{emailAttachment.name}**</p>}
                                             </label>
                                             
                                             {emailError && (
@@ -719,8 +719,8 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                 
                                 {/* ---- Tabela plików i logika przydzielania (brakujące w Twoim fragmencie) ---- */}
                                 <div className="mt-8">
-                                    <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                                        <FileText className="h-5 w-5 mr-2 text-purple-600" /> Pliki
+                                    <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center">
+                                        <FileText className="h-5 w-5 mr-2 text-purple-600 dark:text-purple-400" /> Pliki
                                     </h3>
 
                                     {/* Zarządzanie Programistą (tylko dla Managera) */}
@@ -756,13 +756,13 @@ export default function OrderFilesPage({ role }: { role: Role }) {
 
                                     {/* Formularz wgrywania plików (dla Managera/Programisty) */}
                                     {canSeeUploadForm && (
-                                        <div className="mb-6 p-4 border border-orange-200 bg-orange-50 rounded-xl">
-                                            <h4 className="text-sm font-semibold text-slate-700 mb-3">Wgraj nowy plik:</h4>
+                                        <div className="mb-6 p-4 border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
+                                            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3">Wgraj nowy plik:</h4>
                                             <div className="space-y-3">
                                                 <input 
                                                     type="file"
                                                     onChange={handleFileChange}
-                                                    className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200"
+                                                    className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-100 dark:file:bg-orange-900/50 file:text-orange-700 dark:file:text-orange-300 hover:file:bg-orange-200 dark:hover:file:bg-orange-900/70"
                                                 />
                                                 <div className="flex gap-3">
                                                     <input
@@ -770,12 +770,12 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                         placeholder="Nazwa pliku (wymagana)"
                                                         value={uploadName}
                                                         onChange={(e) => setUploadName(e.target.value)}
-                                                        className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-purple-500 focus:border-purple-500"
+                                                        className="flex-1 border dark:border-itf-darkBorder rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60 focus:ring-purple-500 focus:border-purple-500"
                                                     />
                                                     <select
                                                         value={uploadType}
                                                         onChange={(e) => setUploadType(e.target.value)}
-                                                        className="w-32 border rounded-lg px-3 py-2 text-sm focus:ring-purple-500 focus:border-purple-500"
+                                                        className="w-32 border dark:border-itf-darkBorder rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white focus:ring-purple-500 focus:border-purple-500"
                                                     >
                                                         <option value="pdf">PDF</option>
                                                         <option value="zip">ZIP</option>
@@ -788,7 +788,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                     value={uploadDescription}
                                                     onChange={(e) => setUploadDescription(e.target.value)}
                                                     rows={1}
-                                                    className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-purple-500 focus:border-purple-500 resize-none"
+                                                    className="w-full border dark:border-itf-darkBorder rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60 focus:ring-purple-500 focus:border-purple-500 resize-none"
                                                 />
                                                 <button
                                                     onClick={handleUpload}
@@ -803,14 +803,14 @@ export default function OrderFilesPage({ role }: { role: Role }) {
 
                                     {message && (
                                         <div className={`p-3 text-sm rounded-xl mb-4 ${
-                                            message.includes("Błąd") || message.includes("❌") ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-green-100 text-green-700 border border-green-200'
+                                            message.includes("Błąd") || message.includes("❌") ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800' : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800'
                                         }`}>
                                             {message}
                                         </div>
                                     )}
                                     {statusMessage && (
                                         <div className={`p-3 text-sm rounded-xl mb-4 ${
-                                            statusMessage.includes("Błąd") ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-green-100 text-green-700 border border-green-200'
+                                            statusMessage.includes("Błąd") ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800' : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800'
                                         }`}>
                                             {statusMessage}
                                         </div>
@@ -842,8 +842,8 @@ export default function OrderFilesPage({ role }: { role: Role }) {
 
                                     {/* Lista Plików */}
                                     <div className="space-y-3">
-                                        {filesToDisplay.length === 0 ? (
-                                            <p className="text-center text-slate-500 py-6">Brak plików dla tego zamówienia.</p>
+                                                        {filesToDisplay.length === 0 ? (
+                                            <p className="text-center text-slate-500 dark:text-slate-400 py-6">Brak plików dla tego zamówienia.</p>
                                         ) : (
                                             filesToDisplay.map((file) => (
                                                 <div key={file.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-slate-100 hover:bg-gray-100 transition-colors">
@@ -856,8 +856,8 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                         />
                                                         <FileText className="h-5 w-5 text-purple-500 shrink-0" />
                                                         <div>
-                                                            <p className="text-sm font-medium text-slate-800">{file.name} ({file.file_type})</p>
-                                                            <p className="text-xs text-slate-500">{file.description || 'Brak opisu'}</p>
+                                                            <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{file.name} ({file.file_type})</p>
+                                                            <p className="text-xs text-slate-500 dark:text-slate-400">{file.description || 'Brak opisu'}</p>
                                                         </div>
                                                     </div>
 

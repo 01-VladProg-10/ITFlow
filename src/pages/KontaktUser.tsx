@@ -42,7 +42,12 @@ const nav = [
 function Sidebar() {
   return (
     <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+      <div
+        className="flex h-full w-72 flex-col 
+                   bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] 
+                   dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] 
+                   text-white"
+      >
         <div className="flex items-center justify-between px-4 h-16">
           <Logo />
           <button
@@ -126,75 +131,75 @@ export default function KontaktUser() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
       <Sidebar />
       <main className="md:ml-72">
-        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
+        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]" />
         <div className="px-[88px] pt-6 pb-10">
           <div className="mt-12 max-w-[645px]">
-            <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
+            <h1 className="text-[32px] font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
               📬 Formularz kontaktowy
             </h1>
-            <p className="text-slate-500 text-[14px] mt-1">Masz pytanie? Napisz do nas!</p>
+            <p className="text-slate-500 dark:text-slate-300 text-[14px] mt-1">Masz pytanie? Napisz do nas!</p>
 
-            <div className="mt-6 bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+            <div className="mt-6 bg-white dark:bg-itf-darkSurface rounded-2xl shadow-lg border border-slate-100 dark:border-itf-darkBorder p-6">
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="flex gap-4">
                   <div className="flex-1 flex flex-col space-y-2">
-                    <label htmlFor="firstName" className="font-medium">Imię</label>
+                    <label htmlFor="firstName" className="font-medium text-slate-900 dark:text-white">Imię</label>
                     <input
                       id="firstName"
                       type="text"
                       required
                       value={user.firstName}
                       onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-                      className="border rounded p-2"
+                      className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                       placeholder="Wpisz swoje imię"
                     />
                   </div>
 
                   <div className="flex-1 flex flex-col space-y-2">
-                    <label htmlFor="lastName" className="font-medium">Nazwisko</label>
+                    <label htmlFor="lastName" className="font-medium text-slate-900 dark:text-white">Nazwisko</label>
                     <input
                       id="lastName"
                       type="text"
                       required
                       value={user.lastName}
                       onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-                      className="border rounded p-2"
+                      className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                       placeholder="Wpisz swoje nazwisko"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="email" className="font-medium">Email</label>
+                  <label htmlFor="email" className="font-medium text-slate-900 dark:text-white">Email</label>
                   <input
                     id="email"
                     type="email"
                     required
                     value={user.email}
                     onChange={(e) => setUser({ ...user, email: e.target.value })}
-                    className="border rounded p-2"
+                    className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                     placeholder="Wpisz swój email"
                   />
                 </div>
 
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor="requestMessage" className="font-medium">Wiadomość</label>
+                  <label htmlFor="requestMessage" className="font-medium text-slate-900 dark:text-white">Wiadomość</label>
                   <textarea
                     id="requestMessage"
                     required
                     value={requestMessage}
                     onChange={(e) => setRequestMessage(e.target.value)}
-                    className="border rounded p-2"
+                    className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                     placeholder="Twoja wiadomość"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
+                  className="w-full px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)] hover:opacity-90 transition"
                 >
                   Wyślij wiadomość
                 </button>

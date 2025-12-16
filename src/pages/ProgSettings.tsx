@@ -34,7 +34,12 @@ const nav = [
 function Sidebar() {
   return (
     <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+      <div
+        className="flex h-full w-72 flex-col 
+                   bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] 
+                   dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] 
+                   text-white"
+      >
         <div className="flex items-center justify-between px-4 h-16">
           <Logo />
           <button className="md:hidden rounded-xl p-2 hover:bg-white/10" aria-label="Zamknij menu">
@@ -90,29 +95,29 @@ export default function ProgSettings() {
   const displayValue = (value: string) => (value.trim() === "" ? "-" : value);
 
   return (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
       <Sidebar />
 
       <main className="md:ml-72">
-        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
+        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]" />
 
         <div className="px-[88px] pt-6 pb-10">
           <div className="mt-12 max-w-[645px]">
-            <h1 className="text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
+            <h1 className="text-[32px] font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
               💻 Ustawienia programisty
             </h1>
-            <p className="text-slate-500 text-[14px] mt-1">
+            <p className="text-slate-500 dark:text-slate-300 text-[14px] mt-1">
               Zarządzaj swoim profilem programistycznym
             </p>
 
-            <div className="mt-6 bg-white rounded-2xl shadow-lg border border-slate-100 p-6 space-y-6">
+            <div className="mt-6 bg-white dark:bg-itf-darkSurface rounded-2xl shadow-lg border border-slate-100 dark:border-itf-darkBorder p-6 space-y-6">
 
               <div className="flex gap-4">
                 <div className="flex-1 flex flex-col space-y-2">
-                  <label className="font-medium">Imię</label>
+                  <label className="font-medium text-slate-900 dark:text-white">Imię</label>
                   <input
                     type="text"
-                    className="border rounded p-2"
+                    className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                     value={editing ? profile.firstName : displayValue(profile.firstName)}
                     disabled={!editing}
                     onChange={(e) => handleChange("firstName", e.target.value)}
@@ -120,10 +125,10 @@ export default function ProgSettings() {
                 </div>
 
                 <div className="flex-1 flex flex-col space-y-2">
-                  <label className="font-medium">Nazwisko</label>
+                  <label className="font-medium text-slate-900 dark:text-white">Nazwisko</label>
                   <input
                     type="text"
-                    className="border rounded p-2"
+                    className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                     value={editing ? profile.lastName : displayValue(profile.lastName)}
                     disabled={!editing}
                     onChange={(e) => handleChange("lastName", e.target.value)}
@@ -132,10 +137,10 @@ export default function ProgSettings() {
               </div>
 
               <div className="flex flex-col space-y-2">
-                <label className="font-medium">Email</label>
+                <label className="font-medium text-slate-900 dark:text-white">Email</label>
                 <input
                   type="email"
-                  className="border rounded p-2"
+                  className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                   value={editing ? profile.email : displayValue(profile.email)}
                   disabled={!editing}
                   onChange={(e) => handleChange("email", e.target.value)}
@@ -143,10 +148,10 @@ export default function ProgSettings() {
               </div>
 
               <div className="flex flex-col space-y-2">
-                <label className="font-medium">Języki programowania</label>
+                <label className="font-medium text-slate-900 dark:text-white">Języki programowania</label>
                 <input
                   type="text"
-                  className="border rounded p-2"
+                  className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                   value={editing ? profile.languages : displayValue(profile.languages)}
                   disabled={!editing}
                   onChange={(e) => handleChange("languages", e.target.value)}
@@ -154,10 +159,10 @@ export default function ProgSettings() {
               </div>
 
               <div className="flex flex-col space-y-2">
-                <label className="font-medium">Git (opcjonalnie)</label>
+                <label className="font-medium text-slate-900 dark:text-white">Git (opcjonalnie)</label>
                 <input
                   type="text"
-                  className="border rounded p-2"
+                  className="border border-slate-200 dark:border-itf-darkBorder rounded p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                   value={editing ? profile.git : displayValue(profile.git)}
                   disabled={!editing}
                   onChange={(e) => handleChange("git", e.target.value)}
@@ -167,7 +172,7 @@ export default function ProgSettings() {
               <div className="flex justify-end mt-6">
                 <button
                   onClick={() => setEditing(!editing)}
-                  className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
+                  className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)] hover:opacity-90 transition"
                 >
                   {editing ? "Zapisz" : "Edytuj profil"}
                 </button>

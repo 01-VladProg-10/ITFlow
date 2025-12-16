@@ -26,7 +26,7 @@ function Sidebar({ role }: { role: Role }) {
 
   return (
     <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] text-white">
         <div className="flex items-center justify-between px-4 h-16">
           <h2 className="font-bold text-xl tracking-tight text-white">ITFlow</h2>
           <button className="md:hidden rounded-xl p-2 hover:bg-white/10">
@@ -94,40 +94,40 @@ export default function ManagerReportDetail() {
     }
   };
 
-  if (loading) return <p className="p-8 text-slate-500">Ładowanie zgłoszenia...</p>;
-  if (!report) return <p className="p-8 text-red-500">Nie znaleziono zgłoszenia.</p>;
+  if (loading) return <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A]"><p className="p-8 text-slate-500 dark:text-slate-400">Ładowanie zgłoszenia...</p></div>;
+  if (!report) return <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A]"><p className="p-8 text-red-500 dark:text-red-400">Nie znaleziono zgłoszenia.</p></div>;
 
   return (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A] text-slate-900 dark:text-white">
       <Sidebar role="manager" />
 
       <main className="md:ml-72 p-8">
-        <h1 className="text-2xl font-bold mb-4">Szczegóły zgłoszenia</h1>
+        <h1 className="text-2xl font-bold mb-4 dark:text-white">Szczegóły zgłoszenia</h1>
 
-        <div className="bg-white rounded-2xl shadow-md p-6 max-w-3xl">
+        <div className="bg-white dark:bg-itf-darkSurface rounded-2xl shadow-md border border-slate-200 dark:border-itf-darkBorder p-6 max-w-3xl">
           <div className="mb-4">
-            <h2 className="text-lg font-semibold">{report.first_name} {report.last_name}</h2>
-            <p className="text-slate-500">{report.email}</p>
-            <div className="flex items-center gap-2 text-slate-400 text-sm mt-1">
+            <h2 className="text-lg font-semibold dark:text-white">{report.first_name} {report.last_name}</h2>
+            <p className="text-slate-500 dark:text-slate-400">{report.email}</p>
+            <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-sm mt-1">
               <Clock className="h-4 w-4" />
               <span>{new Date(report.created_at).toLocaleString()}</span>
             </div>
           </div>
 
           <div className="mb-4">
-            <h3 className="font-semibold">Wiadomość od klienta</h3>
-            <p className="text-slate-600 whitespace-pre-wrap">{report.request_message}</p>
+            <h3 className="font-semibold dark:text-white">Wiadomość od klienta</h3>
+            <p className="text-slate-600 dark:text-slate-300 whitespace-pre-wrap">{report.request_message}</p>
           </div>
 
           <div className="mb-4">
-            <h3 className="font-semibold">Odpowiedź</h3>
+            <h3 className="font-semibold dark:text-white">Odpowiedź</h3>
             {report.is_answered ? (
-              <p className="text-slate-600 whitespace-pre-wrap">{report.response_message}</p>
+              <p className="text-slate-600 dark:text-slate-300 whitespace-pre-wrap">{report.response_message}</p>
             ) : (
               <textarea
                 value={response}
                 onChange={(e) => setResponse(e.target.value)}
-                className="w-full border border-slate-300 rounded-xl p-2"
+                className="w-full border border-slate-300 dark:border-itf-darkBorder rounded-xl p-2 bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-white/60"
                 rows={5}
                 placeholder="Wpisz odpowiedź..."
               />
@@ -146,7 +146,7 @@ export default function ManagerReportDetail() {
             </div>
           )}
 
-          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {error && <p className="text-red-500 dark:text-red-400 mt-2">{error}</p>}
         </div>
       </main>
     </div>

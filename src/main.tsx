@@ -20,6 +20,7 @@ import {
   ManagerOrdersPage,
 } from "./pages/OrdersPage";
 import OrderFilesPage from "./pages/OrderFilesPage";
+import { ThemeProvider } from "./theme";
 
 // KONFIGURACJA ROUTERA
 const router = createBrowserRouter([
@@ -35,8 +36,8 @@ const router = createBrowserRouter([
 
   // USTAWIENIA
   { path: "/ustawienia", element: <UserSettings /> },
-  { path: "/prog-ustawienia", element: <UserSettings /> },
-  { path: "/manager-ustawienia", element: <UserSettings /> },
+  { path: "/prog-ustawienia", element: <ProgSettings /> },
+  { path: "/manager-ustawienia", element: <ManagerSettings /> },
 
   // ORDERS
   { path: "/orders", element: <ClientOrdersPage /> },
@@ -49,9 +50,17 @@ const router = createBrowserRouter([
   { path: "/manager-orders/:orderId/files", element: <OrderFilesPage role="manager" /> },
 ]);
 
+function Root() {
+  return (
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
+}
+
 // RENDER
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Root />
   </React.StrictMode>
 );

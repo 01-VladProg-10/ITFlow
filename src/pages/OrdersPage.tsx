@@ -7,7 +7,7 @@ import zanowieniaIcon from "../icons/zanowienia.png";
 import kontaktIcon from "../icons/kontakt.png";
 import ustawieniaIcon from "../icons/ustawienia.png";
 
-import { FileText, Clock, Flame, X, LogIn } from "lucide-react";
+import { Clock, X, LogIn, Search } from "lucide-react";
 
 import { fetchOrders, createOrder, type Order } from "../api/orders";
 
@@ -73,7 +73,12 @@ export function Sidebar({ role }: { role: Role }) {
 
   return (
     <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+      <div
+        className="flex h-full w-72 flex-col 
+                   bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] 
+                   dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] 
+                   text-white"
+      >
         <div className="flex items-center justify-between px-4 h-16">
           <Logo />
           <button className="md:hidden rounded-xl p-2 hover:bg-white/10">
@@ -183,7 +188,7 @@ function OrderMainCard({
 
   if (!order) {
     return (
-      <div className="flex-1 bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex items-center justify-center text-slate-500 text-sm">
+      <div className="flex-1 bg-white dark:bg-itf-darkSurface rounded-2xl shadow-lg border border-slate-100 dark:border-itf-darkBorder p-6 flex items-center justify-center text-slate-500 dark:text-slate-300 text-sm">
         Brak zamówień do wyświetlenia.
       </div>
     );
@@ -194,47 +199,47 @@ function OrderMainCard({
   const updatedLabel = formatUpdatedAt(order);
 
   return (
-    <div className="flex-1 bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+    <div className="flex-1 bg-white dark:bg-itf-darkSurface rounded-2xl shadow-lg border border-slate-100 dark:border-itf-darkBorder p-6">
       <div className="space-y-4">
         <div>
-          <div className="text-[13px] text-slate-500">
+          <div className="text-[13px] text-slate-500 dark:text-slate-300">
             {isProgrammer ? "Twoje zadanie" : "Twoje zamówienie"}
           </div>
-          <div className="text-[18px] font-semibold text-slate-900">
+          <div className="text-[18px] font-semibold text-slate-900 dark:text-white">
             {order.title}
           </div>
         </div>
 
         <div className="space-y-2 text-[14px]">
-          <div>
+          <div className="text-slate-900 dark:text-white">
             Status:{" "}
-            <span className="text-[#6D28D9] font-semibold">
+            <span className="text-[#6D28D9] dark:text-purple-200 font-semibold">
               {order.status || "—"}
             </span>
           </div>
 
           {/* --- ДИНАМІЧНИЙ ПРОГРЕС --- */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 text-slate-900 dark:text-white">
             <span>Postęp:</span>
-            <div className="flex-1 h-3 rounded-full bg-slate-100 overflow-hidden">
+            <div className="flex-1 h-3 rounded-full bg-slate-100 dark:bg-itf-darkBorder overflow-hidden">
               <div
                 className={`h-3 rounded-full bg-gradient-to-r ${gradient}`}
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="text-[12px] text-slate-500 w-10 text-right">
+            <span className="text-[12px] text-slate-500 dark:text-slate-300 w-10 text-right">
               {progress}%
             </span>
           </div>
 
           {/* --- ДИНАМІЧНА ДАТА --- */}
-          <div className="flex items-center gap-2 mt-1 text-[13px] text-slate-600">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-100">
-              <Clock className="h-3 w-3 text-orange-500" />
+          <div className="flex items-center gap-2 mt-1 text-[13px] text-slate-600 dark:text-slate-300">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-itf-darkBorder">
+              <Clock className="h-3 w-3 text-slate-500 dark:text-slate-400" />
             </span>
             <span>
               Ostatnia aktualizacja:{" "}
-              <span className="text-[#2563EB] font-semibold">
+              <span className="text-slate-600 dark:text-slate-300 font-semibold">
                 {updatedLabel ?? "brak danych"}
               </span>
             </span>
@@ -245,7 +250,7 @@ function OrderMainCard({
   {role === "manager" && (
     <Link
       to={`/manager-orders/${order.id}/files`}
-      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
+      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] dark:bg-[#6D28D9] hover:bg-[#4C1DB6] dark:hover:bg-[#7C3AED]">
       Zobacz szczegóły
     </Link>
   )}
@@ -253,7 +258,7 @@ function OrderMainCard({
   {role === "client" && (
     <Link
       to={`/orders/${order.id}/files`}
-      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
+      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] dark:bg-[#6D28D9] hover:bg-[#4C1DB6] dark:hover:bg-[#7C3AED]">
       Zobacz szczegóły
     </Link>
   )}
@@ -261,7 +266,7 @@ function OrderMainCard({
   {role === "programmer" && (
     <Link
       to={`/tasks/${order.id}/files`}
-      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] hover:bg-[#4C1DB6]">
+      className="inline-block px-6 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] dark:bg-[#6D28D9] hover:bg-[#4C1DB6] dark:hover:bg-[#7C3AED]">
       Zobacz szczegóły
     </Link>
   )}
@@ -361,9 +366,9 @@ export function OrdersPage({ role }: { role: Role }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F3F2F8]">
+      <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
         <Sidebar role={role} />
-        <main className="md:ml-72 p-10 text-slate-700">
+        <main className="md:ml-72 p-10 text-slate-700 dark:text-slate-200">
           Ładowanie zamówień.
         </main>
       </div>
@@ -372,7 +377,7 @@ export function OrdersPage({ role }: { role: Role }) {
 
   if (loadError) {
     return (
-      <div className="min-h-screen bg-[#F3F2F8]">
+      <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
         <Sidebar role={role} />
         <main className="md:ml-72 p-10 text-red-600">{loadError}</main>
       </div>
@@ -380,27 +385,28 @@ export function OrdersPage({ role }: { role: Role }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
       <Sidebar role={role} />
 
       <main className="md:ml-72">
-        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
+        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]" />
 
         <div className="px-[88px] pt-10 pb-12">
-          <h1 className="text-[32px] font-extrabold text-slate-900">
+          <h1 className="text-[32px] font-extrabold text-slate-900 dark:text-white">
             {isProgrammer ? "Lista zadań" : "Lista zamówień"}
           </h1>
-          <p className="text-slate-500 text-[14px] mt-1">
+          <p className="text-slate-500 dark:text-slate-300 text-[14px] mt-1">
             {filteredOrders.length} {isProgrammer ? "zadań" : "zamówień"}
             {searchQuery ? " pasujących do wyszukiwania" : " w systemie"}
           </p>
 
           {/* ---- SEARCH BOX ---- */}
-          <div className="mt-6 max-w-xl">
+          <div className="mt-6 max-w-xl relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-400 pointer-events-none" />
             <input
               type="text"
               placeholder="Szukaj po tytule, opisie lub statusie..."
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 shadow-sm text-sm"
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 dark:border-itf-darkBorder shadow-sm text-sm bg-white dark:bg-itf-darkSurface text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-200"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -414,7 +420,7 @@ export function OrdersPage({ role }: { role: Role }) {
 
           {/* ------- LISTA WSZYSTKICH ZAMÓWIEŃ ------- */}
           <div className="mt-12">
-            <h2 className="text-[20px] font-bold text-slate-900 mb-4">
+            <h2 className="text-[20px] font-bold text-slate-900 dark:text-white mb-4">
               Wszystkie {isProgrammer ? "zadania" : "zamówienia"}
             </h2>
 
@@ -422,20 +428,20 @@ export function OrdersPage({ role }: { role: Role }) {
             {filteredOrders.map((o) => (
                 <li
                   key={o.id}
-                  className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-[14px] flex items-center justify-between gap-4"
+                  className="bg-white dark:bg-itf-darkSurface border border-slate-200 dark:border-itf-darkBorder rounded-xl p-4 shadow-sm text-[14px] flex items-center justify-between gap-4"
                 >
                   <div>
-                    <div className="font-medium text-slate-900">{o.title}</div>
-                    <div className="text-slate-500 text-[13px]">
+                    <div className="font-medium text-slate-900 dark:text-white">{o.title}</div>
+                    <div className="text-slate-500 dark:text-slate-300 text-[13px]">
                       {o.status}
                     </div>
                   </div>
 
-                                <div>
+                  <div>
                   {role === "manager" && (
                     <Link
                       to={`/manager-orders/${o.id}/files`}
-                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
+                    className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] dark:bg-[#6D28D9] hover:bg-[#4C1DB6] dark:hover:bg-[#7C3AED]">
                       Zobacz szczegóły
                     </Link>
                   )}
@@ -443,7 +449,7 @@ export function OrdersPage({ role }: { role: Role }) {
                   {role === "client" && (
                     <Link
                       to={`/orders/${o.id}/files`}
-                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
+                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] dark:bg-[#6D28D9] hover:bg-[#4C1DB6] dark:hover:bg-[#7C3AED]">
                       Zobacz szczegóły
                     </Link>
                   )}
@@ -451,7 +457,7 @@ export function OrdersPage({ role }: { role: Role }) {
                   {role === "programmer" && (
                     <Link
                       to={`/tasks/${o.id}/files`}
-                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#8F2AFA] hover:bg-[#7C22E2]">
+                      className="px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#5B21D6] dark:bg-[#6D28D9] hover:bg-[#4C1DB6] dark:hover:bg-[#7C3AED]">
                       Zobacz szczegóły
                     </Link>
                   )}
@@ -480,15 +486,15 @@ export function OrdersPage({ role }: { role: Role }) {
                 {showForm ? (
                   <form
                     onSubmit={handleCreateOrder}
-                    className="bg-white rounded-2xl shadow-md border border-slate-200 p-4 space-y-3"
+                    className="bg-white dark:bg-itf-darkSurface rounded-2xl shadow-md border border-slate-200 dark:border-itf-darkBorder p-4 space-y-3"
                   >
                     <div>
-                      <label className="block text-sm font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1 text-slate-900 dark:text-white">
                         Tytuł zamówienia
                       </label>
                       <input
                         type="text"
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                        className="w-full rounded-lg border border-slate-300 dark:border-itf-darkBorder px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
                         value={form.title}
                         onChange={(e) =>
                           setForm((f) => ({ ...f, title: e.target.value }))
@@ -498,11 +504,11 @@ export function OrdersPage({ role }: { role: Role }) {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-1">
+                      <label className="block text-sm font-medium mb-1 text-slate-900 dark:text-white">
                         Opis
                       </label>
                       <textarea
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                        className="w-full rounded-lg border border-slate-300 dark:border-itf-darkBorder px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
                         rows={4}
                         value={form.description}
                         onChange={(e) =>
@@ -526,7 +532,7 @@ export function OrdersPage({ role }: { role: Role }) {
                       <button
                         type="button"
                         onClick={() => setShowForm(false)}
-                        className="px-4 py-2 rounded-xl text-sm font-semibold bg-slate-200 text-slate-800"
+                        className="px-4 py-2 rounded-xl text-sm font-semibold bg-slate-200 text-slate-800 dark:bg-itf-darkBorder dark:text-slate-100"
                       >
                         Anuluj
                       </button>
@@ -544,7 +550,7 @@ export function OrdersPage({ role }: { role: Role }) {
             )}
 
             {role === "programmer" && (
-              <button className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]">
+              <button className="px-8 py-3 font-semibold text-[14px] rounded-xl text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[#6D28D9] dark:hover:bg-[#7C3AED]">
                 Zmień status
               </button>
             )}

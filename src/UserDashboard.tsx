@@ -143,7 +143,7 @@ function formatLogDate(isoString: string): string {
 function Sidebar({ role, open, onClose }: { role: RoleKey; open: boolean; onClose: () => void }) {
   const nav = navByRole[role];
   const content = (
-    <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+    <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] text-white">
       <div className="flex items-center justify-between px-4 h-16">
         <Logo />
         <button className="md:hidden rounded-xl p-2 hover:bg-white/10" onClick={onClose}>
@@ -294,15 +294,15 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
   const updatedLabel = formatLatestOrderDate(latestOrder);
 
   return (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
       {/* Mobile Header */}
-      <header className="md:hidden sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
+      <header className="md:hidden sticky top-0 z-30 bg-white/80 dark:bg-[#0B122A] backdrop-blur border-b border-slate-200 dark:border-itf-darkBorder">
         <div className="h-14 flex items-center justify-between px-4">
           <button onClick={() => setSidebarOpen(true)} className="rounded-xl p-2 hover:bg-slate-100">
             <Menu className="h-6 w-6" />
           </button>
           <div className="font-bold">ITFlow</div>
-          <Link to="/" className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-600">
+          <Link to="/" className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-600 dark:from-itf-accent dark:to-indigo-600">
             <LogIn className="h-4 w-4" /> Wyloguj
           </Link>
         </div>
@@ -311,59 +311,59 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
       <Sidebar role={role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main className="md:ml-72">
-        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
+        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]" />
 
         <div className="px-6 md:px-[88px] pt-6 pb-10">
           <div className="mt-8 md:mt-12">
             
             {/* Greeting */}
             <div className="mb-8">
-              <h1 className="text-[26px] md:text-[32px] font-extrabold text-slate-900 flex items-center gap-2">
+              <h1 className="text-[26px] md:text-[32px] font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
                 {greeting}
               </h1>
-              <p className="text-slate-500 text-[14px] mt-1">{subText}</p>
+              <p className="text-slate-500 dark:text-slate-300 text-[14px] mt-1">{subText}</p>
             </div>
 
             <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-[88px]">
               {/* LEFT CARD */}
-              <div className="w-full lg:w-[645px] self-start bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+              <div className="w-full lg:w-[645px] self-start bg-white dark:bg-itf-darkSurface rounded-2xl shadow-lg border border-slate-100 dark:border-itf-darkBorder p-6">
                 <div className="space-y-6">
                   <div>
-                    <div className="text-[13px] text-slate-500">{primaryLabel}</div>
-                    <div className="text-[18px] font-semibold text-slate-900 mt-1">{orderTitle}</div>
+                    <div className="text-[13px] text-slate-500 dark:text-slate-300">{primaryLabel}</div>
+                    <div className="text-[18px] font-semibold text-slate-900 dark:text-white mt-1">{orderTitle}</div>
                   </div>
                   <div>
-                    <div className="text-[14px]">
-                      Status: <span className="text-[#6D28D9] font-semibold">{orderStatus}</span>
+                    <div className="text-[14px] text-slate-900 dark:text-white">
+                      Status: <span className="text-[#6D28D9] dark:text-purple-200 font-semibold">{orderStatus}</span>
                     </div>
-                    <div className="mt-2 h-3 rounded-full bg-slate-100 overflow-hidden">
+                    <div className="mt-2 h-3 rounded-full bg-slate-100 dark:bg-itf-darkBorder overflow-hidden">
                       <div className={`h-3 rounded-full bg-gradient-to-r ${progressGradient}`} style={{ width: `${progress}%` }} />
                     </div>
-                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[12px] text-slate-500">
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[12px] text-slate-500 dark:text-slate-300">
                       <span>{progress}% ukończone</span>
-                      {updatedLabel && <span>Ostatnia aktualizacja: <span className="text-[#2563EB] font-semibold">{updatedLabel}</span></span>}
+                      {updatedLabel && <span>Ostatnia aktualizacja: <span className="text-[#2563EB] dark:text-indigo-400 font-semibold">{updatedLabel}</span></span>}
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* RIGHT CARD — Historia (Dynamiczna) */}
-              <div className="w-full lg:w-[350px] bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-                <div className="text-slate-900 font-semibold mb-4 text-[14px] flex justify-between items-center">
+              <div className="w-full lg:w-[350px] bg-white dark:bg-itf-darkSurface rounded-2xl shadow-lg border border-slate-100 dark:border-itf-darkBorder p-6">
+                <div className="text-slate-900 dark:text-white font-semibold mb-4 text-[14px] flex justify-between items-center">
                   <span>Historia działań</span>
                 </div>
 
                 {loadingHistory ? (
-                  <div className="py-4 text-center text-xs text-slate-400">Ładowanie historii...</div>
+                  <div className="py-4 text-center text-xs text-slate-400 dark:text-slate-300">Ładowanie historii...</div>
                 ) : historyLogs.length === 0 ? (
-                  <div className="py-4 text-center text-xs text-slate-400">Brak wpisów w historii.</div>
+                  <div className="py-4 text-center text-xs text-slate-400 dark:text-slate-300">Brak wpisów w historii.</div>
                 ) : (
                   <ul className="space-y-3 text-[14px]">
                     {historyLogs.map((log) => {
                       const { Icon, bg, label, date } = getLogStyle(log);
                       return (
                         <li key={log.id} className="flex items-center justify-between">
-                          <div className="flex items-center gap-3 text-slate-800">
+                          <div className="flex items-center gap-3 text-slate-800 dark:text-slate-100">
                             <span
                               className="h-8 w-8 rounded-full flex items-center justify-center shadow shrink-0"
                               style={{ backgroundColor: bg }}
@@ -372,10 +372,10 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
                             </span>
                             <div className="flex flex-col">
                               <span className="line-clamp-1" title={label}>{label}</span>
-                              <span className="text-[10px] text-slate-400 md:hidden">{date}</span>
+                              <span className="text-[10px] text-slate-400 dark:text-slate-300 md:hidden">{date}</span>
                             </div>
                           </div>
-                          <span className="text-slate-400 text-xs whitespace-nowrap hidden md:block">
+                          <span className="text-slate-400 dark:text-slate-300 text-xs whitespace-nowrap hidden md:block">
                             {date}
                           </span>
                         </li>
@@ -391,7 +391,7 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
         {/* Action Button */}
         <div className="-mt-8 md:-mt-12 flex justify-center px-6 pb-10">
           <button
-            className="w-full sm:w-auto px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] hover:opacity-90 transition"
+            className="w-full sm:w-auto px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)] hover:opacity-90 transition"
             onClick={() => {
               if (role === "client") navigate("/orders?new=1");
               else if (role === "manager") navigate("/manager-orders");

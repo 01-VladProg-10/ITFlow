@@ -1,9 +1,17 @@
 // App.tsx
 import { useState } from "react";
-import {Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
-   Menu, X, Sparkles, ShieldCheck, Rocket, Clock,
-  ArrowRight, Mail, Phone, LogIn
+  Menu,
+  X,
+  Sparkles,
+  ShieldCheck,
+  Rocket,
+  Clock,
+  ArrowRight,
+  Mail,
+  Phone,
+  LogIn,
 } from "lucide-react";
 
 import dashboardIcon from "./icons/daszboard.png";
@@ -47,7 +55,12 @@ function Logo({ className = "h-7 w-auto" }) {
 
 function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
   const content = (
-    <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+    <div
+      className="flex h-full w-72 flex-col 
+                 bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] 
+                 dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)]
+                 text-white"
+    >
 
       <div className="flex items-center justify-between px-4 h-16">
         <Logo />
@@ -83,7 +96,7 @@ function Sidebar({ open, onClose }: { open?: boolean; onClose?: () => void }) {
           <div className="mt-3 grid grid-cols-2 gap-2">
             <Link
               to="/login"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-slate-900 px-3 py-2 text-sm font-semibold"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white px-3 py-2 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-itf-darkSurface transition"
             >
               <LogIn className="h-4 w-4" /> Zaloguj
             </Link>
@@ -119,16 +132,16 @@ function AppContent() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="md:hidden sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
+    <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
+      <header className="md:hidden sticky top-0 z-30 bg-white/80 dark:bg-[#0B122A] backdrop-blur border-b border-slate-200 dark:border-itf-darkBorder">
         <div className="h-14 flex items-center justify-between px-4">
-          <button onClick={() => setOpen(true)} className="rounded-xl p-2 hover:bg-slate-100" aria-label="Otwórz menu">
+          <button onClick={() => setOpen(true)} className="rounded-xl p-2 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-900 dark:text-white" aria-label="Otwórz menu">
             <Menu className="h-6 w-6" />
           </button>
-          <div className="font-bold">ITFlow</div>
+          <div className="font-bold text-slate-900 dark:text-white">ITFlow</div>
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-600"
+            className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]"
           >
             <LogIn className="h-4 w-4" />
             Zaloguj
@@ -140,22 +153,22 @@ function AppContent() {
 
       <main className="md:ml-72 p-6 space-y-12">
         <section id="hero" className="text-center py-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-slate-800">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-purple-700 dark:text-white">
             Zarządzaj projektami IT jak profesjonalista
           </h1>
-          <p className="text-slate-600 max-w-xl mx-auto">
+          <p className="text-purple-600 dark:text-white/80 max-w-xl mx-auto">
             ITFlow to nowoczesny panel do kontroli projektów, zleceń i komunikacji z zespołem.
           </p>
           <div className="mt-6 flex justify-center gap-3">
             <a
               href="/login?mode=register"
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-gradient-to-r from-violet-600 to-blue-600 text-white font-semibold"
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)] text-white font-semibold"
             >
               Wypróbuj teraz <ArrowRight className="h-4 w-4" />
             </a>
             <a
               href="#features"
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-slate-300 font-semibold text-slate-700 bg-white"
+              className="inline-flex items-center gap-2 rounded-xl px-4 py-2 font-semibold text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]"
             >
               Dowiedz się więcej
             </a>
@@ -164,26 +177,38 @@ function AppContent() {
 
         <section id="features" className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 flex items-center justify-center text-white mb-3">
-                <Icon className="h-5 w-5" />
+            <div
+              key={title}
+              className="rounded-2xl bg-white dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)] text-slate-900 dark:text-white p-6 shadow-lg border border-slate-100 dark:border-itf-darkBorder"
+            >
+              <div className="h-10 w-10 rounded-xl bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[#1E1B4B] flex items-center justify-center mb-3">
+                <Icon className="h-5 w-5 text-white dark:text-purple-200" />
               </div>
-              <div className="font-semibold text-slate-800">{title}</div>
-              <p className="text-slate-600 text-sm mt-1">{desc}</p>
+              <div className="font-semibold text-slate-900 dark:text-white">{title}</div>
+              <p className="text-slate-600 dark:text-white/80 text-sm mt-1">{desc}</p>
             </div>
           ))}
         </section>
 
-        <section id="contact" className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-          <h2 className="text-xl font-bold mb-4 text-slate-800">Skontaktuj się z nami</h2>
-          <p className="text-slate-600 mb-4">
+        <section
+          id="contact"
+          className="bg-white dark:bg-itf-darkSurface text-slate-900 dark:text-white rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-itf-darkBorder"
+        >
+          <h2 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Skontaktuj się z nami</h2>
+          <p className="text-slate-600 dark:text-white/80 mb-4">
             Masz pytania? Skontaktuj się z naszym zespołem — odpowiemy w ciągu 24h.
           </p>
           <div className="flex flex-col md:flex-row gap-4">
-            <a href="mailto:kontakt@itflow.pl" className="flex items-center gap-2 text-indigo-600 font-medium">
+            <a
+              href="mailto:kontakt@itflow.pl"
+              className="flex items-center gap-2 text-purple-600 dark:text-indigo-400 font-medium"
+            >
               <Mail className="h-4 w-4" /> kontakt@itflow.pl
             </a>
-            <a href="tel:+48123456789" className="flex items-center gap-2 text-indigo-600 font-medium">
+            <a
+              href="tel:+48123456789"
+              className="flex items-center gap-2 text-purple-600 dark:text-indigo-400 font-medium"
+            >
               <Phone className="h-4 w-4" /> +48 123 456 789
             </a>
           </div>

@@ -53,7 +53,7 @@ function Sidebar({ role }: { role: Role }) {
 
   return (
     <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] text-white">
+      <div className="flex h-full w-72 flex-col bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] text-white">
         <div className="flex items-center justify-between px-4 h-16">
           <Logo />
           <button className="md:hidden rounded-xl p-2 hover:bg-white/10">
@@ -97,31 +97,31 @@ interface ReportCardProps {
 
 function ReportCard({ report, section }: ReportCardProps) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-6 hover:shadow-lg transition">
+    <div className="bg-white dark:bg-itf-darkSurface rounded-2xl border border-slate-200 dark:border-itf-darkBorder shadow-md p-6 hover:shadow-lg transition">
       <div className="space-y-4">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="text-[16px] font-bold text-slate-900">
+            <h3 className="text-[16px] font-bold text-slate-900 dark:text-white">
               {report.first_name} {report.last_name}
             </h3>
-            <p className="text-[13px] text-slate-500 mt-1">{report.email}</p>
+            <p className="text-[13px] text-slate-500 dark:text-slate-300 mt-1">{report.email}</p>
           </div>
           {!report.is_answered && section === "new" && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
               Nowe
             </span>
           )}
         </div>
 
         <div>
-          <h4 className="text-[14px] font-semibold text-slate-800">Wiadomość</h4>
-          <p className="text-[13px] text-slate-600 line-clamp-3">
+          <h4 className="text-[14px] font-semibold text-slate-800 dark:text-slate-200">Wiadomość</h4>
+          <p className="text-[13px] text-slate-600 dark:text-slate-300 line-clamp-3">
             {report.request_message}
           </p>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-          <div className="flex items-center gap-2 text-[12px] text-slate-500">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-itf-darkBorder">
+          <div className="flex items-center gap-2 text-[12px] text-slate-500 dark:text-slate-300">
             <Clock className="h-4 w-4" />
             <span>{new Date(report.created_at).toLocaleDateString()}</span>
           </div>
@@ -154,23 +154,23 @@ export default function ManagerReports() {
   const oldReports = reports.filter((r) => r.is_answered);
 
   return (
-    <div className="min-h-screen bg-[#F3F2F8]">
+    <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A] text-slate-900 dark:text-white">
       <Sidebar role="manager" />
 
       <main className="md:ml-72">
-        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)]" />
+        <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#312E81_40%,_#020617_100%)]" />
 
         <div className="px-[88px] pt-10 pb-12">
-          <h1 className="text-[32px] font-extrabold text-slate-900">Zgłoszenia</h1>
-          <p className="text-slate-500 text-[14px] mt-1">
+          <h1 className="text-[32px] font-extrabold text-slate-900 dark:text-white">Zgłoszenia</h1>
+          <p className="text-slate-500 dark:text-slate-300 text-[14px] mt-1">
             {newReports.length} nowe zgłoszenie{newReports.length !== 1 ? "a" : ""}
           </p>
 
-          {loading && <p className="mt-4 text-slate-500">Ładowanie...</p>}
+          {loading && <p className="mt-4 text-slate-500 dark:text-slate-300">Ładowanie...</p>}
 
           {newReports.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-[16px] font-semibold text-slate-700 mb-4">
+              <h2 className="text-[16px] font-semibold text-slate-700 dark:text-slate-200 mb-4">
                 Nowe zgłoszenia
               </h2>
               <div className="grid grid-cols-1 gap-6">
@@ -183,7 +183,7 @@ export default function ManagerReports() {
 
           {oldReports.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-[16px] font-semibold text-slate-700 mb-4">
+              <h2 className="text-[16px] font-semibold text-slate-700 dark:text-slate-200 mb-4">
                 Stare zgłoszenia
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -196,8 +196,8 @@ export default function ManagerReports() {
 
           {!loading && reports.length === 0 && (
             <div className="mt-12 text-center">
-              <MessageCircle className="h-12 w-12 mx-auto text-slate-300 mb-4" />
-              <p className="text-slate-500">Brak zgłoszeń do wyświetlenia.</p>
+              <MessageCircle className="h-12 w-12 mx-auto text-slate-300 dark:text-slate-600 mb-4" />
+              <p className="text-slate-500 dark:text-slate-300">Brak zgłoszeń do wyświetlenia.</p>
             </div>
           )}
         </div>
