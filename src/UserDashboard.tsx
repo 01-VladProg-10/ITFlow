@@ -376,7 +376,7 @@ function Dashboard({ role, latestOrder, user }: DashboardProps) {
         </div>
 
         {/* Action Button */}
-        <div className="-mt-8 md:-mt-12 flex justify-center px-6 pb-10">
+        <div className="mt-10 md:mt-14 flex justify-center px-6 pb-10">
           <button
             className="w-full sm:w-auto px-8 py-3 font-semibold text-[14px] rounded-xl text-white shadow-md bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)] hover:opacity-90 transition"
             onClick={() => {
