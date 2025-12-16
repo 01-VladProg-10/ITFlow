@@ -88,3 +88,46 @@ export async function updateFileVisibility(fileId: number, visible: boolean): Pr
   
   return json as OrderFile;
 }
+
+/**
+ * 📥 Pobieranie raportu PDF dla zamówienia.
+ * Używa globalnego 'fetch' i ręcznej autoryzacji do obsługi odpowiedzi binarnej (PDF).
+ * @param orderId ID zamówienia.
+ * @returns Obiekt Blob reprezentujący plik PDF.
+ */
+export async function downloadReport(orderId: number): Promise<Blob> {
+    const token = auth.getAccess(); 
+    if (!token) throw new Error("Brak tokenu autoryzacji.");
+
+    // Endpoint musi pasować do tego, który dodaliśmy w pliku files/urls.py na Back-endzie
+    const url = `${API_BASE}/files/order/${orderId}/final_report/`; 
+
+    // --- Używamy globalnego fetch z RĘCZNĄ autoryzacją ---
+    const res = await fetch(url, {
+        method: "GET", 
+        headers: { 
+            "Authorization": `Bearer ${token}`,
+            // Nie dodajemy Content-Type, bo Back-end zwróci PDF
+        },
+    });
+    // ---------------------------------------------------
+
+    if (!res.ok) {
+        // Spróbuj odczytać wiadomość o błędzie, jeśli istnieje
+        const errorText = await res.text().catch(() => 'Błąd serwera.');
+        
+        throw new Error(`Nie udało się pobrać raportu. Status: ${res.status}. Odpowiedź: ${errorText.substring(0, 100)}`);
+    }
+
+    // Oczekujemy odpowiedzi binarnej (Blob), którą Front-end wykorzysta do pobrania pliku.
+    const pdfBlob = await res.blob();
+    
+    // Opcjonalna walidacja typu (jeśli serwer nie zwrócił Content-Type: application/pdf)
+    if (pdfBlob.type && pdfBlob.type !== 'application/pdf') {
+         // Czasami błąd serwera (np. 403/500) może być tekstem, który zostanie odczytany jako Blob.
+         // Zwykle jest to dobrze obsługiwane przez res.ok, ale to jest dodatkowe zabezpieczenie.
+         console.warn(`Otrzymano inny typ zawartości niż PDF: ${pdfBlob.type}`);
+    }
+
+    return pdfBlob;
+}
