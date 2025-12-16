@@ -12,7 +12,7 @@ import {
     X, // Dodano ikonę do zamknięcia formularza
     Send, // Dodano ikonę do wysyłki
     // Ikony do historii
-    Flame, Wrench, CheckCircle, RefreshCcw, User, AlertCircle, Eye, EyeOff, Download
+    Flame, Wrench, CheckCircle, RefreshCcw, User, AlertCircle, Eye, EyeOff, Download, Menu
 } from "lucide-react";
 
 // Zakładamy, że to importy z Twoich plików
@@ -138,16 +138,16 @@ function downloadBlob(blob: Blob, filename: string) {
 
 // Komponenty pomocnicze
 const HeaderGradient = () => <div className="absolute top-0 left-0 w-full h-[150px] bg-gradient-to-r from-purple-600 to-indigo-700 dark:from-[#4C1D95] dark:via-[#312E81] dark:to-[#020617] md:ml-72" />;
-const Loading = ({ role }: { role: Role }) => (
+const Loading = ({ role, sidebarOpen, setSidebarOpen }: { role: Role; sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => (
     <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A]">
-        <Sidebar role={role} />
-        <main className="md:ml-72 pt-40 px-12 max-w-4xl mx-auto text-center text-slate-500 dark:text-slate-400">Ładowanie danych...</main>
+        <Sidebar role={role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <main className="md:ml-72 pt-40 px-6 md:px-12 max-w-4xl mx-auto text-center text-slate-500 dark:text-slate-400">Ładowanie danych...</main>
     </div>
 );
-const ErrorMessage = ({ role, message }: { role: Role, message: string }) => (
+const ErrorMessage = ({ role, message, sidebarOpen, setSidebarOpen }: { role: Role; message: string; sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => (
     <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A]">
-        <Sidebar role={role} />
-        <main className="md:ml-72 pt-40 px-12 max-w-4xl mx-auto text-center text-red-600 dark:text-red-400">Błąd: {message}</main>
+        <Sidebar role={role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <main className="md:ml-72 pt-40 px-6 md:px-12 max-w-4xl mx-auto text-center text-red-600 dark:text-red-400">Błąd: {message}</main>
     </div>
 );
 const LinkBack = ({ role }: { role: Role }) => (
@@ -194,6 +194,7 @@ const OrderHistoryList = ({ logs }: { logs: LogEntry[] }) => (
 export default function OrderFilesPage({ role }: { role: Role }) {
     const { orderId } = useParams<{ orderId: string }>();
     const id = Number(orderId);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const [order, setOrder] = useState<Order | null>(null);
     const [files, setFiles] = useState<OrderFile[]>([]);
@@ -543,8 +544,8 @@ export default function OrderFilesPage({ role }: { role: Role }) {
         }
     };
 
-    if (loading) return <Loading role={role} />;
-    if (error) return <ErrorMessage role={role} message={error} />;
+    if (loading) return <Loading role={role} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />;
+    if (error) return <ErrorMessage role={role} message={error} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />;
     
     // Pliki widoczne dla klienta (lub wszystkie dla pracownika)
     const filesToDisplay = isClient ? files.filter(f => f.visible_to_clients) : files;
@@ -553,7 +554,24 @@ export default function OrderFilesPage({ role }: { role: Role }) {
 
     return (
         <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A] text-slate-900 dark:text-white">
-            <Sidebar role={role} />
+            {/* Mobile Header */}
+            <header className="md:hidden sticky top-0 z-30 bg-white/80 dark:bg-[#0B122A] backdrop-blur border-b border-slate-200 dark:border-itf-darkBorder">
+                <div className="h-14 flex items-center justify-between px-4">
+                    <button onClick={() => setSidebarOpen(true)} className="rounded-xl p-2 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-900 dark:text-white">
+                        <Menu className="h-6 w-6" />
+                    </button>
+                    <div className="font-bold text-slate-900 dark:text-white">ITFlow</div>
+                    <Link
+                        to={role === "client" ? "/orders" : role === "programmer" ? "/tasks" : "/manager-orders"}
+                        className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        Wstecz
+                    </Link>
+                </div>
+            </header>
+
+            <Sidebar role={role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <main className="md:ml-72">
                 <HeaderGradient />
                 <div className="px-4 md:px-12 lg:px-[88px] pt-10 pb-12 max-w-4xl mx-auto">

@@ -1,32 +1,19 @@
 import { useEffect, useState } from "react";
 import { getUserProfile, sendContactMessage } from "../api/kontakt";
-import { X, LogIn } from "lucide-react";
+import { X, LogIn, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import dashboardIcon from "../icons/daszboard.png";
 import zanowieniaIcon from "../icons/zanowienia.png";
 import kontaktIcon from "../icons/kontakt.png";
 import ustawieniaIcon from "../icons/ustawienia.png";
+import logoIcon from "../icons/logo.png";
 
 /* === Sidebar === */
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
-      <svg className={className} viewBox="0 0 64 64" fill="none" aria-hidden>
-        <defs>
-          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#7C3AED" />
-            <stop offset="100%" stopColor="#2563EB" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M12 46c10 4 29-2 34-14"
-          stroke="url(#g)"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-        <circle cx="46" cy="22" r="6" fill="url(#g)" />
-      </svg>
+      <img src={logoIcon} alt="ITFlow" className={className} />
       <span className="font-bold text-xl tracking-tight text-white">ITFlow</span>
     </div>
   );
@@ -39,57 +26,71 @@ const nav = [
   { name: "Ustawienia", to: "/ustawienia", icon: ustawieniaIcon },
 ];
 
-function Sidebar() {
-  return (
-    <aside className="hidden md:block fixed inset-y-0 left-0 z-40">
-      <div
-        className="flex h-full w-72 flex-col 
-                   bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] 
-                   dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] 
-                   text-white"
-      >
-        <div className="flex items-center justify-between px-4 h-16">
-          <Logo />
-          <button
-            className="md:hidden rounded-xl p-2 hover:bg-white/10"
-            aria-label="Zamknij menu"
-          >
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-
-        <nav className="mt-4 px-3 space-y-1">
-          {nav.map(({ name, to, icon }) => (
-            <Link
-              key={name}
-              to={to ?? "#"}
-              className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition hover:bg-white/10"
-            >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
-                <img src={icon} alt={name} className="h-4 w-4" />
-              </span>
-              <span>{name}</span>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-auto p-4">
-          <Link
-            to="/"
-            className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 transition px-4 py-2 text-sm font-semibold"
-          >
-            <LogIn className="h-4 w-4" /> Wyloguj się
-          </Link>
-
-          <div className="mt-4 text-xs text-white/70">© {new Date().getFullYear()} ITFlow</div>
-        </div>
+function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const content = (
+    <div
+      className="flex h-full w-72 flex-col 
+                 bg-[linear-gradient(180deg,_#7A36EF_0%,_#2D19E9_100%)] 
+                 dark:bg-[linear-gradient(180deg,_#4C1D95_0%,_#1E1B4B_35%,_#020617_100%)] 
+                 text-white"
+    >
+      <div className="flex items-center justify-between px-4 h-16">
+        <Logo />
+        <button
+          className="md:hidden rounded-xl p-2 hover:bg-white/10"
+          aria-label="Zamknij menu"
+          onClick={onClose}
+        >
+          <X className="h-6 w-6" />
+        </button>
       </div>
-    </aside>
+
+      <nav className="mt-4 px-3 space-y-1">
+        {nav.map(({ name, to, icon }) => (
+          <Link
+            key={name}
+            to={to ?? "#"}
+            className="group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition hover:bg-white/10"
+            onClick={onClose}
+          >
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/10">
+              <img src={icon} alt={name} className="h-4 w-4" />
+            </span>
+            <span>{name}</span>
+          </Link>
+        ))}
+      </nav>
+
+      <div className="mt-auto p-4">
+        <Link
+          to="/"
+          className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 transition px-4 py-2 text-sm font-semibold"
+          onClick={onClose}
+        >
+          <LogIn className="h-4 w-4" /> Wyloguj się
+        </Link>
+
+        <div className="mt-4 text-xs text-white/70">© {new Date().getFullYear()} ITFlow</div>
+      </div>
+    </div>
+  );
+  return (
+    <>
+      <aside className="hidden md:block fixed inset-y-0 left-0 z-40">{content}</aside>
+      {open && (
+        <div className="md:hidden fixed inset-0 z-50 bg-black/40" onClick={onClose}>
+          <div className="h-full" onClick={(e) => e.stopPropagation()}>
+            {content}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 /* === end Sidebar === */
 
 export default function KontaktUser() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -132,12 +133,29 @@ export default function KontaktUser() {
 
   return (
     <div className="min-h-screen bg-[#F3F2F8] text-slate-900 dark:bg-[#0B122A] dark:text-white">
-      <Sidebar />
+      {/* Mobile Header */}
+      <header className="md:hidden sticky top-0 z-30 bg-white/80 dark:bg-[#0B122A] backdrop-blur border-b border-slate-200 dark:border-itf-darkBorder">
+        <div className="h-14 flex items-center justify-between px-4">
+          <button onClick={() => setSidebarOpen(true)} className="rounded-xl p-2 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-900 dark:text-white">
+            <Menu className="h-6 w-6" />
+          </button>
+          <div className="font-bold text-slate-900 dark:text-white">ITFlow</div>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]"
+          >
+            <LogIn className="h-4 w-4" />
+            Wyloguj
+          </Link>
+        </div>
+      </header>
+
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="md:ml-72">
         <div className="h-[100px] w-full bg-[linear-gradient(90deg,_#8F2AFA_9%,_#5F7EFA_35%,_#2D19E9_100%)] dark:bg-[linear-gradient(90deg,_#4C1D95_0%,_#1E1B4B_40%,_#020617_100%)]" />
-        <div className="px-[88px] pt-6 pb-10">
-          <div className="mt-12 max-w-[645px]">
-            <h1 className="text-[32px] font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+        <div className="px-6 md:px-[88px] pt-6 pb-10">
+          <div className="mt-8 md:mt-12 max-w-[645px]">
+            <h1 className="text-[26px] md:text-[32px] font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
               📬 Formularz kontaktowy
             </h1>
             <p className="text-slate-500 dark:text-slate-300 text-[14px] mt-1">Masz pytanie? Napisz do nas!</p>

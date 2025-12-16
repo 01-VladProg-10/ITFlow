@@ -18,6 +18,7 @@ import dashboardIcon from "./icons/daszboard.png";
 import zanowieniaIcon from "./icons/zanowienia.png";
 import kontaktIcon from "./icons/kontakt.png";
 import ustawieniaIcon from "./icons/ustawienia.png";
+import logoIcon from "./icons/logo.png";
 
 type NavItem = { name: string; href: string; icon: string; disabled?: boolean };
 
@@ -38,16 +39,7 @@ const features = [
 function Logo({ className = "h-7 w-auto" }) {
   return (
     <div className="flex items-center gap-2">
-      <svg className={className} viewBox="0 0 64 64" fill="none" aria-hidden>
-        <defs>
-          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#7C3AED" />
-            <stop offset="100%" stopColor="#2563EB" />
-          </linearGradient>
-        </defs>
-        <path d="M12 46c10 4 29-2 34-14" stroke="url(#g)" strokeWidth="6" strokeLinecap="round" />
-        <circle cx="46" cy="22" r="6" fill="url(#g)" />
-      </svg>
+      <img src={logoIcon} alt="ITFlow" className={className} />
       <span className="font-bold text-xl tracking-tight text-white">ITFlow</span>
     </div>
   );
