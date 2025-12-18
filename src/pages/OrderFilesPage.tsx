@@ -137,7 +137,9 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 // Komponenty pomocnicze
-const HeaderGradient = () => <div className="absolute top-0 left-0 w-full h-[150px] bg-gradient-to-r from-purple-600 to-indigo-700 dark:from-[#4C1D95] dark:via-[#312E81] dark:to-[#020617] md:ml-72" />;
+const HeaderGradient = () => (
+    <div className="absolute top-0 left-0 right-0 w-full h-[150px] bg-gradient-to-r from-purple-600 to-indigo-700 dark:from-[#4C1D95] dark:via-[#312E81] dark:to-[#020617]" />
+);
 const Loading = ({ role, sidebarOpen, setSidebarOpen }: { role: Role; sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => (
     <div className="min-h-screen bg-[#F3F2F8] dark:bg-[#0B122A]">
         <Sidebar role={role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -592,13 +594,13 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                     </div>
 
 
-                    <div className="bg-white dark:bg-itf-darkSurface rounded-2xl shadow-xl border border-slate-100 dark:border-itf-darkBorder p-6">
+                    <div className="bg-white dark:bg-itf-darkSurface rounded-2xl shadow-xl border border-slate-100 dark:border-itf-darkBorder p-4 sm:p-6">
                         {activeTab === "files" ? (
                             // WIDOK PLIKÓW I STATUSU
                             <>
                                 {/* ---- Status i Akcje Managera ---- */}
                                 <div className="mb-6">
-                                    <div className="flex flex-wrap items-center justify-between mb-4 gap-4">
+                                    <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between mb-4 gap-4">
                                         <div>
                                             <p className="text-xs text-slate-400 uppercase font-semibold">Aktualny status</p>
                                             <span className={`inline-block px-3 py-1 rounded-full text-sm font-bold text-white shadow-md ${
@@ -611,7 +613,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                             </span>
                                         </div>
                                         
-                                        <div className="flex gap-3">
+                                        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                                             {/* 🚨 NOWY PRZYCISK WYSYŁKI E-MAILA (Tylko dla Managera) */}
                                             {isManager && (
                                                 <button
@@ -621,7 +623,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                         setIsChangingStatus(false); 
                                                         setEmailError(null);
                                                     }}
-                                                    className={`px-4 py-2 rounded-xl text-white text-[13px] font-semibold transition-colors flex items-center shadow-md ${
+                                                    className={`w-full sm:w-auto px-4 py-2 rounded-xl text-white text-[13px] font-semibold transition-colors flex items-center justify-center sm:justify-start shadow-md ${
                                                         showEmailForm ? 'bg-red-500 hover:bg-red-600' : 'bg-slate-500 hover:bg-slate-600'
                                                     }`}
                                                 >
@@ -635,7 +637,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                 <button
                                                     onClick={handleDownloadFinalReport}
                                                    disabled={isDownloadingReport}
-                                                    className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-[13px] font-semibold transition-colors flex items-center shadow-md disabled:opacity-50"
+                                                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-[13px] font-semibold transition-colors flex items-center justify-center sm:justify-start shadow-md disabled:opacity-50"
                                                 >
                                                     <Download className="h-4 w-4 mr-2" /> {isDownloadingReport ? 'Pobieranie...' : 'Pobierz Raport'}
                                                 </button>
@@ -649,7 +651,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                         // Zamknij formularz maila, jeśli otwierasz status
                                                         setShowEmailForm(false); 
                                                     }}
-                                                    className={`px-4 py-2 rounded-xl text-white text-[13px] font-semibold transition-colors flex items-center shadow-md ${
+                                                    className={`w-full sm:w-auto px-4 py-2 rounded-xl text-white text-[13px] font-semibold transition-colors flex items-center justify-center sm:justify-start shadow-md ${
                                                         isChangingStatus ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700' : 'bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600'
                                                     }`}
                                                 >
@@ -743,9 +745,9 @@ export default function OrderFilesPage({ role }: { role: Role }) {
 
                                     {/* Zarządzanie Programistą (tylko dla Managera) */}
                                     {isManager && (
-                                        <div className="mb-4 p-4 border border-blue-200 bg-blue-50 rounded-xl">
-                                            <p className="text-sm font-semibold mb-2 text-slate-700">Zarządzanie Zespołem:</p>
-                                            <div className="flex items-center gap-3">
+                                        <div className="mb-4 p-4 rounded-xl border border-slate-200 bg-slate-50 dark:bg-itf-darkCard dark:border-itf-darkBorder">
+                                            <p className="text-sm font-semibold mb-2 text-slate-800 dark:text-slate-100">Zarządzanie zespołem</p>
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                                                 <select
                                                     defaultValue={order?.developer || ""}
                                                     onChange={(e) => {
@@ -755,7 +757,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                             handleAssignProgrammer(id);
                                                         }
                                                     }}
-                                                    className="block w-full sm:w-1/2 border rounded-lg px-3 py-2 text-sm focus:ring-purple-500 focus:border-purple-500"
+                                                    className="block w-full sm:w-1/2 border rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkSurface text-slate-900 dark:text-white border-slate-200 dark:border-itf-darkBorder focus:ring-purple-500 focus:border-purple-500"
                                                     disabled={isAssigning}
                                                 >
                                                     <option value="">-- Wybierz Programistę (Opcjonalnie) --</option>
@@ -765,7 +767,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                         </option>
                                                     ))}
                                                 </select>
-                                                <span className="text-xs text-slate-500">
+                                                <span className="text-xs text-slate-600 dark:text-slate-300">
                                                     Aktualnie przypisany: **{order?.developer || 'Brak'}**
                                                 </span>
                                             </div>
@@ -782,7 +784,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                     onChange={handleFileChange}
                                                     className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-100 dark:file:bg-orange-900/50 file:text-orange-700 dark:file:text-orange-300 hover:file:bg-orange-200 dark:hover:file:bg-orange-900/70"
                                                 />
-                                                <div className="flex gap-3">
+                                                <div className="flex flex-col sm:flex-row gap-3">
                                                     <input
                                                         type="text"
                                                         placeholder="Nazwa pliku (wymagana)"
@@ -793,7 +795,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                     <select
                                                         value={uploadType}
                                                         onChange={(e) => setUploadType(e.target.value)}
-                                                        className="w-32 border dark:border-itf-darkBorder rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white focus:ring-purple-500 focus:border-purple-500"
+                                                        className="w-full sm:w-32 border dark:border-itf-darkBorder rounded-lg px-3 py-2 text-sm bg-white dark:bg-itf-darkCard text-slate-900 dark:text-white focus:ring-purple-500 focus:border-purple-500"
                                                     >
                                                         <option value="pdf">PDF</option>
                                                         <option value="zip">ZIP</option>
@@ -835,16 +837,16 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                     )}
 
                                     {/* Kontrola widoku i akcje zbiorcze */}
-                                    <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                                    <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
                                         <div className="flex items-center space-x-2">
                                             <input
                                                 type="checkbox"
                                                 checked={selectedIds.length === filesToDisplay.length && filesToDisplay.length > 0}
                                                 onChange={toggleSelectAll}
-                                                className="rounded text-purple-600 focus:ring-purple-500"
+                                                className="rounded text-purple-600 focus:ring-purple-500 border-slate-300 dark:border-itf-darkBorder dark:bg-itf-darkSurface"
                                                 disabled={filesToDisplay.length === 0}
                                             />
-                                            <span className="text-sm text-slate-600">
+                                            <span className="text-sm text-slate-600 dark:text-slate-300">
                                                 Zaznacz wszystkie ({selectedIds.length}/{filesToDisplay.length})
                                             </span>
                                         </div>
@@ -852,7 +854,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                         <button
                                             onClick={handleDownload}
                                             disabled={!canDownloadAnything}
-                                            className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors flex items-center disabled:opacity-50"
+                                            className="w-full sm:w-auto px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors flex items-center justify-center sm:justify-start disabled:opacity-50"
                                         >
                                             <Download className="h-4 w-4 mr-2" /> Pobierz zaznaczone
                                         </button>
@@ -864,26 +866,33 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                             <p className="text-center text-slate-500 dark:text-slate-400 py-6">Brak plików dla tego zamówienia.</p>
                                         ) : (
                                             filesToDisplay.map((file) => (
-                                                <div key={file.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-slate-100 hover:bg-gray-100 transition-colors">
-                                                    <div className="flex items-center space-x-3">
+                                                <div
+                                                    key={file.id}
+                                                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors dark:bg-itf-darkCard dark:hover:bg-white/5 dark:border-itf-darkBorder"
+                                                >
+                                                    <div className="flex items-start sm:items-center gap-3 min-w-0">
                                                         <input
                                                             type="checkbox"
                                                             checked={!!selected[file.id]}
                                                             onChange={() => toggleOne(file.id)}
-                                                            className="rounded text-purple-600 focus:ring-purple-500"
+                                                            className="mt-1 sm:mt-0 rounded text-purple-600 focus:ring-purple-500 border-slate-300 dark:border-itf-darkBorder dark:bg-itf-darkSurface"
                                                         />
                                                         <FileText className="h-5 w-5 text-purple-500 shrink-0" />
-                                                        <div>
-                                                            <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{file.name} ({file.file_type})</p>
+                                                        <div className="min-w-0">
+                                                            <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{file.name} ({file.file_type})</p>
                                                             <p className="text-xs text-slate-500 dark:text-slate-400">{file.description || 'Brak opisu'}</p>
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex items-center space-x-3 shrink-0">
+                                                    <div className="flex items-center justify-end gap-3 shrink-0">
                                                         {isManager && (
                                                             <button
                                                                 onClick={() => handleVisibilityToggle(file.id, !file.visible_to_clients)}
-                                                                className={`p-1 rounded-full transition-colors ${file.visible_to_clients ? 'bg-green-100 text-green-600 hover:bg-green-200' : 'bg-red-100 text-red-600 hover:bg-red-200'}`}
+                                                                className={`p-1.5 rounded-full transition-colors border border-transparent dark:border-itf-darkBorder ${
+                                                                    file.visible_to_clients
+                                                                        ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50'
+                                                                        : 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-300 dark:hover:bg-red-900/50'
+                                                                }`}
                                                                 title={file.visible_to_clients ? 'Ukryj przed klientem' : 'Udostępnij klientowi'}
                                                             >
                                                                 {file.visible_to_clients ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
@@ -896,7 +905,7 @@ export default function OrderFilesPage({ role }: { role: Role }) {
                                                         )}
                                                         <button
                                                             onClick={() => window.open(file.uploaded_file_url, "_blank")}
-                                                            className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold hover:bg-purple-200 transition-colors flex items-center"
+                                                            className="px-3 py-1.5 rounded-full text-xs font-semibold transition-colors flex items-center bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/40 dark:text-purple-200 dark:hover:bg-purple-900/60"
                                                             title="Otwórz plik w nowej karcie"
                                                         >
                                                             <Download className="h-3 w-3 mr-1" /> POBIERZ
