@@ -60,7 +60,6 @@ html.dark body {
     box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35) !important;
   }
   
-  /* Специфічне правило для input полів - перекриває будь-які градієнти */
   .dark input[class*="bg-itf-darkCard"],
   .dark textarea[class*="bg-itf-darkCard"],
   .dark select[class*="bg-itf-darkCard"] {
@@ -68,7 +67,6 @@ html.dark body {
     background-image: none !important;
   }
   
-  /* Також для варіантів з opacity */
   .dark .bg-itf-darkSurface\/80,
   .dark .bg-itf-darkCard\/80,
   .dark .bg-itf-darkSurface\/90,
