@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+:root {
+  --itf-bg: #050c24;
+  --itf-surface: #0b132f;
+  --itf-card: #111c42;
+  --itf-border: #1f2e55;
+  --itf-text: #e9edff;
+  --itf-subtext: #c6d0ff;
+  --itf-accent: #6b35f4;
+  --itf-accent-2: #4f6dff;
+  --itf-dark-card-grad-from: #6b35f4;
+  --itf-dark-card-grad-mid: #4255ff;
+  --itf-dark-card-grad-to: oklch(0.28 0.1 283.13);
+}
+
+body {
+  background: linear-gradient(160deg, #0b132f 0%, #050c24 55%, #040716 100%);
+  color: #0f172a;
+  transition: background 250ms ease, color 250ms ease;
+}
+
+html.dark body {
+  color: var(--itf-text);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(107, 53, 244, 0.14), transparent 28%),
+    radial-gradient(circle at 80% 10%, rgba(52, 172, 224, 0.12), transparent 28%),
+    linear-gradient(160deg, #0b132f 0%, #050c24 60%, #040716 100%);
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  .dark .bg-white,
+  .dark .bg-slate-50,
+  .dark .bg-gray-50 {
+    background-image: linear-gradient(
+      145deg,
+      var(--itf-dark-card-grad-from) 0%,
+      var(--itf-dark-card-grad-mid) 48%,
+      var(--itf-dark-card-grad-to) 100%
+    ) !important;
+    color: var(--itf-text) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  .dark .bg-itf-darkSurface,
+  .dark .bg-itf-darkCard {
+    background-color: var(--itf-darkCard) !important;
+    background-image: none !important;
+    color: var(--itf-text) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35) !important;
+  }
+  
+  /* Специфічне правило для input полів - перекриває будь-які градієнти */
+  .dark input[class*="bg-itf-darkCard"],
+  .dark textarea[class*="bg-itf-darkCard"],
+  .dark select[class*="bg-itf-darkCard"] {
+    background-color: var(--itf-darkCard) !important;
+    background-image: none !important;
+  }
+  
+  /* Також для варіантів з opacity */
+  .dark .bg-itf-darkSurface\/80,
+  .dark .bg-itf-darkCard\/80,
+  .dark .bg-itf-darkSurface\/90,
+  .dark .bg-itf-darkCard\/90 {
+    background-color: var(--itf-darkCard) !important;
+    background-image: none !important;
+    color: var(--itf-text) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  .dark .bg-white\/6 {
+    background-color: rgba(107, 53, 244, 0.08) !important;
+  }
+
+  .dark .bg-white\/10 {
+    background-color: rgba(107, 53, 244, 0.15) !important;
+  }
+
+  .dark .bg-white\/20 {
+    background-color: rgba(107, 53, 244, 0.24) !important;
+  }
+
+  .dark .hover\:bg-white\/10:hover,
+  .dark .hover\:bg-white\/20:hover {
+    background-color: rgba(107, 53, 244, 0.22) !important;
+  }
+
+  .dark .border-slate-100,
+  .dark .border-slate-200,
+  .dark .border-slate-300,
+  .dark .border-white\/10,
+  .dark .border-white\/20,
+  .dark .border-white\/30 {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .dark .text-slate-900,
+  .dark .text-slate-800 {
+    color: #f5f7ff !important;
+  }
+
+  .dark .text-slate-700 {
+    color: var(--itf-text) !important;
+  }
+
+  .dark .text-slate-600,
+  .dark .text-slate-500 {
+    color: var(--itf-subtext) !important;
+  }
+
+  .dark .placeholder-slate-400 {
+    color: #c6d0ff !important;
+  }
+
+  .dark .bg-white\/10,
+  .dark .bg-white\/20,
+  .dark .bg-white\/6,
+  .dark .bg-black\/20 {
+    backdrop-filter: blur(8px);
+  }
+}
+
+.animate-gradient {
+  animation: gradient-xy 8s ease infinite;
+}
+
+@keyframes gradient-xy {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
