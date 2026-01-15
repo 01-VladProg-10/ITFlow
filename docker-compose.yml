@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: ./Frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+
+  backend:
+    build: ./Backend
+    ports:
+      - "8080:8080"   # port backend
+    volumes:
+      - ./Backend:/app
+    depends_on:
+      - database
+    environment:
+      POSTGRES_DB: itflow
+      POSTGRES_USER: itflow
+      POSTGRES_PASSWORD: itflow
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+
+  database:
+    image: postgres:17
+    container_name: itflow-postgres
+    environment:
+      POSTGRES_DB: itflow
+      POSTGRES_USER: itflow
+      POSTGRES_PASSWORD: itflow
+    ports:
+      - "5433:5432"   # port host:container dla bazy
+    volumes:
+      - itflow_pgdata:/var/lib/postgresql/data
+
+volumes:
+  itflow_pgdata:
