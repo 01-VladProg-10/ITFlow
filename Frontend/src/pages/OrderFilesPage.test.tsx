@@ -3,13 +3,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import OrderFilesPage from "./OrderFilesPage";
-import { fetchOrders } from "../api/orders";
+import OrderFilesPage from "./OrderFilesPage.tsx";
+import { fetchOrders } from "../api/orders.ts";
 import {
   buildDownloadUrl,
   fetchOrderFiles,
   sendFilesToClient,
-} from "../api/orderFiles";
+} from "../api/orderFiles.ts";
 
 vi.mock("./OrdersPage", () => ({
   Sidebar: () => <aside data-testid="sidebar" />,

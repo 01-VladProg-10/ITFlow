@@ -1,4 +1,4 @@
-import { API_BASE, apiFetch, auth } from "./auth";
+import { API_BASE, apiFetch, auth } from "./auth.ts";
 
 export async function loginUser(usernameOrEmail: string, password: string) {
   const res = await fetch(`${API_BASE}/token/`, {

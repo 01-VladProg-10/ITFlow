@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LogIn, UserPlus, Mail, Lock } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { loginUser, fetchMe, registerUser } from "./api/users"; 
+import { loginUser, fetchMe, registerUser } from "./api/users.ts";
 
 export default function AuthDualPanel() {
  

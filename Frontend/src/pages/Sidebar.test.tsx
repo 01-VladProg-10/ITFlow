@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 
-import { Sidebar } from "./OrdersPage";
+import { Sidebar } from "./OrdersPage.tsx";
 
 describe("Sidebar", () => {
   it("calls onClose when clicking overlay", async () => {

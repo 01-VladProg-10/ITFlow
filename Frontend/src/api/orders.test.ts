@@ -5,8 +5,8 @@ vi.mock("./auth", () => ({
   apiFetch: vi.fn(),
 }));
 
-import { apiFetch, API_BASE } from "./auth";
-import { createOrder, fetchOrders } from "./orders";
+import { apiFetch, API_BASE } from "./auth.ts";
+import { createOrder, fetchOrders } from "./orders.ts";
 
 const apiFetchMock = vi.mocked(apiFetch);
 

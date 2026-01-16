@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-import type { LatestOrder, DashboardUser } from "./api/users";
+import type { LatestOrder, DashboardUser } from "./api/users.ts";
 
 /* === TYPES === */
 

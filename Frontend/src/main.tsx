@@ -3,20 +3,20 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
-import App from "./App";
-import Login from "./login";
-import KontaktUser from "./pages/KontaktUser";
-import DashboardSwitch from "./DashboardSwitch";
-import UserSettings from "./pages/UserSettings";
-import ProgSettings from "./pages/ProgSettings";
-import ManagerSettings from "./pages/ManagerSettings";
+import App from "./App.tsx";
+import Login from "./login.tsx";
+import KontaktUser from "./pages/KontaktUser.tsx";
+import DashboardSwitch from "./DashboardSwitch.tsx";
+import UserSettings from "./pages/UserSettings.tsx";
+import ProgSettings from "./pages/ProgSettings.tsx";
+import ManagerSettings from "./pages/ManagerSettings.tsx";
 import {
   ClientOrdersPage,
   ProgrammerOrdersPage,
   ManagerOrdersPage,
-} from "./pages/OrdersPage";
-import ManagerReports from "./pages/ManagerReports";
-import OrderFilesPage from "./pages/OrderFilesPage";
+} from "./pages/OrdersPage.tsx";
+import ManagerReports from "./pages/ManagerReports.tsx";
+import OrderFilesPage from "./pages/OrderFilesPage.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },

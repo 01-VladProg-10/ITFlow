@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 
-import ProgSettings from "./ProgSettings";
+import ProgSettings from "./ProgSettings.tsx";
 
 describe("ProgSettings", () => {
   it("toggles edit mode for profile fields", async () => {

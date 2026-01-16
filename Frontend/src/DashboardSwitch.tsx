@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import {
   fetchDashboard,
   type DashboardResponse,
-} from "./api/users";
+} from "./api/users.ts";
 
 import UserDashboard, {
   ManagerDashboard,
   ProgrammerDashboard,
-} from "./UserDashboard";
+} from "./UserDashboard.tsx";
 
 const ROLE_CLIENT = "client";
 const ROLE_MANAGER = "manager";

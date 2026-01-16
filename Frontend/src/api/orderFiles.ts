@@ -1,5 +1,5 @@
 // src/api/orderFiles.ts
-import { API_BASE, apiFetch } from "./auth";
+import { API_BASE, apiFetch } from "./auth.ts";
 
 export type OrderFile = {
   id: number;

@@ -5,12 +5,12 @@ vi.mock("./auth", () => ({
   apiFetch: vi.fn(),
 }));
 
-import { apiFetch, API_BASE } from "./auth";
+import { apiFetch, API_BASE } from "./auth.ts";
 import {
   buildDownloadUrl,
   fetchOrderFiles,
   sendFilesToClient,
-} from "./orderFiles";
+} from "./orderFiles.ts";
 
 const apiFetchMock = vi.mocked(apiFetch);
 

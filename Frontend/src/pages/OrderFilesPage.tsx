@@ -12,14 +12,14 @@ import {
   LogIn,
 } from "lucide-react";
 
-import { Sidebar } from "./OrdersPage";
-import { fetchOrders, type Order } from "../api/orders";
+import { Sidebar } from "./OrdersPage.tsx";
+import { fetchOrders, type Order } from "../api/orders.ts";
 import {
   fetchOrderFiles,
   sendFilesToClient,
   buildDownloadUrl,
   type OrderFile,
-} from "../api/orderFiles";
+} from "../api/orderFiles.ts";
 
 type Role = "client" | "programmer" | "manager";
 

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 
-import ManagerSettings from "./ManagerSettings";
+import ManagerSettings from "./ManagerSettings.tsx";
 
 describe("ManagerSettings", () => {
   it("toggles edit mode for profile fields", async () => {

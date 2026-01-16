@@ -3,8 +3,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 
-import { OrdersPage } from "./OrdersPage";
-import { createOrder, fetchOrders } from "../api/orders";
+import { OrdersPage } from "./OrdersPage.tsx";
+import { createOrder, fetchOrders } from "../api/orders.ts";
 
 vi.mock("../api/orders", () => ({
   fetchOrders: vi.fn(),

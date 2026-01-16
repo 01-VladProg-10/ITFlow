@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
-import KontaktUser from "./KontaktUser";
+import KontaktUser from "./KontaktUser.tsx";
 
 describe("KontaktUser", () => {
   it("renders contact form fields", () => {

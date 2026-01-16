@@ -8,7 +8,7 @@ import ustawieniaIcon from "../icons/ustawienia.png";
 
 import { FileText, Clock, Flame, X, LogIn, Menu } from "lucide-react";
 
-import { fetchOrders, createOrder, type Order } from "../api/orders";
+import { fetchOrders, createOrder, type Order } from "../api/orders.ts";
 
 type Role = "client" | "manager" | "programmer";
 
