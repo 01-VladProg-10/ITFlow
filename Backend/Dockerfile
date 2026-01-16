@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Kopiujemy cały projekt do kontenera
-COPY . .
+COPY .. .
 
 # Ustawienie zmiennej środowiskowej dla czytelnych logów
 ENV PYTHONUNBUFFERED=1
