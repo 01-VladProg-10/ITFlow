@@ -9,18 +9,6 @@ Prosta aplikacja składająca się z frontend, backend i bazy danych PostgreSQL,
 * [Docker Compose](https://docs.docker.com/compose/) (wersja ≥ 1.29)  
 * Git (opcjonalnie, jeśli klonujesz repozytorium)  
 
-## Struktura projektu
-
-```
-
-ITFlow/
-├─ Frontend/        # aplikacja frontend (np. React/Vue)
-├─ Backend/         # aplikacja backend (np. Django / Node.js/Express)
-├─ docker-compose.yml
-└─ README.md
-
-````
-
 ---
 
 ## Konfiguracja
@@ -138,8 +126,4 @@ docker-compose exec backend python manage.py createsuperuser
 * Frontend i backend są połączone z bazą danych PostgreSQL automatycznie przez Docker Compose.
 * Porty lokalne (`5173` i `8080`) możesz zmienić w `docker-compose.yml` według potrzeb.
 * **Migracje są obowiązkowe** przy pierwszym uruchomieniu backendu, aby wszystkie tabele w bazie danych zostały utworzone.
-* Utworzenie superusera jest opcjonalne, ale zalecane w przypadku potrzeby pełnego dostępu administracyjnego.
-
-```
-Chcesz, żebym taką zrobił?
-```
+* Utworzenie superusera jest opcjonalne, ale zalecane w przypadku potrzeby pełnego dostępu administracyjnego
